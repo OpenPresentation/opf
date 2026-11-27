@@ -97,11 +97,11 @@ function Com-ExportSlide {
 }
 
 function Com-Link {
-  # A hyperlink of an ActionSettings collection (mouse click), or $null. Action 7 is ppActionHyperlink.
+  # A hyperlink of an ActionSettings collection (mouse click), or $null. The Hyperlink's address decides, not Action: the
+  # first PowerPoint run (2026-11-27) found no link on words while Action had to be ppActionHyperlink.
   param($Settings)
   $setting = Com-TryGet { $Settings.Item(1) }
   if ($null -eq $setting) { return $null }
-  if ((Com-TryGet { [int]$setting.Action }) -ne 7) { return $null }
   $address = [string](Com-TryGet { $setting.Hyperlink.Address })
   $sub = [string](Com-TryGet { $setting.Hyperlink.SubAddress })
   if ($address -eq '' -and $sub -eq '') { return $null }
@@ -253,7 +253,12 @@ function Com-ProbeSlide {
       if ((Com-TryGet { [int]$placeholder.PlaceholderFormat.Type }) -eq 2) { $notes = [string](Com-TryGet { $placeholder.TextFrame.TextRange.Text }) }
     }
   }
-  return [ordered]@{ notes = $notes; shapes = $shapes.ToArray() }
+  # Every hyperlink of the slide as PowerPoint lists it, also those the per-shape reading above cannot reach.
+  $hyperlinks = New-Object System.Collections.ArrayList
+  foreach ($link in $slide.Hyperlinks) {
+    [void]$hyperlinks.Add([ordered]@{ address = [string](Com-TryGet { $link.Address }); subAddress = [string](Com-TryGet { $link.SubAddress }); type = (Com-TryGet { [int]$link.Type }); text = [string](Com-TryGet { $link.TextToDisplay }) })
+  }
+  return [ordered]@{ notes = $notes; shapes = $shapes.ToArray(); hyperlinks = $hyperlinks.ToArray() }
 }
 
 function Com-SaveCopy {
@@ -305,28 +310,18 @@ function Com-ApplyEdit {
       return [ordered]@{ applies = $true; what = "deleted row $count of table '$($hit.shape.Name)' on slide $($hit.slide)" }
     }
     'change-link' {
+      # Slide.Hyperlinks lists every hyperlink of a slide, on shapes and on text ranges (MsoHyperlinkType: 0 range, 1 shape).
       foreach ($slide in $Pres.Slides) {
-        foreach ($shape in $slide.Shapes) {
-          $link = Com-Link (Com-TryGet { $shape.ActionSettings })
-          if ($null -ne $link -and $link.address -ne '') {
-            $shape.ActionSettings.Item(1).Hyperlink.Address = $new
-            return [ordered]@{ applies = $true; what = "changed the click address of '$($shape.Name)' on slide $($slide.SlideIndex) from $($link.address) to $new" }
-          }
-          if ((Com-TryGet { [int]$shape.HasTextFrame }) -eq -1 -and (Com-TryGet { [int]$shape.TextFrame.HasText }) -eq -1) {
-            $range = $shape.TextFrame.TextRange
-            $runs = [int]$range.Runs().Count
-            for ($i = 1; $i -le $runs; $i++) {
-              $run = $range.Runs($i, 1)
-              $link = Com-Link (Com-TryGet { $run.ActionSettings })
-              if ($null -ne $link -and $link.address -ne '') {
-                $run.ActionSettings.Item(1).Hyperlink.Address = $new
-                return [ordered]@{ applies = $true; what = "changed the text link of '$($shape.Name)' on slide $($slide.SlideIndex) from $($link.address) to $new" }
-              }
-            }
-          }
+        foreach ($link in $slide.Hyperlinks) {
+          $old = [string](Com-TryGet { $link.Address })
+          if ($old -eq '') { continue }
+          $on = 'text'
+          if ((Com-TryGet { [int]$link.Type }) -eq 1) { $on = 'a shape' }
+          $link.Address = $new
+          return [ordered]@{ applies = $true; what = "changed the address of a hyperlink on $on on slide $($slide.SlideIndex) from $old to $new" }
         }
       }
-      return [ordered]@{ applies = $false; why = 'the file has no web link on a shape or in a text box' }
+      return [ordered]@{ applies = $false; why = 'no slide has a hyperlink with a web address' }
     }
     'add-paragraph' {
       $hit = $null
@@ -373,8 +368,19 @@ function Com-Quit {
 }
 
 function Com-Release {
+  # Every reference this thread holds to the application, not just one.
   param($App)
-  try { [void][System.Runtime.InteropServices.Marshal]::ReleaseComObject($App) } catch {}
+  try { [void][System.Runtime.InteropServices.Marshal]::FinalReleaseComObject($App) } catch {}
+}
+
+function Com-Collect {
+  # On the worker (STA) thread that made them: collect the runtime wrappers of every COM object the probe and the edits
+  # left behind, so PowerPoint does not wait for COM's clean-up of a client that is gone.
+  param()
+  [GC]::Collect()
+  [GC]::WaitForPendingFinalizers()
+  [GC]::Collect()
+  [GC]::WaitForPendingFinalizers()
 }
 
 # ---- the verbs (run on the worker thread; they keep the COM objects in its global scope, never on the main thread) ---
@@ -433,10 +439,16 @@ function Ppt-Close {
 function Ppt-Finish {
   param()
   # Quit only when no presentation is open: one left open (a close that failed) keeps PowerPoint running for the supervisor.
+  # Order (first contact, 2026-11-27): no global keeps a COM object, Quit, release every reference, collect on this thread.
   $count = Com-OpenCount $global:NtApp
+  $app = $global:NtApp
+  $global:NtPres = $null
+  $global:NtApp = $null
   $quit = $false
-  if ($count -eq 0) { Com-Quit $global:NtApp; $quit = $true }
-  Com-Release $global:NtApp
+  if ($count -eq 0) { Com-Quit $app; $quit = $true }
+  Com-Release $app
+  $app = $null
+  Com-Collect
   return [ordered]@{ openCount = $count; quit = $quit }
 }
 
@@ -449,6 +461,27 @@ function Get-OfficeProcesses {
     if (Get-Process -Name $name -ErrorAction SilentlyContinue) { [void]$names.Add("$name.EXE") }
   }
   return $names.ToArray()
+}
+
+function Get-PowerPointIds {
+  # The process ids of every POWERPNT.EXE now; the run's own is the one that is new after Ppt-Start.
+  param()
+  return @(Get-Process -Name POWERPNT -ErrorAction SilentlyContinue | ForEach-Object { [int]$_.Id })
+}
+
+function Wait-PowerPointExit {
+  # Waits at most $Seconds in all for these processes to end on their own (Process.WaitForExit: no loop, nothing is ended).
+  # Returns { exited, seconds, left: [ids still running] }.
+  param([int[]]$Ids, [double]$Seconds)
+  $watch = [System.Diagnostics.Stopwatch]::StartNew()
+  $left = New-Object System.Collections.ArrayList
+  foreach ($id in $Ids) {
+    $process = Get-Process -Id $id -ErrorAction SilentlyContinue
+    if ($null -eq $process) { continue }
+    $remaining = [int][math]::Max(0, $Seconds * 1000 - $watch.ElapsedMilliseconds)
+    if (-not $process.WaitForExit($remaining)) { [void]$left.Add($id) }
+  }
+  return @{ exited = ($left.Count -eq 0); seconds = [math]::Round($watch.Elapsed.TotalSeconds, 2); left = $left.ToArray() }
 }
 
 function Write-Json {
@@ -539,7 +572,7 @@ if ($SelfTest) {
   if (-not $Fake) { Say 'NT16 -SelfTest needs -Fake <scenario.json>'; exit 2 }
   . (Join-Path $PSScriptRoot 'powerpoint-fake.ps1')
   # Every entry point that touches COM or the process list must now be the fake: refuse to run anything real.
-  foreach ($name in @('Com-NewApp', 'Com-AppInfo', 'Com-Open', 'Com-PresInfo', 'Com-ExportSlide', 'Com-ProbeSlide', 'Com-SaveCopy', 'Com-ApplyEdit', 'Com-Close', 'Com-OpenCount', 'Com-Quit', 'Com-Release', 'Get-OfficeProcesses')) {
+  foreach ($name in @('Com-NewApp', 'Com-AppInfo', 'Com-Open', 'Com-PresInfo', 'Com-ExportSlide', 'Com-ProbeSlide', 'Com-SaveCopy', 'Com-ApplyEdit', 'Com-Close', 'Com-OpenCount', 'Com-Quit', 'Com-Release', 'Com-Collect', 'Get-OfficeProcesses', 'Get-PowerPointIds', 'Wait-PowerPointExit')) {
     $file = (Get-Item "function:$name").ScriptBlock.File
     if (-not $file -or -not $file.EndsWith('powerpoint-fake.ps1')) { Say "NT16 self-test: $name is not faked; nothing runs"; exit 2 }
   }
@@ -584,8 +617,10 @@ $load.Runspace = $script:Worker
 $load.Dispose()
 
 $readCharts = $true
+$idsBefore = @(Get-PowerPointIds)
 $start = Invoke-Worker 'Ppt-Start' @{} ([double]$limits.start)
 $run.start = Verb $start
+$run.powerpointIds = @(Get-PowerPointIds | Where-Object { $idsBefore -notcontains $_ })
 if ($start.status -eq 'done') { $run.application = $start.value }
 Say "NT16 start $($start.status) $(if ($run.application) { "PowerPoint $($run.application.version) build $($run.application.build)" })"
 
@@ -647,7 +682,7 @@ foreach ($entry in @($work.files)) {
         if ($script:Stopped) { break }
         $answer = Invoke-Worker 'Ppt-Probe' @{ Index = [int]$slide.index; ReadCharts = $readCharts } ([double]$limits.probe)
         $raw.probe.seconds = [math]::Round($raw.probe.seconds + $answer.seconds, 2)
-        if ($answer.status -eq 'done') { $slide.shapes = @($answer.value.shapes); $slide.notes = $answer.value.notes }
+        if ($answer.status -eq 'done') { $slide.shapes = @($answer.value.shapes); $slide.notes = $answer.value.notes; $slide.hyperlinks = @($answer.value.hyperlinks) }
         elseif ($answer.status -eq 'timeout') { $raw.probe.status = 'timeout'; $raw.probe.message = "slide $($slide.index): $($answer.message)" }
         else { $slide.probeError = $answer.message; [void]$failed.Add("slide $($slide.index): $($answer.message)") }
       }
@@ -715,7 +750,31 @@ if ($start.status -eq 'done' -and -not $script:Stopped) {
 }
 if ($script:Stopped) { $run.stopped = $script:Stopped; $run.powerpointMayBeLeft = $true; $code = 4 }
 if ($start.status -eq 'failed') { $run.stopped = "PowerPoint did not start: $($start.message)"; $code = 4 }
+if ($code -ne 0) {
+  Write-Json $runFile $run
+  Say "NT16 done exit $code$(if ($run.stopped) { ": $($run.stopped)" })"
+  # Only here, where the worker thread may still wait inside PowerPoint: Environment.Exit ends this process without it.
+  # PowerPoint is not ended.
+  [Environment]::Exit($code)
+}
+
+# The clean path: the worker has released and collected everything; close it, then see whether PowerPoint ends on its own.
+$script:Worker.Close()
+$script:Worker.Dispose()
+$run.finish.workerClosed = $true
+$exitNote = ''
+if ($run.finish.quit) {
+  $gone = Wait-PowerPointExit ([int[]]@($run.powerpointIds)) ([double]$limits.exit)
+  $run.finish.exited = [bool]$gone.exited
+  $run.finish.exitSeconds = $gone.seconds
+  if ($gone.exited) { $exitNote = "; PowerPoint exited after $($gone.seconds) s" }
+  else {
+    $run.finish.left = @($gone.left)
+    $run.powerpointMayBeLeft = $true
+    $run.finish.message = "PowerPoint was quit, but POWERPNT.EXE $($gone.left -join ', ') had not ended $($gone.seconds) s later; the driver does not end it: the supervisor looks at it"
+    $exitNote = "; POWERPNT.EXE $($gone.left -join ', ') had not exited after $($gone.seconds) s"
+  }
+}
 Write-Json $runFile $run
-Say "NT16 done exit $code$(if ($run.stopped) { ": $($run.stopped)" })"
-# Environment.Exit ends this process even while the worker thread still waits inside PowerPoint; PowerPoint is not ended.
-[Environment]::Exit($code)
+Say "NT16 done exit $code$exitNote"
+exit $code

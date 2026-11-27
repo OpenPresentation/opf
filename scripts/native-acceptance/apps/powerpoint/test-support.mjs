@@ -58,10 +58,11 @@ const msg = (text) => ({ status: 'failed', seconds: 0.1, message: text });
  * exportFail?: [index], probeFail?: [index], closeError?, notApplicable?: { caseId: why }, writeInput?, excel? }.
  * spec.copyInput: the copies are the input's bytes (a real PowerPoint file for the round trip); spec.picture: the picture bytes.
  * Options: defaults (the spec of a file not named in files), running (names tasklist reports), installed (false: no App Paths), refuseInScript (names powerpoint.ps1 finds
- * running), crash (the script dies with this stderr and writes nothing), keepOpen (Presentations.Count stays 1).
+ * running), crash (the script dies with this stderr and writes nothing), keepOpen (Presentations.Count stays 1),
+ * exitsAfterQuit (false: POWERPNT.EXE 4242 has not ended when the script stops waiting).
  * exec.calls lists every command with its arguments.
  */
-export function fakeExec({ files = {}, running = [], installed = true, refuseInScript = [], crash = null, keepOpen = false, defaults = {}, application = { name: 'PowerPoint', version: '16.0', build: '20625' } } = {}) {
+export function fakeExec({ files = {}, running = [], installed = true, refuseInScript = [], crash = null, keepOpen = false, exitsAfterQuit = true, defaults = {}, application = { name: 'PowerPoint', version: '16.0', build: '20625' } } = {}) {
   const calls = [];
   const exec = async (command, args = [], options = {}) => {
     calls.push([command, ...args]);
@@ -75,7 +76,7 @@ export function fakeExec({ files = {}, running = [], installed = true, refuseInS
     const plan = JSON.parse(readFileSync(args[args.indexOf('-Plan') + 1], 'utf8'));
     const runFile = path.join(plan.runDir, 'powerpoint-run.json');
     if (crash) return { code: 1, stdout: '', stderr: crash, timedOut: false, seconds: 1 };
-    const run = { schema: 'nt16-powerpoint-run/1', selfTest: false, check: { status: 'ready', reasons: [] }, application, powershell: '5.1.26100.1', files: plan.files.map((file) => file.id), stopped: null, powerpointMayBeLeft: false, excelSeen: false, finish: { status: 'not-run' }, start: { status: 'done', seconds: 1 } };
+    const run = { schema: 'nt16-powerpoint-run/1', selfTest: false, check: { status: 'ready', reasons: [] }, application, powershell: '5.1.26100.1', files: plan.files.map((file) => file.id), stopped: null, powerpointMayBeLeft: false, excelSeen: false, finish: { status: 'not-run' }, start: { status: 'done', seconds: 1 }, powerpointIds: [4242] };
     if (refuseInScript.length > 0) {
       writeFileSync(runFile, JSON.stringify({ ...run, application: null, files: [], start: undefined, check: { status: 'refused', reasons: refuseInScript.map((item) => `${item} is running: that instance is the owner's.`) } }));
       return { code: 3, stdout: 'NT16 refused', stderr: '', timedOut: false, seconds: 0.5 };
@@ -165,7 +166,12 @@ export function fakeExec({ files = {}, running = [], installed = true, refuseInS
       options.onLine?.(`NT16 file ${file.id} open ${raw.open.status}`);
     }
     if (!stopped) {
-      run.finish = { status: 'done', seconds: 0.2, openCount: open, quit: open === 0 };
+      run.finish = { status: 'done', seconds: 0.2, openCount: open, quit: open === 0, workerClosed: true };
+      if (open === 0 && exitsAfterQuit) Object.assign(run.finish, { exited: true, exitSeconds: 0.8 });
+      if (open === 0 && !exitsAfterQuit) {
+        Object.assign(run.finish, { exited: false, exitSeconds: plan.timeouts.exit, left: [4242], message: `PowerPoint was quit, but POWERPNT.EXE 4242 had not ended ${plan.timeouts.exit} s later; the driver does not end it: the supervisor looks at it` });
+        run.powerpointMayBeLeft = true;
+      }
       if (open > 0) {
         run.finish.message = `${open} presentation(s) still open in PowerPoint, so it was not quit: a POWERPNT.EXE process is left for the supervisor to look at`;
         run.powerpointMayBeLeft = true;

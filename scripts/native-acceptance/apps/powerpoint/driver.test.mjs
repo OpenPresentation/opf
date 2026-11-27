@@ -226,6 +226,22 @@ test('a presentation left open: PowerPoint is not quit and the run says so', asy
   assert.deepEqual(done.notRun.map((item) => item.what), ['quitting PowerPoint']);
 });
 
+test('how PowerPoint ended: exited is the summary line; still there after Quit is a note, not a failed verb', async () => {
+  const clean = await runFiles(await ready(fakeExec()), inputs(['a']), { opf: OPF });
+  assert.equal(clean.summary, 'PowerPoint quit and POWERPNT.EXE 4242 exited after 0.8 s');
+  assert.deepEqual([clean.notes, clean.notRun, clean.stopped], [[], [], false]);
+  assert.deepEqual(clean.results[0].details.powerpoint, { ids: [4242], quit: true, exited: true, exitSeconds: 0.8, left: [], mayBeLeft: false });
+
+  const left = await runFiles(await ready(fakeExec({ exitsAfterQuit: false })), inputs(['a']), { opf: OPF });
+  assert.match(left.summary, /^PowerPoint quit, but POWERPNT\.EXE 4242 had not exited 15 s later: it is left for the supervisor \(the driver never ends it\)$/u);
+  assert.deepEqual(left.notRun, []);
+  assert.equal(left.stopped, false);
+  assert.match(left.notes[0], /POWERPNT\.EXE 4242 had not ended 15 s later; the driver does not end it/u);
+  assert.equal(left.results[0].verbs.resave.status, 'done', 'every verb stands');
+  assert.deepEqual(left.results[0].details.powerpoint, { ids: [4242], quit: true, exited: false, exitSeconds: 15, left: [4242], mayBeLeft: true });
+  assert.deepEqual(validateResult(left.results[0]).errors, []);
+});
+
 test('edit cases: one that does not apply is not-run with the reason; after a failed close none runs', async () => {
   const ctx = await ready(fakeExec({ files: { 'a.pptx': { notApplicable: { 'add-row': 'the file has no table', 'delete-row': 'the file has no table with two rows or more' } }, 'b.pptx': { closeError: 'Close failed' } } }));
   const [a, b] = (await runFiles(ctx, inputs(['a', 'b']), { opf: OPF })).results;

@@ -19,7 +19,8 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 
 export const SCRIPT = path.join(here, 'powerpoint.ps1');
 /** Seconds PowerPoint gets per call, enforced inside powerpoint.ps1 (a call that does not return in time is "timeout"). */
-export const TIMEOUTS = Object.freeze({ start: 120, open: 120, slide: 120, probe: 300, resave: 300, edit: 300, close: 60, quit: 60 });
+/** exit: how long the script waits, in all, for the POWERPNT.EXE it started to end on its own after Quit (never ended). */
+export const TIMEOUTS = Object.freeze({ start: 120, open: 120, slide: 120, probe: 300, resave: 300, edit: 300, close: 60, quit: 60, exit: 15 });
 /**
  * The pictures' width in pixels; the height follows the slide's aspect. The compare step works at 1280 pixels and resizes
  * any size (core/result/README.md, "Pictures"); the format names 1920 x 1080 as PowerPoint's size for a 16:9 deck, the
@@ -113,6 +114,30 @@ export function runApplication(started, registry) {
 }
 
 /**
+ * How the run's PowerPoint ended, from powerpoint-run.json: { ids, quit, exited, exitSeconds, left, mayBeLeft }. quit is
+ * null when the script never reached the end (a stop), exited null when it did not wait (no quit).
+ */
+export function powerpointEnd(driverRun) {
+  const finish = driverRun?.finish ?? {};
+  return {
+    ids: Array.isArray(driverRun?.powerpointIds) ? driverRun.powerpointIds : driverRun?.powerpointIds != null ? [driverRun.powerpointIds] : [],
+    quit: typeof finish.quit === 'boolean' ? finish.quit : null,
+    exited: typeof finish.exited === 'boolean' ? finish.exited : null,
+    exitSeconds: typeof finish.exitSeconds === 'number' ? finish.exitSeconds : null,
+    left: Array.isArray(finish.left) ? finish.left : finish.left != null ? [finish.left] : [],
+    mayBeLeft: Boolean(driverRun?.powerpointMayBeLeft),
+  };
+}
+
+/** The summary line of how PowerPoint ended. */
+export function endLine(end) {
+  if (end.quit === true && end.exited === true) return `PowerPoint quit and POWERPNT.EXE ${end.ids.join(', ')} exited after ${end.exitSeconds} s`;
+  if (end.quit === true && end.exited === false) return `PowerPoint quit, but POWERPNT.EXE ${end.left.join(', ')} had not exited ${end.exitSeconds} s later: it is left for the supervisor (the driver never ends it)`;
+  if (end.quit === false) return 'PowerPoint was not quit (a presentation stayed open): a POWERPNT.EXE process is left for the supervisor';
+  return end.mayBeLeft ? 'the run stopped before PowerPoint was quit: a POWERPNT.EXE process may be left for the supervisor' : 'PowerPoint was not started';
+}
+
+/**
  * Runs every input through PowerPoint in one powerpoint.ps1 process and writes the run directory.
  *   inputs: [{ path (absolute), relativePath, deck, variant, id? }]
  *   options: { opf, fonts?, tier?, baseline?, edits? (EDIT_CASES by default; [] for none), log? (each progress line) }
@@ -158,6 +183,7 @@ export async function runFiles(ctx, inputs, { opf, fonts = 'installed', tier = n
       notRun.push({ what: 'the PowerShell driver', reason: `powerpoint.ps1 ${answer.timedOut ? 'did not end in time and was stopped' : `exited with ${answer.code}`}${driverRun ? '' : ' and wrote no powerpoint-run.json'}${said ? `: ${said}` : ''}`, blocking: true });
     }
     ctx.facts.application = runApplication(driverRun?.application, ctx.facts.application);
+    const powerpoint = powerpointEnd(driverRun);
     const finished = iso(ctx.now());
     const results = [];
     const validations = [];
@@ -171,6 +197,8 @@ export async function runFiles(ctx, inputs, { opf, fonts = 'installed', tier = n
         // The input went away: unchangedAfterRun stays unknown.
       }
       const result = buildResult({ raw, input, application: ctx.facts.application, system: ctx.facts.system, opf, fonts, started, finished, hashes: { before, after }, fileDir: dir });
+      // run.json has no details (core/result is fixed), so how the run's PowerPoint ended is kept on every file's result.
+      result.details.powerpoint = powerpoint;
       const validation = validateResult(result);
       writeFileSync(path.join(dir, 'result.json'), `${JSON.stringify(result, null, 2)}\n`);
       results.push(result);
@@ -178,12 +206,15 @@ export async function runFiles(ctx, inputs, { opf, fonts = 'installed', tier = n
     }
     if (driverRun?.stopped) {
       notRun.push({ what: 'the files after the call that stopped the run', reason: `${driverRun.stopped}${driverRun.powerpointMayBeLeft ? '; a POWERPNT.EXE process may be left for the supervisor to look at (the driver never ends it)' : ''}`, blocking: true });
-    } else if (driverRun?.powerpointMayBeLeft) {
+    } else if (driverRun?.powerpointMayBeLeft && powerpoint.quit !== true) {
       notRun.push({ what: 'quitting PowerPoint', reason: driverRun.finish?.message ?? 'PowerPoint was not quit; a POWERPNT.EXE process may be left for the supervisor to look at', blocking: true });
     }
+    // Quit but still running is not a failed verb: every file's result stands. It is said, because the next run's check
+    // refuses while that POWERPNT.EXE runs.
+    const notes = powerpoint.quit === true && powerpoint.exited === false ? [driverRun.finish?.message ?? `PowerPoint was quit but POWERPNT.EXE ${powerpoint.left.join(', ')} had not ended`] : [];
     const run = buildRun(ctx, { opf, fonts, started, check: ctx.lastCheck ?? { status: 'ready', reasons: [] }, results, target: 'powerpoint', tier, baseline });
     const runValidation = writeRun(ctx, run);
-    return { results, validations, run, runValidation, driverRun, stopped: crashed || Boolean(driverRun?.stopped), notRun, exit: answer.code, stderr: answer.stderr };
+    return { results, validations, run, runValidation, driverRun, powerpoint, summary: endLine(powerpoint), notes, stopped: crashed || Boolean(driverRun?.stopped), notRun, exit: answer.code, stderr: answer.stderr };
   } finally {
     lock.release();
   }

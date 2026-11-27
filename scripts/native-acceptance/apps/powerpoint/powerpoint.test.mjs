@@ -65,12 +65,27 @@ test('every COM touch is inside a Com-* function; the main thread only waits on 
   assert.match(body('Com-Open'), /\$App\.Presentations\.Open\(\$Path, -1, 0, 0\)/u, 'ReadOnly msoTrue, Untitled msoFalse, WithWindow msoFalse');
   assert.equal((code.match(/\.Quit\(\)/gu) ?? []).length, 1);
   assert.match(body('Com-Quit'), /\$App\.Quit\(\)/u);
-  assert.match(body('Ppt-Finish'), /if \(\$count -eq 0\) \{ Com-Quit \$global:NtApp; \$quit = \$true \}/u, 'quit only when no presentation is open');
+  // The end on the worker thread: globals cleared, Quit only when nothing is open, every reference released, collected.
+  assert.match(body('Ppt-Finish'), /\$global:NtPres = \$null\s+\$global:NtApp = \$null[\s\S]*if \(\$count -eq 0\) \{ Com-Quit \$app; \$quit = \$true \}\s+Com-Release \$app\s+\$app = \$null\s+Com-Collect/u, 'quit only when no presentation is open');
+  assert.match(body('Com-Release'), /FinalReleaseComObject\(\$App\)/u);
+  assert.match(body('Com-Collect'), /\[GC\]::Collect\(\)\s+\[GC\]::WaitForPendingFinalizers\(\)\s+\[GC\]::Collect\(\)\s+\[GC\]::WaitForPendingFinalizers\(\)/u);
   assert.match(body('Com-Close'), /\$Pres\.Saved = -1[\s\S]*\$Pres\.Close\(\)/u);
   for (const pattern of [/\$App\b/u, /\$Pres\b/u, /\.Presentations\b/u, /\.Slides\b/u, /ComObject/u]) assert.doesNotMatch(mainPart.replace(/function Ppt-[\s\S]*?\n\}/gu, ''), pattern);
   assert.match(code, /ApartmentState = \[System\.Threading\.ApartmentState\]::STA/u);
   assert.match(body('Invoke-Worker'), /BeginInvoke\(\)[\s\S]*AsyncWaitHandle\.WaitOne/u, 'every call waits with a time limit');
-  assert.match(code, /\[Environment\]::Exit\(\$code\)/u);
+  // Environment.Exit only on the stopped path; the clean path closes the worker, waits for PowerPoint's exit, ends normally.
+  assert.equal((code.match(/\[Environment\]::Exit\(/gu) ?? []).length, 1);
+  assert.match(code, /if \(\$code -ne 0\) \{\s+Write-Json \$runFile \$run\s+Say [^\n]*\n\s+\[Environment\]::Exit\(\$code\)\s*\}/u);
+  assert.match(code, /\$script:Worker\.Close\(\)\s+\$script:Worker\.Dispose\(\)[\s\S]*Wait-PowerPointExit[\s\S]*\nexit \$code\s*$/u);
+  assert.match(body('Wait-PowerPointExit'), /\.WaitForExit\(\$remaining\)/u, 'a bounded wait, no loop and nothing ended');
+});
+
+test('change-link edits a hyperlink from Slide.Hyperlinks; the probe lists them too', () => {
+  const edit = body('Com-ApplyEdit');
+  assert.match(edit, /foreach \(\$link in \$slide\.Hyperlinks\) \{[\s\S]*\$link\.Address = \$new/u);
+  assert.match(edit, /why = 'no slide has a hyperlink with a web address'/u);
+  assert.match(body('Com-ProbeSlide'), /foreach \(\$link in \$slide\.Hyperlinks\)/u);
+  assert.doesNotMatch(body('Com-Link'), /Action/u, 'a link is its Hyperlink address, whatever Action says');
 });
 
 test('the fake replaces every COM entry point, and the script checks each one before a self-test runs', () => {
@@ -97,7 +112,7 @@ test('Windows PowerShell parses both scripts without an error', { skip }, () => 
   }
 });
 
-const LIMITS = { start: 5, open: 1.5, slide: 1.5, probe: 1.5, resave: 1.5, edit: 1.5, close: 1.5, quit: 1.5 };
+const LIMITS = { start: 5, open: 1.5, slide: 1.5, probe: 1.5, resave: 1.5, edit: 1.5, close: 1.5, quit: 1.5, exit: 1.5 };
 
 /** A plan and a scenario in a fresh folder: files = { name: spec }. */
 function selfTestFolder(files, extra = {}) {
@@ -127,10 +142,28 @@ test('self-test: a clean run quits PowerPoint only after every presentation clos
   const folder = selfTestFolder({ 'a.pptx': { slideSize: [960, 540], slides } });
   const answer = powershell(['-File', SCRIPT, '-Plan', folder.plan, '-SelfTest', '-Fake', folder.scenario]);
   assert.equal(answer.status, 0, answer.stdout + answer.stderr);
-  assert.match(answer.stdout, /NT16 done exit 0/u);
-  assert.deepEqual(callsOf(folder.scenario), ['new-app', 'open a.pptx', 'save-copy resaved.pptx', 'close a.pptx', 'open a.pptx', 'save-copy retype-cell.pptx', 'close a.pptx', 'open a.pptx', 'save-copy add-row.pptx', 'close a.pptx', 'quit', 'release']);
+  assert.match(answer.stdout, /NT16 done exit 0; PowerPoint exited after 0\.5 s\s*$/u);
+  // The end, in this order on the worker thread: the globals hold no COM object, Quit, release, collect; then the main
+  // thread closes the worker and waits (bounded) for the POWERPNT.EXE this run started.
+  assert.deepEqual(callsOf(folder.scenario), [
+    'new-app',
+    'open a.pptx',
+    'save-copy resaved.pptx',
+    'close a.pptx',
+    'open a.pptx',
+    'save-copy retype-cell.pptx',
+    'close a.pptx',
+    'open a.pptx',
+    'save-copy add-row.pptx',
+    'close a.pptx',
+    'quit (globals null)',
+    'release (globals null)',
+    'collect (globals null)',
+    'wait-exit 4242 within 1.5',
+  ]);
   const run = readJson(path.join(folder.runDir, 'powerpoint-run.json'));
   assert.deepEqual([run.selfTest, run.finish.status, run.finish.openCount, run.finish.quit, run.stopped, run.powerpointMayBeLeft], [true, 'done', 0, true, null, false]);
+  assert.deepEqual([run.powerpointIds, run.finish.workerClosed, run.finish.exited, run.finish.exitSeconds], [[4242], true, true, 0.5]);
   const raw = readJson(path.join(folder.entries[0].dir, 'powerpoint-raw.json'));
   assert.deepEqual([raw.open.status, raw.resave.status, raw.render.status, raw.probe.status, raw.close.status], ['done', 'done', 'done', 'done', 'done']);
   assert.deepEqual(raw.render.pixelSize, [1920, 1080]);
@@ -152,7 +185,7 @@ test('self-test: a call that does not return is a timeout, the rest not-run, and
   assert.ok(Date.now() - started < 5600, 'the script exits on its limit, not when the hung call returns');
   assert.match(answer.stdout, /NT16 done exit 4: PowerPoint did not answer Ppt-Export within 1\.5 s/u);
   const calls = callsOf(folder.scenario);
-  assert.ok(!calls.includes('quit') && !calls.includes('release'), 'nothing more is sent to PowerPoint after a timeout');
+  assert.ok(!calls.some((call) => /^(quit|release|collect|wait-exit)/u.test(call)), 'nothing more is sent to PowerPoint after a timeout, and no wait');
   assert.ok(!calls.includes('close c.pptx'));
   const raw = (id) => readJson(path.join(folder.runDir, 'files', id, 'powerpoint-raw.json'));
   const a = raw('a~default');
@@ -185,8 +218,10 @@ test('self-test: a failed close keeps PowerPoint running (no quit); Excel appear
   const answer = powershell(['-File', SCRIPT, '-Plan', kept.plan, '-SelfTest', '-Fake', kept.scenario]);
   assert.equal(answer.status, 0, answer.stdout + answer.stderr);
   const run = readJson(path.join(kept.runDir, 'powerpoint-run.json'));
-  assert.deepEqual([run.finish.openCount, run.finish.quit, run.powerpointMayBeLeft], [1, false, true]);
-  assert.ok(!callsOf(kept.scenario).includes('quit'));
+  assert.deepEqual([run.finish.openCount, run.finish.quit, run.powerpointMayBeLeft, run.finish.exited], [1, false, true, undefined]);
+  const keptCalls = callsOf(kept.scenario);
+  assert.ok(!keptCalls.some((call) => call.startsWith('quit') || call.startsWith('wait-exit')), 'no quit, so no wait');
+  assert.deepEqual(keptCalls.slice(-2), ['release (globals null)', 'collect (globals null)'], 'its references are still released');
   const raw = readJson(path.join(kept.entries[0].dir, 'powerpoint-raw.json'));
   assert.notEqual(raw.sha256Before, raw.sha256After);
   assert.ok(raw.edits.every((edit) => edit.message === 'not run: the file did not close'));
@@ -200,13 +235,30 @@ test('self-test: a failed close keeps PowerPoint running (no quit); Excel appear
   assert.equal(readJson(path.join(excel.entries[1].dir, 'powerpoint-raw.json')).open.status, 'not-run');
 });
 
+test('self-test: PowerPoint quit but its process still there after the wait: recorded, said on the done line, never ended', { skip }, () => {
+  const folder = selfTestFolder({ 'a.pptx': { slideSize: [960, 540], slides } }, { exitsAfterQuit: false, powerpointIds: [5150] });
+  const answer = powershell(['-File', SCRIPT, '-Plan', folder.plan, '-SelfTest', '-Fake', folder.scenario]);
+  assert.equal(answer.status, 0, answer.stdout + answer.stderr);
+  assert.match(answer.stdout, /NT16 done exit 0; POWERPNT\.EXE 5150 had not exited after 1\.5 s\s*$/u);
+  const run = readJson(path.join(folder.runDir, 'powerpoint-run.json'));
+  assert.deepEqual([run.finish.quit, run.finish.exited, run.finish.exitSeconds, run.finish.left, run.powerpointMayBeLeft], [true, false, 1.5, [5150], true]);
+  assert.match(run.finish.message, /the driver does not end it/u);
+  assert.equal(callsOf(folder.scenario).at(-1), 'wait-exit 5150 within 1.5');
+});
+
 test('self-test end to end: the Node driver starts the real script once (fake COM) and writes a valid run directory', { skip }, async () => {
   const root = mkdtempSync(path.join(tmpdir(), 'nt16-e2e-'));
   const input = path.join(root, 'pptx', 'pricing.pptx');
   mkdirSync(path.dirname(input), { recursive: true });
   writeFileSync(input, 'deck');
   const scenario = path.join(root, 'scenario.json');
-  writeFileSync(scenario, JSON.stringify({ processes: [[]], app: { version: '16.0', build: '20625' }, files: { 'pricing.pptx': { slideSize: [960, 540], slides: sampleSlides() } } }));
+  const withLinks = sampleSlides();
+  // Slide.Hyperlinks repeats the cell link the probe found and adds one on words the per-shape reading missed.
+  withLinks[0].hyperlinks = [
+    { address: 'https://example.com/pro', subAddress: '', type: 0, text: 'Pro' },
+    { address: 'https://example.com/words', subAddress: '', type: 0, text: 'these words' },
+  ];
+  writeFileSync(scenario, JSON.stringify({ processes: [[]], app: { version: '16.0', build: '20625' }, files: { 'pricing.pptx': { slideSize: [960, 540], slides: withLinks } } }));
   const ctx = createContext({ runDir: path.join(root, 'run'), machine: windowsMachine({ officeProcesses: async () => [], powerpointInstall: async () => ({ path: 'POWERPNT.EXE', version: '16.0.20625.20108' }) }), timeouts: LIMITS, selfTest: { fake: scenario } });
   assert.equal((await check(ctx)).status, 'ready');
   const done = await runFiles(ctx, [{ path: input, relativePath: 'pptx/pricing.pptx', deck: 'pricing', variant: 'default' }], { opf: { version: '0.37.0' } });
@@ -218,6 +270,10 @@ test('self-test end to end: the Node driver starts the real script once (fake CO
   assert.equal(result.file.unchangedAfterRun, true);
   assert.equal(result.verbs.edits.length, 7);
   assert.ok(result.verbs.edits.every((edit) => edit.status === 'done'));
-  assert.deepEqual(result.slides[0].objects.map((object) => object.kind), ['title', 'table', 'link']);
+  assert.deepEqual(result.slides[0].objects.map((object) => object.kind), ['title', 'table', 'link', 'link']);
+  assert.deepEqual(result.slides[0].objects[3], { kind: 'link', outcome: null, text: 'these words', on: 'text', target: 'https://example.com/words', details: { address: 'https://example.com/words', subAddress: '', from: 'Slide.Hyperlinks' } });
   assert.equal(result.application.version, '16.0');
+  assert.deepEqual(result.details.powerpoint, { ids: [4242], quit: true, exited: true, exitSeconds: 0.5, left: [], mayBeLeft: false });
+  assert.equal(done.summary, 'PowerPoint quit and POWERPNT.EXE 4242 exited after 0.5 s');
+  assert.deepEqual(done.notes, []);
 });

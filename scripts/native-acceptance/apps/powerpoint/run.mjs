@@ -100,7 +100,9 @@ export async function main(argv, { exec, machine, now, selfTest, log = console.l
     for (const line of done.runValidation.errors) error(`  ${line}`);
     exit = Math.max(exit, 1);
   }
+  log(done.summary);
   for (const item of done.notRun) error(`run.mjs: not run: ${item.what}: ${item.reason}`);
+  for (const note of done.notes) error(`run.mjs: note: ${note}`);
   if (done.stopped) exit = 2;
   log(`run directory: ${runDir}`);
   return exit;

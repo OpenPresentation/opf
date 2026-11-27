@@ -8,7 +8,27 @@
 function Set-FakeMainScenario {
   param([string]$Path)
   $script:FakeMain = Get-Content -LiteralPath $Path -Raw -Encoding UTF8 | ConvertFrom-Json
+  $script:FakePath = $Path
   $script:FakeProcessCalls = 0
+  $script:FakeIdCalls = 0
+}
+
+function Get-PowerPointIds {
+  # None before the run starts PowerPoint; then the scenario's (4242 unless it says otherwise).
+  param()
+  $script:FakeIdCalls++
+  if ($script:FakeIdCalls -eq 1) { return @() }
+  $ids = @($script:FakeMain.powerpointIds)
+  if ($ids.Count -eq 0 -or $null -eq $ids[0]) { $ids = @(4242) }
+  return $ids
+}
+
+function Wait-PowerPointExit {
+  # The scenario says whether PowerPoint ends on its own after Quit (exitsAfterQuit, true unless false). No real process.
+  param([int[]]$Ids, [double]$Seconds)
+  Add-Content -LiteralPath ($script:FakePath + '.calls') -Value "wait-exit $($Ids -join ',') within $Seconds" -Encoding UTF8
+  if ($script:FakeMain.exitsAfterQuit -eq $false) { return @{ exited = $false; seconds = $Seconds; left = $Ids } }
+  return @{ exited = $true; seconds = 0.5; left = @() }
 }
 
 function Get-OfficeProcesses {
@@ -92,7 +112,9 @@ function Com-ProbeSlide {
   if (@($Pres.spec.probeFail) -contains $Index) { throw "probe failed on slide $Index (fake)" }
   $notes = $null
   if ($slide.notes) { $notes = [string]$slide.notes }
-  return [ordered]@{ notes = $notes; shapes = @($slide.shapes) }
+  $links = @()
+  if ($slide.hyperlinks) { $links = @($slide.hyperlinks) }
+  return [ordered]@{ notes = $notes; shapes = @($slide.shapes); hyperlinks = $links }
 }
 
 function Com-SaveCopy {
@@ -123,12 +145,24 @@ function Com-OpenCount {
   return [int]$global:NtFakeOpen
 }
 
+function Com-FakeGlobals {
+  # Whether the worker's globals still hold a "COM object" when the call comes.
+  param()
+  if ($null -eq $global:NtApp -and $null -eq $global:NtPres) { return 'globals null' }
+  return 'globals held'
+}
+
 function Com-Quit {
   param($App)
-  Com-FakeMark 'quit'
+  Com-FakeMark "quit ($(Com-FakeGlobals))"
 }
 
 function Com-Release {
   param($App)
-  Com-FakeMark 'release'
+  Com-FakeMark "release ($(Com-FakeGlobals))"
+}
+
+function Com-Collect {
+  param()
+  Com-FakeMark "collect ($(Com-FakeGlobals))"
 }

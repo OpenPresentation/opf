@@ -501,7 +501,9 @@ export async function runNative(argv, deps = {}) {
           const invalid = done.validations.filter((validation) => !validation.ok);
           if (invalid.length > 0) throw new Error(`${invalid[0].id}: result.json does not validate: ${invalid[0].errors.join('; ')}`);
           if (!done.runValidation.ok) throw new Error(`run.json does not validate: ${done.runValidation.errors.join('; ')}`);
+          say(`  ${done.summary}`);
           report.notRun.push(...done.notRun);
+          report.notes.push(...done.notes);
           if (done.stopped) stopped = true;
           entry.message = `${done.results.filter((result) => result.verbs.open.status === 'done').length} of ${built.length} file(s) opened, into ${runDir}`;
           if (done.results.length === 0) throw new Error('no file was run');

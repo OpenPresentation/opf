@@ -170,11 +170,45 @@ const verbOf = (raw) => {
   return verb;
 };
 
+/**
+ * The link objects of Slide.Hyperlinks that the per-shape reading did not already report (counted by target, group
+ * members included). Slide.Hyperlinks lists every hyperlink of a slide, on shapes (Type 1) and on text (Type 0); the first
+ * PowerPoint run (2026-11-27) found links on words only there.
+ */
+export function slideLinks(hyperlinks, objects) {
+  const seen = new Map();
+  const count = (list) => {
+    for (const object of list) {
+      if (object.kind === 'link') seen.set(object.target, (seen.get(object.target) ?? 0) + 1);
+      if (object.objects) count(object.objects);
+    }
+  };
+  count(objects);
+  const added = [];
+  for (const link of asArray(hyperlinks)) {
+    if (!link) continue;
+    const target = linkTarget(link);
+    if (!target) continue;
+    if ((seen.get(target) ?? 0) > 0) {
+      seen.set(target, seen.get(target) - 1);
+      continue;
+    }
+    const object = { kind: 'link', outcome: null };
+    if (link.text && String(link.text).trim()) object.text = cutText(plainText(link.text));
+    object.on = link.type === 1 ? 'shape' : 'text';
+    object.target = target;
+    object.details = { address: link.address ?? '', subAddress: link.subAddress ?? '', from: 'Slide.Hyperlinks' };
+    added.push(object);
+  }
+  return added;
+}
+
 /** The slides of a raw file in the shared shape. */
 export function slidesOf(raw) {
   return asArray(raw.slides).map((slide) => {
     const notes = typeof slide.notes === 'string' && slide.notes.trim() !== '' ? plainText(slide.notes) : null;
     const objects = asArray(slide.shapes).flatMap(objectsOf);
+    objects.push(...slideLinks(slide.hyperlinks, objects));
     if (notes) objects.push({ kind: 'notes', outcome: null, text: cutText(notes) });
     const details = {};
     if (slide.id !== undefined && slide.id !== null) details.slideId = slide.id;
