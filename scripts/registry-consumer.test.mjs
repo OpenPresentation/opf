@@ -9,6 +9,7 @@ import {
   CONSUMER_PACKAGES, ESBUILD_VERSION, consumerManifest, consumerPackages, existsAtRef, fileAtRef, installConsumer, parsePins, pinOverrides,
   registryManifest, rendererOptionalPeers, resolveRef, verifiedPackages,
 } from './registry-consumer.mjs';
+import { checkoutNames, publishedNames } from './registry-names.mjs';
 import { registryPlan } from './registry-plan.mjs';
 import { developerQuickstartInput, DEVELOPER_QUICKSTART_FILE, QUICKSTART_033 } from './developer-quickstart-input.mjs';
 import {createHash} from 'node:crypto';
@@ -177,4 +178,18 @@ test('quickstart input rejects missing/ambiguous/malformed version or release au
 });
 test('registry quickstart retains every original workflow/CLI/source assertion verbatim after input selection',()=>{
  const file='scripts/test-developer-quickstart.mjs',before=fileAtRef('e1480c66ba8df5e47869be63040b5cb1abb4e96f',file,{cwd:root}),after=readFileSync(path.join(root,file),'utf8'),marker='  const originalDeck =';const pinned=before.slice(before.indexOf(marker));assert.equal(pinned.split('minFontSize: 32').length,2,'the one 0.37 rename of the pinned text: minFontSize to minFontSizePx');assert.equal(after.slice(after.indexOf(marker)),pinned.replace('minFontSize: 32','minFontSizePx: 32'));assert.ok(after.includes("assert.match(svgs[0], /Developer  quickstart/);"));assert.ok(after.includes('developerQuickstartInput(plan, {cwd: root})'));assert.ok(!after.includes('copyFile(deckSource'));
+});
+
+test('an installed package names the renamed keys by its version: one name, never either', () => {
+  const renamed = Object.keys(checkoutNames);
+  assert.deepEqual(renamed, ['scriptGroup', 'anchor', 'organization', 'minFontSizePx', 'maxFontSizePx', 'link', 'appearance', 'lineSeries']);
+  for (const version of ['0.36.0', '0.36.9', '0.9.0']) {
+    assert.deepEqual(publishedNames(version), {
+      scriptGroup: 'languageFamily', anchor: 'verticalAlign', organization: 'organizationId', minFontSizePx: 'minFontSize',
+      maxFontSizePx: 'maxFontSize', link: 'url', appearance: 'tone', lineSeries: 'line',
+    }, version);
+  }
+  for (const version of ['0.37.0', '0.37.0-next.1', '0.38.2', '1.0.0']) assert.deepEqual(publishedNames(version), checkoutNames, version);
+  assert.throws(() => publishedNames('latest'), TypeError);
+  assert.throws(() => publishedNames(undefined), TypeError);
 });
