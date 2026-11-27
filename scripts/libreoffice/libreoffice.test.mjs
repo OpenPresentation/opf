@@ -9,7 +9,9 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { compareStructure, containment, inkOutside, missingWords, runExtent, shapeForRun, sourceBleeds, verdict } from "./checks.mjs";
-import { corpusCases, selectCases } from "./corpus.mjs";
+import { corpusCases, LIBREOFFICE_CASES, qualificationSelection, selectCases, sharedFixtureCases } from "./corpus.mjs";
+import { decksForTier } from "../native-acceptance/qualification/tiers.mjs";
+import { fileIdentity } from "../native-acceptance/apps/impress/from-libreoffice.mjs";
 import { pinnedImage } from "./image.mjs";
 import { readPptx, slideWords, tokenize } from "./pptx-model.mjs";
 
@@ -168,10 +170,97 @@ test("the runner also writes the shared native result format, and writes nothing
   const scratch = mkdtempSync(path.join(tmpdir(), "opf-lo-native-"));
   try {
     writeNativeRun(path.join(scratch, "native"), run, [result]);
-    assert.deepEqual(JSON.parse(readFileSync(path.join(scratch, "native/run.json"), "utf8")).files.map((file) => file.result), ["files/tables~opf/result.json"]);
-    assert.equal(JSON.parse(readFileSync(path.join(scratch, "native/files/tables~opf/result.json"), "utf8")).target, "impress");
+    assert.deepEqual(JSON.parse(readFileSync(path.join(scratch, "native/run.json"), "utf8")).files.map((file) => file.result), ["files/tables~default.opf/result.json"]);
+    assert.equal(JSON.parse(readFileSync(path.join(scratch, "native/files/tables~default.opf/result.json"), "utf8")).target, "impress");
     const invalid = { ...result, verbs: { ...result.verbs, probe: { status: "skipped" } } };
-    assert.throws(() => writeNativeRun(path.join(scratch, "again"), run, [invalid]), /files\/tables~opf\/result\.json does not validate/);
+    assert.throws(() => writeNativeRun(path.join(scratch, "again"), run, [invalid]), /files\/tables~default\.opf\/result\.json does not validate/);
     assert.equal(existsSync(path.join(scratch, "again")), false, "nothing is written when a result is invalid");
   } finally { rmSync(scratch, { recursive: true, force: true }); }
+});
+
+// NT-14: the qualification part of the list comes from the manifest's tiers (tiers.mjs), as in the Keynote runner.
+const manifest = JSON.parse(readFileSync(path.join(root, "scripts/native-acceptance/qualification/manifest.json"), "utf8"));
+
+/** A build directory as build.mjs writes it, for every deck and variant of the manifest (no files are read except build.json). */
+function fakeBuild(failing = []) {
+  const dir = mkdtempSync(path.join(tmpdir(), "opf-lo-build-"));
+  const decks = manifest.decks.map((deck) => ({
+    id: deck.id,
+    source: deck.source,
+    variants: (deck.variants ?? [{ name: "default" }]).map((variant) => ({ name: variant.name, ok: !failing.includes(`${deck.id}~${variant.name}`), pptx: `pptx/${variant.name === "default" ? deck.id : `${deck.id}~${variant.name}`}.pptx`, sha256: "0".repeat(64) })),
+  }));
+  writeFileSync(path.join(dir, "build.json"), JSON.stringify({ revision: "abc", decks }));
+  return dir;
+}
+
+test("a tier selects exactly the decks and variants decksForTier names, in the tier's order", () => {
+  const dir = fakeBuild();
+  try {
+    for (const tier of ["smoke", "release", "full"]) {
+      const expected = decksForTier(manifest, tier).flatMap(({ deck, variants }) => variants.map((variant) => `${deck}~${variant}`));
+      const { cases, failed } = qualificationSelection(dir, { tier });
+      assert.deepEqual(cases.map((entry) => `${entry.qualification.deck}~${entry.qualification.variant}`), expected, tier);
+      assert.deepEqual(failed, []);
+    }
+    const release = qualificationSelection(dir).cases;
+    assert.equal(release.length, manifest.decks.reduce((total, deck) => total + (deck.variants?.length || 1), 0), "the default is release: every deck in every variant");
+    const smoke = qualificationSelection(dir, { tier: "smoke" });
+    assert.ok(smoke.cases.length < release.length / 2);
+    assert.deepEqual(smoke.sources, ["native-fragments"], "named sources are reported, not resolved");
+    assert.ok(qualificationSelection(dir, { tier: "full" }).sources.includes("examples"));
+    assert.throws(() => qualificationSelection(dir, { tier: "nightly" }), /unknown tier/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("a variant that did not export is left out and named; a tier entry the build lacks throws", () => {
+  const dir = fakeBuild(["smartart~shapes"]);
+  try {
+    const { cases, failed } = qualificationSelection(dir, { tier: "release" });
+    assert.deepEqual(failed, ["smartart~shapes"]);
+    assert.ok(!cases.some((entry) => entry.id === "q-smartart~shapes") && cases.some((entry) => entry.id === "q-smartart"));
+    const short = structuredClone(manifest);
+    short.tiers.smoke.decks.push({ deck: "not-built" });
+    assert.throws(() => qualificationSelection(dir, { tier: "smoke", manifest: short }), /tier smoke: no deck "not-built"/);
+    const build = JSON.parse(readFileSync(path.join(dir, "build.json"), "utf8"));
+    build.decks = build.decks.filter((deck) => deck.id !== "footers");
+    writeFileSync(path.join(dir, "build.json"), JSON.stringify(build));
+    assert.throws(() => qualificationSelection(dir, { tier: "smoke" }), /deck footers is not in/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("qualification cases keep their case ids and scope, and name the manifest deck and variant", () => {
+  const dir = fakeBuild();
+  try {
+    const { cases } = qualificationSelection(dir, { tier: "release" });
+    const sampler = cases.find((entry) => entry.id === "q-chart-type-sampler");
+    assert.equal(sampler.scope, "advanced");
+    assert.deepEqual(sampler.qualification, { deck: "chart-type-sampler", variant: "default", sha256: "0".repeat(64), revision: "abc" });
+    assert.equal(cases.find((entry) => entry.id === "q-layout-sampler~native-body").qualification.variant, "native-body");
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("LibreOffice's own cases are one named list with a reason each, and none repeats a manifest deck", async () => {
+  assert.equal(new Set(LIBREOFFICE_CASES.map((entry) => entry.id)).size, LIBREOFFICE_CASES.length);
+  for (const entry of LIBREOFFICE_CASES) assert.ok(entry.why.length > 20, `${entry.id} says why it is not a corpus deck`);
+  const shared = await sharedFixtureCases();
+  assert.ok(shared.every((entry) => entry.why));
+  const decks = new Set(manifest.decks.map((deck) => deck.id));
+  const mine = [...LIBREOFFICE_CASES, ...shared].map((entry) => fileIdentity(entry.id, "opf").deck);
+  assert.equal(new Set(mine).size, mine.length, "file ids of the non-manifest cases are unique");
+  assert.deepEqual(mine.filter((deck) => decks.has(deck)), [], "a case that is a manifest deck belongs to the tier, not to this list");
+  const ids = (await corpusCases({ tier: "release" })).map((entry) => entry.id);
+  assert.equal(ids.length, LIBREOFFICE_CASES.length + shared.length);
+  const smoke = await corpusCases({ tier: "smoke" });
+  assert.deepEqual(smoke.map((entry) => entry.id), LIBREOFFICE_CASES.map((entry) => entry.id), "a smoke run keeps the own cases and leaves the shared fixtures out");
+  assert.ok(smoke.every((entry) => !("why" in entry)), "run.mjs never sees the documentation fields");
+});
+
+test("file ids of a whole release run are unique and valid in both profiles", async () => {
+  const dir = fakeBuild();
+  try {
+    const cases = [...(await corpusCases({ tier: "release" })), ...qualificationSelection(dir, { tier: "release" }).cases];
+    const ids = cases.flatMap((entry) => ["opf", "stock"].map((profile) => fileIdentity(entry.id, profile, entry.qualification).id));
+    assert.equal(new Set(ids).size, ids.length);
+    assert.equal(ids.length, 2 * (LIBREOFFICE_CASES.length + 28 + 74));
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });
