@@ -21,7 +21,7 @@ pnpm native <target> [--tier smoke|release|full|candidate] [--decks a,b] [--vari
 | Target | Driver |
 | --- | --- |
 | `keynote` | `apps/keynote/driver.mjs`, on a Mac where the owner has started Keynote and the screen is unlocked. |
-| `powerpoint` | The PowerPoint driver runs on the release supervisor's Windows computer and writes a run directory; classify it here with `--from-run`. |
+| `powerpoint` | `apps/powerpoint/driver.mjs`, on Windows only, where no `POWERPNT.EXE` or `EXCEL.EXE` is running: one Windows PowerShell process drives PowerPoint over COM for the whole run (`apps/powerpoint/README.md`). On another system the command refuses; classify a Windows run directory here with `--from-run`. |
 | `impress` | The LibreOffice runner (`scripts/libreoffice/run.mjs`). The command refuses when LibreOffice is missing. When it is installed, the command builds the decks and prints the runner's command and the `--from-run` command that classifies the runner's `native/` folder; it does not start the runner itself yet. |
 | `powerpoint-mac` | No driver yet (opf#1314); the command says so. |
 

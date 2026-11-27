@@ -24,7 +24,7 @@ Editing in the application's user interface is not part of a run.
 | Application | System | How it is driven | Who runs it | State today |
 | --- | --- | --- | --- | --- |
 | Keynote (`keynote`) | macOS | AppleScript through Keynote's own scripting dictionary ([apps/keynote/](../scripts/native-acceptance/apps/keynote/README.md)) | An agent session or the owner on the Mac | The driver is in the repository and tested without Keynote. Not run in Keynote yet |
-| PowerPoint (`powerpoint`) | Windows | COM | The release supervisor session on the owner's Windows computer | Its driver runs there and writes a run directory in the shared format, which `pnpm native powerpoint --from-run` classifies. The format and the five verbs are agreed with the release supervisor on Windows ([opf#1468, comment of 2026-11-25](https://github.com/OpenPresentation/opf/issues/1468#issuecomment-7174529699)); the Windows command that writes the run directory is the release supervisor's and comes after the 0.37.0 format changes |
+| PowerPoint (`powerpoint`) | Windows | COM, one Windows PowerShell process for the whole run, read-only and without a window ([apps/powerpoint/](../scripts/native-acceptance/apps/powerpoint/README.md)) | The release supervisor session on the owner's Windows computer | The driver is in the repository and tested without PowerPoint (NT-16): on Windows `pnpm native powerpoint` runs it, elsewhere `--from-run` classifies its run directory. First runs in PowerPoint 16.0 on 2026-11-27: the smoke tier (13 files) and the release tier (74 files, 242 s in PowerPoint), every file opened, no window, no dialog, inputs unchanged. Not yet reviewed: `known/powerpoint.json` is empty and there is no PowerPoint summary under `runs/` |
 | LibreOffice Impress (`impress`) | Linux, in CI | LibreOffice's headless conversion, `scripts/libreoffice/run.mjs` in `nightly.yml` | GitHub's runners | The runner writes the shared format into its artifact ([libreoffice.md](libreoffice.md)); the first real run is the nightly after that change merges. The nightly does not run the classify step, and there is no `known/impress.json` yet |
 | PowerPoint for Mac (`powerpoint-mac`) | macOS | A reserved slot, no driver (decision D3) | The owner's: it needs a license and an install (opf#1314) | The command says "no driver yet" |
 
@@ -165,10 +165,12 @@ Decision D1: a Keynote run gates OPF's defects only. A release supervisor applie
 6. An OPF defect first seen in an earlier release and still open does not block by itself. The release supervisor lists it under
    known differences on the release's tracking issue.
 
-PowerPoint on Windows keeps its existing rule until its driver writes the shared format: "A change that moves what the export
-writes (layout rules, chart geometry, text boxes) is opened in PowerPoint and compared with the preview before the owner is asked
-to approve it and before it merges" ([working-rules.md of 2026-11-24](handoff/2026-11-24/working-rules.md), "PowerPoint before
-merge"). Impress does not gate: its nightly leg is report-only, and `release.yml` turns it off in the release gate, until the
+PowerPoint on Windows has a driver that writes the shared format (`pnpm native powerpoint`). The release supervisor ran the smoke
+tier (13 files) and the release tier (74 files) with it in PowerPoint on 2026-11-27. Until a PowerPoint run has been reviewed, with
+its records in `known/powerpoint.json` and its summary under `runs/`, PowerPoint keeps its existing rule: "A change that moves
+what the export writes (layout rules, chart geometry, text boxes) is opened in PowerPoint and compared with the preview before the
+owner is asked to approve it and before it merges" ([working-rules.md of 2026-11-24](handoff/2026-11-24/working-rules.md),
+"PowerPoint before merge"). Impress does not gate: its nightly leg is report-only, and `release.yml` turns it off in the release gate, until the
 classify step runs on it and it has a known-difference file.
 
 ## After the release

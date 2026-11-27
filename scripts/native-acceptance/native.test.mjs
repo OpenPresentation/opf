@@ -13,6 +13,7 @@ import { sharp } from './core/compare/picture.mjs';
 import { picturePath } from './core/result/result.mjs';
 import { exportHashes } from './core/select/slide-parts.mjs';
 import { makePptx, sp } from './core/roundtrip/test-deck.mjs';
+import { fakeExec, windowsMachine } from './apps/powerpoint/test-support.mjs';
 import { defaultOut, impressDeck, opfLine, insideRepository, lookForTarget, parseArgs, ROOT, resolveBaseline, runNative, selectFiles, UsageError } from './native.mjs';
 
 const MANIFEST = {
@@ -126,7 +127,8 @@ async function setup({ appPictures, refuse = false, failRender = false, fragment
     workspace: () => ({ version: '0.37.0', commit: 'abc1234', built: true }),
     build,
     loadDriver: async () => driver,
-    soffice: () => ({ program: null, pinned: '/opt/libreoffice26.8/program/soffice' }),
+    platform: 'darwin',
+    soffice:() => ({ program: null, pinned: '/opt/libreoffice26.8/program/soffice' }),
     importer: () => ({ status: 'imported', slideCount: 2 }),
     knownDir,
     runsDir: temp('runs'),
@@ -257,12 +259,59 @@ test('a verb that did not finish leaves the run unfinished: exit 2, and the repo
 test('a target without a driver here exits 2 and says where its driver is', async () => {
   const { deps, build, lines } = await setup();
   assert.equal((await runNative(['powerpoint'], deps)).exit, 2);
-  assert.match(lines.join('\n'), /runs on the release supervisor's Windows computer and writes a run directory; pass it with --from-run/u);
+  assert.match(lines.join('\n'), /the PowerPoint driver \(apps\/powerpoint\) runs on the release supervisor's Windows computer and writes a run directory; pass it with --from-run/u);
   assert.equal((await runNative(['powerpoint-mac'], deps)).exit, 2);
   assert.match(lines.join('\n'), /powerpoint-mac: no driver yet, opf#1314/u);
   assert.equal((await runNative(['impress'], deps)).exit, 2);
   assert.match(lines.join('\n'), /LibreOffice is not installed here/u);
   assert.deepEqual(build.calls, []);
+});
+
+/** The real PowerPoint driver (apps/powerpoint) with a fake powerpoint.ps1 child and this machine's facts faked (NT-16). */
+async function powerpointDriver(options) {
+  const real = await import('./apps/powerpoint/driver.mjs');
+  const exec = fakeExec(options);
+  return { exec, driver: { ...real, createContext: ({ runDir }) => real.createContext({ runDir, exec, machine: windowsMachine(), now: () => new Date('2026-11-25T12:00:00Z') }) } };
+}
+
+test('powerpoint on Windows: check before the build, one powerpoint.ps1 process for the run, then classify', async () => {
+  const { deps, build, lines, out } = await setup();
+  const preview = await picture(40);
+  const { exec, driver } = await powerpointDriver({ defaults: { slides: [{ shapes: [] }, { shapes: [] }], copyInput: true, picture: preview } });
+  const { exit, report } = await runNative(['powerpoint', '--out', out, '--baseline', 'none'], { ...deps, platform: 'win32', loadDriver: async () => driver });
+  assert.equal(exit, 0, lines.join('\n'));
+  assert.deepEqual(
+    report.steps.map((item) => [item.name, item.status]),
+    [
+      ['select', 'done'],
+      ['check', 'ready'],
+      ['build', 'done'],
+      ['run', 'done'],
+      ['round trip', 'done'],
+      ['compare', 'done'],
+      ['classify', 'done'],
+    ],
+  );
+  assert.equal(exec.calls.filter(([command]) => /powershell\.exe$/iu.test(command)).length, 1);
+  assert.deepEqual(build.calls, [['alpha']]);
+  const result = JSON.parse(readFileSync(path.join(out, 'run', 'files', 'alpha~default', 'result.json'), 'utf8'));
+  assert.equal(result.target, 'powerpoint');
+  assert.equal(result.verbs.edits.length, 7);
+  assert.match(lines.join('\n'), /alpha~default\topen done\tprobe done\trender done\tresave done\tclose done/u);
+});
+
+test('powerpoint on Windows: Office running refuses before the build; a stopped run exits 2', async () => {
+  const refused = await setup();
+  const office = await powerpointDriver({ running: ['POWERPNT.EXE'] });
+  assert.equal((await runNative(['powerpoint', '--out', refused.out], { ...refused.deps, platform: 'win32', loadDriver: async () => office.driver })).exit, 2);
+  assert.match(refused.lines.join('\n'), /check refused; nothing was opened:\n {2}- POWERPNT\.EXE is running: that instance is the owner's/u);
+  assert.deepEqual(refused.build.calls, []);
+
+  const hung = await setup();
+  const stopped = await powerpointDriver({ defaults: { hang: 'open' } });
+  const { exit, report } = await runNative(['powerpoint', '--out', hung.out, '--baseline', 'none'], { ...hung.deps, platform: 'win32', loadDriver: async () => stopped.driver });
+  assert.equal(exit, 2, hung.lines.join('\n'));
+  assert.match(report.notRun.map((item) => item.reason).join('\n'), /a POWERPNT\.EXE process may be left for the supervisor to look at/u);
 });
 
 test('--from-run classifies an existing run directory in place; a target that does not match is refused', async () => {
@@ -403,6 +452,47 @@ test('--tier candidate builds the release tier and opens the smoke tier and the 
   assert.deepEqual(native.export, { deck: same.deck, slides: same.slides });
   assert.deepEqual(
     native.slides.map((slide) => slide.changed ?? false),
+    [false, true],
+  );
+});
+
+test('--tier candidate for powerpoint on Windows: the shared selection, then one powerpoint.ps1 run of the selected files (NT-16)', async () => {
+  const { deps, build, lines, out } = await setup();
+  const preview = await picture(40);
+  const { exec, driver } = await powerpointDriver({ defaults: { slides: [{ shapes: [] }, { shapes: [] }], copyInput: true, picture: preview } });
+  const same = exportHashes(deckBytes());
+  const file = (id, slides) => ({ id, sha256: 'a'.repeat(64), open: 'done', slideCount: 2, scores: [0.001, 0.001], classes: 'ss', known: {}, export: { deck: same.deck, slides } });
+  const baseline = {
+    schemaVersion: 1,
+    target: 'powerpoint',
+    application: { name: 'PowerPoint', version: '16.0' },
+    system: { os: 'Windows', version: '10.0.26300' },
+    opf: { version: '0.36.0' },
+    tier: 'release',
+    date: '2026-11-27',
+    settings: { threshold: 0.005, tolerance: 0.002 },
+    counts: { files: 3, slides: { same: 6, 'known-present': 0, 'known-gone': 0, new: 0, 'not-compared': 0 } },
+    warnings: [],
+    files: [file('alpha~default', same.slides), file('beta~default', same.slides), file('beta~native-body', [same.slides[0], 'f'.repeat(16)])],
+  };
+  assert.deepEqual(validateSummary(baseline), { ok: true, errors: [] });
+  mkdirSync(path.join(deps.runsDir, '0.36.0'));
+  writeFileSync(path.join(deps.runsDir, '0.36.0', 'powerpoint.json'), JSON.stringify(baseline));
+  const { exit, report } = await runNative(['powerpoint', '--tier', 'candidate', '--out', out, '--release', '0.37.0'], { ...deps, platform: 'win32', loadDriver: async () => driver });
+  assert.equal(exit, 0, lines.join('\n'));
+  assert.deepEqual(build.calls, [['alpha', 'beta']], 'the whole release tier is built');
+  assert.deepEqual(report.selection.skipped, ['beta~default']);
+  assert.equal(exec.calls.filter(([command]) => /powershell\.exe$/iu.test(command)).length, 1, 'one PowerShell process for the selected files');
+  const plan = JSON.parse(readFileSync(path.join(out, 'run', 'powerpoint-plan.json'), 'utf8'));
+  assert.deepEqual(
+    plan.files.map((item) => item.id),
+    ['alpha~default', 'beta~native-body'],
+  );
+  const run = JSON.parse(readFileSync(path.join(out, 'run', 'run.json'), 'utf8'));
+  assert.deepEqual([run.target, run.tier, run.baseline], ['powerpoint', 'candidate', '0.36.0']);
+  const classified = JSON.parse(readFileSync(path.join(out, 'run', 'classify.json'), 'utf8'));
+  assert.deepEqual(
+    classified.files.find((item) => item.id === 'beta~native-body').slides.map((slide) => slide.changed ?? false),
     [false, true],
   );
 });

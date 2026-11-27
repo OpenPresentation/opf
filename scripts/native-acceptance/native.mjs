@@ -50,9 +50,9 @@ export const USAGE = `usage: pnpm native <${TARGETS.join('|')}> [--tier ${RUN_TI
                    [--baseline <opf version>|none] [--out <dir>] [--from-run <dir>] [--inputs <dir>] [--previews <dir>]
                    [--warnings-dir <dir>] [--look deck#slide,...] [--no-sheets] [--write-summary] [--release <x.y.z>] [--force-summary] [--json]`;
 
-/** What a target without a driver in this repository says instead of a check. */
+/** What a target without a driver on this system says instead of a check (PowerPoint's driver runs on Windows only). */
 export const NO_DRIVER = Object.freeze({
-  powerpoint: "the PowerPoint driver runs on the release supervisor's Windows computer and writes a run directory; pass it with --from-run",
+  powerpoint: "the PowerPoint driver (apps/powerpoint) runs on the release supervisor's Windows computer and writes a run directory; pass it with --from-run",
   'powerpoint-mac': 'powerpoint-mac: no driver yet, opf#1314',
 });
 
@@ -285,6 +285,7 @@ function defaults(deps) {
     workspace: () => workspace(ROOT),
     build: buildDecks,
     loadDriver: (target) => import(`./apps/${target}/driver.mjs`),
+    platform: process.platform,
     soffice: () => findSoffice({ root: ROOT }),
     importer: importResaved,
     knownDir: path.join(here, 'known'),
@@ -407,7 +408,8 @@ export async function runNative(argv, deps = {}) {
     report.files = selection.files.map((file) => file.id);
 
     // c, before the build: a machine that cannot run the target spends no time building.
-    if (NO_DRIVER[target]) return refuse('check', [NO_DRIVER[target]]);
+    const windowsPowerPoint = target === 'powerpoint' && d.platform === 'win32';
+    if (NO_DRIVER[target] && !windowsPowerPoint) return refuse('check', [NO_DRIVER[target]]);
     let soffice;
     if (target === 'impress') {
       soffice = d.soffice();
@@ -438,7 +440,7 @@ export async function runNative(argv, deps = {}) {
     let driver;
     let ctx;
     let checked;
-    if (target === 'keynote') {
+    if (target === 'keynote' || windowsPowerPoint) {
       driver = await d.loadDriver(target);
       const warningsText = options.warningsDir
         ? (id) => {
@@ -530,6 +532,25 @@ export async function runNative(argv, deps = {}) {
     // d. run
     try {
       await step('run', async (entry) => {
+        if (driver.runFiles) {
+          // PowerPoint on Windows: one powerpoint.ps1 process runs every file and the driver writes the run directory.
+          const done = await driver.runFiles(ctx, built, { opf, check: checked, tier: options.tier, baseline: baseline?.version ?? null, log: (line) => say(`  ${line}`) });
+          if (done.refused) throw new Error(`refused; nothing was opened: ${done.refused.join('; ')}`);
+          for (const result of done.results) {
+            const { verbs } = result;
+            say(`  ${result.file.id}\topen ${verbs.open.status}\tprobe ${verbs.probe.status}\trender ${verbs.render.status}\tresave ${verbs.resave.status}\tclose ${result.details?.close?.status ?? 'not-run'}`);
+          }
+          const invalid = done.validations.filter((validation) => !validation.ok);
+          if (invalid.length > 0) throw new Error(`${invalid[0].id}: result.json does not validate: ${invalid[0].errors.join('; ')}`);
+          if (!done.runValidation.ok) throw new Error(`run.json does not validate: ${done.runValidation.errors.join('; ')}`);
+          say(`  ${done.summary}`);
+          report.notRun.push(...done.notRun);
+          report.notes.push(...done.notes);
+          if (done.stopped) stopped = true;
+          entry.message = `${done.results.filter((result) => result.verbs.open.status === 'done').length} of ${built.length} file(s) opened, into ${runDir}`;
+          if (done.results.length === 0) throw new Error('no file was run');
+          return;
+        }
         const started = iso(d.now());
         const results = [];
         for (const [index, input] of built.entries()) {
