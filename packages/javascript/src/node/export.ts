@@ -97,9 +97,9 @@ export interface ExportOptions {
 	/**
 	 * `pptx` (NT-09): the application the file will be read in, standing for a set of the options above, which opf-pptx owns
 	 * (`readerOptions`); an option set here as well wins over the set. `powerpoint` (the default) sets none. `keynote` sets
-	 * `typefaces: "safe"` and `slideNumbers: "static"`; `smartArt: "shapes"` and `bodyText: "native"` stay options a caller adds. What it
+	 * `typefaces: "safe"`, `slideNumbers: "static"` and `smartArt: "shapes"`; `bodyText: "native"` stays an option a caller adds. What it
 	 * costs a PowerPoint reader of the same file: Arial, Georgia and Courier New replace the deck's faces; slide numbers with words
-	 * around them are fixed text.
+	 * around them are fixed text; there is no live SmartArt.
 	 */
 	reader?: "powerpoint" | "keynote";
 	/**

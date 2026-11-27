@@ -12,7 +12,7 @@ import { installIsolatedCore } from "../../../scripts/isolated-core.mjs";
 import { STUB_LOG, installStubPeers, parseStubLog } from "../../../scripts/stub-peers.mjs";
 
 const executable = process.env.OPF_TEST_BIN ?? fileURLToPath(new URL("../dist/index.js", import.meta.url));
-const KEYNOTE_FLAGS = ["--typefaces", "safe", "--slide-numbers", "static"];
+const KEYNOTE_FLAGS = ["--typefaces", "safe", "--slide-numbers", "static", "--smart-art", "shapes"];
 const deck = {
   name: "Reader deck",
   design: { footer: { end: { text: "{{slide.number}} / {{deck.slideCount}}" } } },
@@ -53,7 +53,7 @@ describe("opf convert --reader", () => {
     assert.equal(noted(powerpoint.report), noted(plain.report));
     const keynote = await exported("keynote.pptx", ["--reader", "keynote"]);
     const flags = await exported("flags.pptx", KEYNOTE_FLAGS);
-    assert.ok(keynote.bytes.equals(flags.bytes), "--reader keynote writes what its two flags write");
+    assert.ok(keynote.bytes.equals(flags.bytes), "--reader keynote writes what its three flags write");
     assert.equal(keynote.report.outputs[0].sha256, flags.report.outputs[0].sha256);
     assert.ok(!keynote.bytes.equals(plain.bytes));
     assert.equal(noted(keynote.report), false, "safe typefaces need no note");
@@ -83,6 +83,6 @@ describe("opf convert --reader", () => {
   test("the help names the flag and what it sets", () => {
     const help = run(["convert", "--help"]).stdout;
     assert.match(help, /--reader <powerpoint\|keynote>/);
-    assert.match(help, /keynote sets --typefaces safe --slide-numbers static/);
+    assert.match(help, /keynote sets --typefaces safe --slide-numbers static --smart-art shapes/);
   });
 });

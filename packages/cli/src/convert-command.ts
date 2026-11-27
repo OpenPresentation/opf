@@ -81,9 +81,10 @@ Flags, each only where its format is involved (otherwise exit 2):
                                                   on every Windows and macOS machine, and lay the text out with it, so every
                                                   viewer breaks lines where the file does (typeface-replaced)
                    --reader <powerpoint|keynote>  the application the file is for. powerpoint (the default) sets nothing.
-                                                  keynote sets --typefaces safe --slide-numbers static (a flag given beside
-                                                  it wins), for a file read in Keynote; a PowerPoint reader of it gets Arial,
-                                                  Georgia and Courier New and fixed slide numbers beside words
+                                                  keynote sets --typefaces safe --slide-numbers static --smart-art shapes
+                                                  (a flag given beside it wins), for a file read in Keynote; a PowerPoint
+                                                  reader of it gets Arial, Georgia and Courier New, fixed slide numbers beside
+                                                  words and no live SmartArt
                    --as <native|images>           native (the default): editable shapes, text and charts. images: a
                                                   fidelity fallback, each slide one full-bleed PNG picture drawn like the
                                                   preview (--scale, default 2), with its speaker notes and its text as the

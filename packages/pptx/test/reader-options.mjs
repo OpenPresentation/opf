@@ -8,7 +8,7 @@ import {toPptx} from './helpers/default-catalog.mjs';
 import {OPFPptxError, READERS, readerOptions} from '../dist/index.js';
 
 let checks = 0;
-const KEYNOTE = {typefaces: 'safe', slideNumberFields: 'static'};
+const KEYNOTE = {typefaces: 'safe', slideNumberFields: 'static', smartArt: 'shapes'};
 
 // The documented sets, each a new object.
 {
@@ -53,14 +53,13 @@ for (const file of decks) {
   same(await exported({reader: 'keynote', typefaces: 'selected'}), await exported({...KEYNOTE, typefaces: 'selected'}), `${file}: typefaces selected wins`);
   checks++;
 }
-// SmartArt as shapes and native body text are not in the set (NT-09, measured in Keynote 16.0): a caller adds them beside the reader, and an option set beside it wins.
+// Native body text is not in the set (NT-09, measured in Keynote 16.0): a caller adds it beside the reader, and an option set beside it wins.
 {
   const deck = await read('technical/icons-and-arrangements.opf.json');
   const exported = options => toPptx(structuredClone(deck), {fonts, ...options});
-  assert.equal(readerOptions('keynote').smartArt, undefined);
   assert.equal(readerOptions('keynote').bodyText, undefined);
-  same(await exported({reader: 'keynote', smartArt: 'shapes', bodyText: 'native'}), await exported({...KEYNOTE, smartArt: 'shapes', bodyText: 'native'}), 'smartArt and bodyText added beside the reader');
-  assert.ok(!Buffer.from(await exported({reader: 'keynote'})).equals(Buffer.from(await exported({reader: 'keynote', smartArt: 'shapes'}))), 'the set leaves SmartArt live');
+  same(await exported({reader: 'keynote', bodyText: 'native'}), await exported({...KEYNOTE, bodyText: 'native'}), 'bodyText added beside the reader');
+  same(await exported({reader: 'keynote', smartArt: 'live'}), await exported({...KEYNOTE, smartArt: 'live'}), 'smartArt live beside the reader wins');
   checks++;
 }
 
