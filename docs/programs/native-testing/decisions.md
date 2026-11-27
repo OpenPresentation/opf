@@ -4,7 +4,7 @@ The questions are the "Decisions for the owner" of opf#1468, plus the choice of 
 [burndown.md](burndown.md).
 
 Who decided: D1 to D6 were given by the owner (Michael Grimm) on 2026-11-25 in the supervisor session, answering a question that came
-with a recommendation; D7 and D8 came on 2026-11-27. Each decision says whether he took the recommended option. An overruled or changed decision changes its section
+with a recommendation; D7, D8 and D9 came on 2026-11-27. Each decision says whether he took the recommended option. An overruled or changed decision changes its section
 here and the items that depend on it.
 
 | ID | Question | Decision | Who |
@@ -17,6 +17,7 @@ here and the items that depend on it.
 | D6 | Which languages? | Node for shared code; AppleScript and PowerShell only in their drivers | Owner, 2026-11-25, as recommended |
 | D7 | How big is the native corpus, and when does each part run? | Option A: one trimmed corpus, run in tiers | Owner, 2026-11-27, as recommended |
 | D8 | How is the Keynote gate handled for 0.37.0? | The smoke tier gates; the release tier runs after the release and is recorded | Owner, 2026-11-27, to the release supervisor |
+| D9 | May 0.37.1 be released without its Keynote run? | Yes, as an exception for this patch: its exported files are identical to 0.37.0's | Owner, 2026-11-27, to the release supervisor |
 
 ## D1: a gate or a review
 
@@ -146,3 +147,21 @@ their default files. The Windows supervisor has no record of them showing anythi
   owner's delegation: `reader` with the values `powerpoint` and `keynote`. Version 1 of `keynote` sets safe typefaces, static
   slide numbers, SmartArt as shapes and native body text; native body text is on condition of one Keynote smoke run of
   profile exports. The profile is NT-09 (#1508).
+
+## D9: 0.37.1 without its Keynote run
+
+Question: the Keynote gate for the 0.37.1 candidate `8bc766056` could not run because the Mac's screen was locked. Release on the
+evidence that its exported files are identical to 0.37.0's, or wait for the Mac to be unlocked and the smoke tier to run?
+
+Decision: "Release now", given by the owner on 2026-11-27 to the release supervisor. The supervisor's session relayed it and recorded
+on opf#1538 that the Keynote gate was not run and that the release goes out on the owner's word as an exception to D1 for this patch.
+
+Evidence the decision rests on (ran, without any application): all 74 release-tier files built at the candidate have the same
+per-slide export hashes as the 0.37.0 Keynote summary (645 of 645 slides, no deck-level change), and every one of those files was
+opened in Keynote on the same day (the 0.37.0 release tier).
+
+Who: the owner, 2026-11-27, to the release supervisor; relayed by that session.
+
+Follows: it sets no precedent for a release whose exported files differ. A candidate whose hashes all equal the last release's
+summary is a case the process could name on its own (the `candidate` tier already opens only the smoke tier then); whether an
+identical export may skip the application run is left open and belongs to NT-11.
