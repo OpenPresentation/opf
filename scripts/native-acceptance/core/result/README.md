@@ -97,7 +97,7 @@ A driver without screen access (PowerPoint over COM, whose window is never drive
 
 ## run.json
 
-`{ schemaVersion: 1, target, application, system, fonts, opf, tier, baseline, started, finished, check, files }`. `tier` is `smoke`, `release`, `full` or null; `baseline` the OPF version compared against, or null. `check` is `{ status: ready / refused, reasons: [] }`, what the driver's `check` said before the run (a refused run opens nothing). `files` has one `{ id, deck, variant, result: "files/<id>/result.json", open, slideCount }` per input in run order; `runFileEntry(result)` builds it.
+`{ schemaVersion: 1, target, application, system, fonts, opf, tier, baseline, started, finished, check, files }`. `tier` is `smoke`, `release`, `full`, `candidate` or null; `baseline` the OPF version compared against, or null. `check` is `{ status: ready / refused, reasons: [] }`, what the driver's `check` said before the run (a refused run opens nothing). `files` has one `{ id, deck, variant, result: "files/<id>/result.json", open, slideCount }` per input in run order; `runFileEntry(result)` builds it.
 
 ## The driver contract
 

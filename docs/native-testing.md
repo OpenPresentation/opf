@@ -34,7 +34,7 @@ Impress runs on GitHub's runners.
 ## The command
 
 ```sh
-pnpm native <target> [--tier smoke|release|full] [--decks a,b] [--baseline <opf version>|none] [--out <dir>]
+pnpm native <target> [--tier smoke|release|full|candidate] [--decks a,b] [--baseline <opf version>|none] [--out <dir>]
                      [--from-run <dir>] [--warnings-dir <dir>] [--look deck#slide,...] [--release <x.y.z>]
                      [--write-summary] [--force-summary] [--json]
 ```
@@ -46,6 +46,7 @@ opens nothing. The full list of flags is in the command's reference.
 | --- | --- |
 | `smoke` (the default) | About ten decks named in `tiers.smoke` of the qualification manifest, plus the decks that unreleased changelog fragments name in `native:` |
 | `release` | Every deck and variant of the qualification corpus (`scripts/native-acceptance/qualification/`) |
+| `candidate` | For a release candidate: builds the `release` tier, hashes what each file's slides draw, and opens only the `smoke` tier, the files of the slides that fragments or `--look` name, and the files with a slide whose export changed since the baseline (every file of a deck whose masters, layouts or theme changed). It prints the selection before the run |
 | `full` | The corpus. The other sources (example decks, gallery layouts at three content sizes, language decks) cannot be built by the runner yet: they are listed as "not run" and the run exits with 2 |
 
 In every tier, the slides that unreleased fragments name and the slides given with `--look` are reported as `new` whatever their
@@ -59,7 +60,7 @@ the exported files and OPF's previews; `<out>/run` the run directory, `classify.
 **Exit codes.** 0: nothing new. 1: something new; look at each item. 2: refused, something not run, or the run could not finish.
 
 ```sh
-pnpm native keynote --tier smoke --release 0.37.0 --warnings-dir ~/opf-work/warnings-0.37.0
+pnpm native keynote --tier candidate --release 0.37.0 --warnings-dir ~/opf-work/warnings-0.37.0
 pnpm native keynote --tier release --release 0.37.0 --out ~/opf-work/native/keynote-0.37.0
 pnpm native powerpoint --from-run D:/opf-work/native/run --inputs D:/opf-work/native/build --previews D:/opf-work/native/build/preview
 ```
@@ -72,6 +73,14 @@ The baseline is, by default, the newest version under `scripts/native-acceptance
 both, for example "OPF workspace 0.36.0 at <commit>, release candidate 0.37.0": the workspace version is the previous release's,
 and the commit identifies the candidate. `run.json` and every `result.json` keep the workspace's version and commit; only the
 summary carries the release.
+
+**Changed slides.** A summary keeps, per file, a deck hash and one hash per slide of what the export draws
+(`scripts/native-acceptance/core/select/slide-parts.mjs`): the slide part and every part it reaches (charts with their
+workbooks, diagrams, pictures, media, notes, tags), and for the deck the masters, the layouts slides use, the theme and the
+presentation properties. Part names, relationship ids and `docProps` do not count, so inserting a slide changes no other
+slide's hash. `--tier candidate` compares these with the baseline's; a baseline without them (0.36.0) selects the `smoke` tier
+and the named files only, and says so. In every run, a slide whose hash changed gets `changed: true` in `classify.json` (and on
+its sheet when it is new), and the report counts the slides whose export changed since the baseline.
 
 ## Before a Keynote run
 
@@ -138,7 +147,7 @@ with 0.
 Decision D1: a Keynote run gates OPF's defects only. A release supervisor applies these rules:
 
 1. A release candidate is the commit of `main` that the Release workflow's dry run tested. Before the real run, Keynote runs the
-   `smoke` tier on it, then the `release` tier, both with `--release <the version being released>`.
+   `candidate` tier on it, then the `release` tier, both with `--release <the version being released>`.
 2. Each run must finish. Exit 2 is not a pass: fix the cause and run again.
 3. Every `new` item of both runs is reviewed and settled as above, until the run classified again exits with 0.
 4. A reviewed difference that is OPF's defect (`whose: opf-file`, `opf-importer` or `preview`) and first seen in this candidate
@@ -166,6 +175,30 @@ classify step runs on it and it has a known-difference file.
   every record the run reported, and retire the records that are gone. No tool updates `lastSeen`; it is edited by hand.
 - Pictures, sheets, saved decks and logs go to an evidence branch (`codex/evidence-<slug>`), are attached to the issue, or stay
   on the machine. They never go into `main` (`pnpm check:evidence-size`).
+
+## Coverage and budgets
+
+The corpus stays small only if every file earns its place. `pnpm report:native-coverage [--tier release] [--out <file.md>]
+[--json]` computes, from the repository alone, the units each corpus file shows: the schema locations its decks use (keys, enum
+values, `oneOf`/`anyOf` branches, default layouts, chart types), the manifest features it carries, the scripts of its text, its
+export variant, and the known differences whose `where` names its slides. It prints the units each tier covers against the
+totals, the units on exactly one slide, the decks with no unit of their own, the schema locations no deck shows, and each tier's
+files, slides and modeled minutes. The report is not committed.
+
+`pnpm check:native-coverage` fails on any of four rules:
+
+1. **Known places.** Every record of `known/<application>.json` with places has one that the release tier runs (the deck and
+   variant are in the manifest, the slide is within the deck). Records whose deck is still being moved into the corpus are
+   listed with the item that moves it in `core/coverage/pending-known-places.json`; a listed record that no longer needs it fails.
+2. **Schema.** Every schema location is on a corpus slide, or `scripts/format-coverage-allowlist.json` gives a reason.
+3. **Earned place.** Every corpus deck shows a schema location, script or variant no other deck shows, or a known record or a
+   feature names it. The exceptions are in `core/coverage/dominated-decks.json`, each with a reason.
+4. **Time budget.** Modeled seconds = 4.15 x files + 0.86 x slides (fitted on 584 Keynote opens); the model and the budgets per
+   application and tier (smoke 6, release 25, full 90 minutes) are in `core/coverage/budgets.json`.
+
+To add a deck, give it something no corpus deck shows, or a feature with `targets`. To add a schema key or value, put it on a
+slide of a `coverage-*` deck. When a tier goes over its budget, move decks to a later tier or merge decks that show the same
+units before raising the budget.
 
 ## Who does what
 

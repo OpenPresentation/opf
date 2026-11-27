@@ -2,7 +2,8 @@
 // native-summary.schema.json, and readBaseline, which turns one back into the lookup the classifier uses.
 //
 // Per file one line: { id, sha256, open, slideCount, scores: [..], classes: "skgn-", known: { "<slide>": [ids] },
-// import?, importError?, outcomes? }. The exported objects per kind are the outcome counts summed per kind, so they need no
+// import?, importError?, outcomes?, export? }. export (NT-13) is { deck, slides: [..] }: the export hashes of
+// core/select/slide-parts.mjs, which the next release candidate compares to open only the files whose slides changed. The exported objects per kind are the outcome counts summed per kind, so they need no
 // field of their own. classes has one letter per slide (s same, k known-present, g known-gone, n new, - not-compared);
 // scores are rounded to 5 places, null where the slide was not compared.
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -31,6 +32,7 @@ export function validateSummary(value) {
       seen.add(file.id);
       if (file.classes.length !== file.scores.length) errors.push(`/files/${position}: ${file.classes.length} classes but ${file.scores.length} scores`);
       if (file.slideCount !== null && file.slideCount !== file.scores.length) errors.push(`/files/${position}: slideCount ${file.slideCount} but ${file.scores.length} scores`);
+      if (file.export && file.export.slides.length !== file.scores.length) errors.push(`/files/${position}/export: ${file.export.slides.length} slide hashes but ${file.scores.length} scores`);
       for (const slide of Object.keys(file.known)) {
         if (Number(slide) > file.classes.length) errors.push(`/files/${position}/known/${slide}: the file has ${file.classes.length} slides`);
       }
@@ -73,6 +75,7 @@ export function summarize({ run, results, classified, date, note, settings }) {
     if (result.verbs.resave.import?.status === 'failed' && importCode(result.verbs.resave.import.error)) entry.importError = importCode(result.verbs.resave.import.error);
     const outcomes = outcomeCounts(result);
     if (outcomes) entry.outcomes = outcomes;
+    if (file.export) entry.export = { deck: file.export.deck, slides: [...file.export.slides] };
     return entry;
   });
   const summary = {
@@ -118,6 +121,7 @@ export function baselineOf(summary) {
         import: file.import ?? null,
         importError: file.importError ?? null,
         outcomes: file.outcomes ?? null,
+        export: file.export ?? null,
         slides: [...file.classes].map((letter, position) => ({ class: CLASS_OF_LETTER[letter], score: file.scores[position], known: file.known[position + 1] ?? [] })),
       },
     ]),

@@ -27,7 +27,7 @@
       "required": ["version"],
       "properties": { "version": { "type": "string" }, "commit": { "type": "string" } }
     },
-    "tier": { "enum": ["smoke", "release", "full", null], "description": "The run's tier; null for a run that was not a tier run." },
+    "tier": { "enum": ["smoke", "release", "full", "candidate", null], "description": "The run's tier; null for a run that was not a tier run. candidate: the smoke tier plus the release-tier files whose slides changed since the baseline (NT-13)." },
     "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$", "description": "The day the run finished (UTC)." },
     "note": { "type": "string", "minLength": 1, "description": "How the summary was made, when not by `pnpm native` (for example a one-time import of a round's hand grades)." },
     "settings": {
@@ -93,6 +93,16 @@
             "description": "Object outcomes counted by \"<kind>.<outcome>\". Summed per kind they are the exported objects of that kind, which the classifier compares before it compares outcomes.",
             "propertyNames": { "pattern": "^[a-z]+\\.(native|changed|picture|dropped)$" },
             "additionalProperties": { "type": "integer", "minimum": 1 }
+          },
+          "export": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["deck", "slides"],
+            "description": "NT-13: what the exported file draws, as hashes (scripts/native-acceptance/core/select/slide-parts.mjs, the first 16 hex digits of a SHA-256). deck covers the parts every slide shares (masters, the layouts slides use, theme, presentation properties); slides has one hash per slide, over the slide part and every part it reaches (charts, diagrams, pictures, media, notes, tags). A release candidate opens only the files whose hashes differ.",
+            "properties": {
+              "deck": { "type": "string", "pattern": "^[0-9a-f]{16}$" },
+              "slides": { "type": "array", "items": { "type": "string", "pattern": "^[0-9a-f]{16}$" } }
+            }
           }
         }
       }

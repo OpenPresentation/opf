@@ -22,6 +22,7 @@
       {"match": ["scripts/native-acceptance/"], "run": ["check:native-acceptance", "check:libreoffice"]},
       {"match": ["scripts/native-acceptance/check-native.mjs", "scripts/native-acceptance/native.mjs", "scripts/native-acceptance/native.test.mjs", "scripts/native-acceptance/core/", "scripts/native-acceptance/apps/", "scripts/native-acceptance/known/", "scripts/native-acceptance/runs/"], "run": ["check:native"]},
       {"match": ["scripts/native-acceptance/known/", "skills/opf-export/SKILL.md"], "run": ["check:native-known"]},
+      {"match": ["scripts/native-acceptance/qualification/", "scripts/native-acceptance/known/", "scripts/native-acceptance/core/", "scripts/check-format-coverage.mjs", "scripts/format-coverage-allowlist.json", "spec/schemas/opf.schema.json", "packages/gallery/catalog/layouts/", "examples/"], "run": ["check:native-coverage"]},
       {"match": ["spec/schemas/opf.schema.json", "scripts/native-acceptance/qualification/", "packages/gallery/catalog/layouts/", "examples/"], "run": ["check:format-coverage"]},
       {"match": ["scripts/libreoffice/", "packages/pptx/test/fixtures/native-long-text/", "spec/reference/font-policy.json"], "run": ["check:libreoffice"]},
       {"match": ["scripts/pack-ecosystem.mjs", "scripts/ecosystem-preview-plan.mjs", "scripts/ecosystem-preview-plan.test.mjs"], "run": ["check:preview-packaging"]},

@@ -14,11 +14,15 @@
 // File-level findings: open not done; an import-warning line; a failed import of the application's copy; object-outcome
 // counts (kind x outcome) that differ from the baseline's while the exported objects per kind are the same. Each is
 // known-present when a record or the baseline covers it, else new.
+// NT-13: with options.exports (the export hashes per file id, core/select/slide-parts.mjs) a file carries `export`, and a
+// slide whose hash differs from a baseline that has hashes (or every slide, when the deck hash differs or the baseline
+// lacks the file) carries `changed: true`. It changes no class.
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateResult, validateRun } from '../result/result.mjs';
+import { exportChange, hasHashes } from '../select/select.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '../../../..');
@@ -190,7 +194,8 @@ export function lookList(items = []) {
  * Classifies results in memory (pure; the tests call this).
  *   classifyResults({ results, known, baseline, options: { threshold, tolerance, knownBefore, look } })
  * `baseline` is readBaseline's value or null; `options.look` the slides a change names ("deck#slide" or { deck, slide, reason },
- * every variant of the deck). Returns the classify.json value without run facts.
+ * every variant of the deck); `options.exports` a Map of file id -> { deck, slides } export hashes. Returns the classify.json
+ * value without run facts.
  */
 export function classifyResults({ results, known, baseline = null, options = {} }) {
   const threshold = options.threshold ?? CALIBRATION.threshold;
@@ -201,11 +206,15 @@ export function classifyResults({ results, known, baseline = null, options = {} 
   const look = lookList(options.look);
   const baseOpf = baseline?.opf?.version ?? null;
   const baseWarnings = new Set((baseline?.warnings ?? []).map((line) => warningHead(line.text)));
+  const baselineHashes = hasHashes(baseline);
   const files = [];
   const knownGone = [];
   for (const result of results) {
     const { id, deck, variant } = result.file;
     const base = baseline?.files.get(id) ?? null;
+    const exported = options.exports?.get(id) ?? null;
+    const change = exportChange(exported, base, baselineHashes);
+    const changed = new Set(change.slides);
     const slides = result.slides.map((slide) => {
       const score = slide.compare ? round5(slide.compare.score) : null;
       const named = recordsNaming(records, result.file, slide.index);
@@ -216,6 +225,7 @@ export function classifyResults({ results, known, baseline = null, options = {} 
       for (const record of classified.class === 'known-gone' ? classified.known : []) knownGone.push({ record, deck, variant, slide: slide.index });
       const entry = { index: slide.index, class: classified.class, score, known: classified.known, reasons: classified.reasons };
       if (classified.direction) entry.direction = classified.direction;
+      if (changed.has(slide.index)) entry.changed = true;
       return entry;
     });
     const findings = [];
@@ -251,7 +261,7 @@ export function classifyResults({ results, known, baseline = null, options = {} 
         if (delta.length > 0) findings.push({ kind: 'outcomes', class: 'new', known: [], text: `object outcomes differ from the baseline: ${delta.join(', ')}`, reasons: delta });
       } else notes.push('content changed since the baseline; outcome counts not compared');
     }
-    files.push({ id, deck, variant, open: open.status, slides, findings, notes, outcomes });
+    files.push({ id, deck, variant, open: open.status, ...(exported ? { export: exported } : {}), slides, findings, notes, outcomes });
   }
   const counts = { files: files.length, slides: Object.fromEntries(CLASSES.map((name) => [name, 0])), findings: { 'known-present': 0, new: 0 } };
   for (const file of files) {
