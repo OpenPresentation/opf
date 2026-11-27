@@ -69,7 +69,8 @@ Time target: about 20 minutes from the click to seven verified packages (measure
 ### Native-app run (between the dry run and the real run)
 
 The commit of `main` that the dry run tested is the release candidate. Before the real run, an agent on the Mac, with Keynote
-started by the owner, runs `pnpm native keynote --tier smoke` and then `--tier release` on a checkout of that commit, and every
+started by the owner, runs `pnpm native keynote --tier candidate --release <version>` (the smoke tier plus the files whose
+slides changed since the last release) and then `--tier release` on a checkout of that commit, and every
 `new` item is reviewed. A run that exits with 2 is not a pass. A reviewed difference that is OPF's defect and first seen in this
 candidate blocks the release until it is fixed (a new candidate, run again) or the owner accepts it in writing on the release's
 tracking issue; a limit of Keynote is recorded and does not block (decision D1). PowerPoint on Windows keeps its before-merge

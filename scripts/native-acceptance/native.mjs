@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // NT-05: one command from OPF's decks to the classified result of one native application.
 //
-//   pnpm native <target> [--tier smoke|release|full] [--decks a,b] [--variants default,native-body] [--baseline <opf version>|none]
+//   pnpm native <target> [--tier smoke|release|full|candidate] [--decks a,b] [--variants default,native-body] [--baseline <opf version>|none]
 //                        [--out <dir>] [--from-run <dir>] [--inputs <dir>] [--previews <dir>] [--warnings-dir <dir>]
 //                        [--look deck#slide,...] [--no-sheets] [--write-summary] [--release <x.y.z>] [--force-summary] [--json]
 //
@@ -14,12 +14,15 @@
 //   e. classify round trip (core/roundtrip), compare with the previews (core/compare), classify (core/classify) against
 //               known/<target>.json and the baseline summary runs/<version>/<target>.json; a sheet per new slide
 //   f. report   the counts, every new item with its reason and sheet, and what was not run
+// --tier candidate (NT-13, a release candidate) builds the release tier, hashes every file's slides (core/select) and runs
+// only the smoke tier, the named slides' files and the files with a slide whose export changed since the baseline.
 // --from-run <dir> skips a to d and classifies a run directory another machine's driver (or import-recorded.mjs) wrote.
 // --write-summary writes runs/<version>/<target>.json: the workspace's version, or with --release <x.y.z> the version a
 // release candidate will be released as (run.json and result.json keep the workspace's version and commit). It never
 // replaces a summary unless --force-summary is given. Both work with --from-run.
 // Exit: 0 nothing new, 1 something new, 2 refused, not run, or failed to finish.
 import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, realpathSync } from 'node:fs';
 import { homedir, tmpdir } from 'node:os';
 import path from 'node:path';
@@ -30,15 +33,20 @@ import { classifyRun, UnusableRun } from './core/classify/classify.mjs';
 import { readBaseline, summarize, writeSummary } from './core/classify/summary.mjs';
 import { compareRun } from './core/compare/compare-run.mjs';
 import { slideSheet } from './core/compare/sheet.mjs';
+import { CANDIDATE, exportsOfResults, hasHashes, selectCandidate, selectionTable, smokeIds } from './core/select/select.mjs';
+import { exportHashesOfFile } from './core/select/slide-parts.mjs';
 import { fileId, TARGETS } from './core/result/result.mjs';
 import { importResaved } from './core/roundtrip/import.mjs';
 import { roundTripRun } from './core/roundtrip/roundtrip-run.mjs';
 import { decksForTier, sourcesForTier, TIERS } from './qualification/tiers.mjs';
 
+/** The tiers --tier takes: the manifest's, and the release candidate's selection (core/select/select.mjs). */
+const RUN_TIERS = [...TIERS, CANDIDATE];
+
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const ROOT = path.resolve(here, '../..');
 
-export const USAGE = `usage: pnpm native <${TARGETS.join('|')}> [--tier ${TIERS.join('|')}] [--decks a,b] [--variants default,native-body]
+export const USAGE = `usage: pnpm native <${TARGETS.join('|')}> [--tier ${RUN_TIERS.join('|')}] [--decks a,b] [--variants default,native-body]
                    [--baseline <opf version>|none] [--out <dir>] [--from-run <dir>] [--inputs <dir>] [--previews <dir>]
                    [--warnings-dir <dir>] [--look deck#slide,...] [--no-sheets] [--write-summary] [--release <x.y.z>] [--force-summary] [--json]`;
 
@@ -91,7 +99,7 @@ export function parseArgs(argv) {
   if (options.help) return options;
   if (!options.target) throw new UsageError('name a target');
   if (!TARGETS.includes(options.target)) throw new UsageError(`unknown target "${options.target}": use ${TARGETS.join(', ')}`);
-  if (!TIERS.includes(options.tier)) throw new UsageError(`unknown tier "${options.tier}": use ${TIERS.join(', ')}`);
+  if (!RUN_TIERS.includes(options.tier)) throw new UsageError(`unknown tier "${options.tier}": use ${RUN_TIERS.join(', ')}`);
   for (const key of ['decks', 'variants']) if (options[key] && options[key].length === 0) throw new UsageError(`--${key} names nothing`);
   for (const item of options.look) if (!LOOK.test(item)) throw new UsageError(`--look "${item}" is not deck#slide`);
   if (options.baseline !== undefined && options.baseline !== 'none' && !/^\d+\.\d+\.\d+$/u.test(options.baseline)) throw new UsageError(`--baseline "${options.baseline}" is not an OPF version (such as 0.36.0) or none`);
@@ -255,6 +263,7 @@ export function findSoffice({ root = ROOT, env = process.env } = {}) {
 }
 
 const readJson = (file) => JSON.parse(readFileSync(file, 'utf8'));
+const fileSha256 = (file) => createHash('sha256').update(readFileSync(file)).digest('hex');
 
 /** The known records of a target, or an empty list (and a note) when the target has none yet. */
 export function knownFor(target, knownDir) {
@@ -289,7 +298,7 @@ const seconds = (from, to) => Math.round((to - from) / 100) / 10;
 
 /**
  * The whole command; returns { exit, report }. deps (tests): { log, error, now, manifest(), fragments(), workspace(), build(),
- * loadDriver(target), soffice(), importer, knownDir, runsDir, home, temp }.
+ * loadDriver(target), soffice(), importer, knownDir, runsDir, home, temp, hashExport(file), sha256(file) }.
  */
 export async function runNative(argv, deps = {}) {
   const d = defaults(deps);
@@ -381,7 +390,10 @@ export async function runNative(argv, deps = {}) {
     let selection;
     try {
       selection = await step('select', (entry) => {
-        const chosen = selectFiles({ manifest, tier: options.tier, decks: options.decks, variants: options.variants, fragments: d.fragments(), look: options.look });
+        const candidate = options.tier === CANDIDATE;
+        const chosen = selectFiles({ manifest, tier: candidate ? 'release' : options.tier, decks: options.decks, variants: options.variants, fragments: d.fragments(), look: options.look });
+        // A candidate builds the release tier; the smoke tier's own notes (fragments naming no corpus deck) still apply.
+        if (candidate && !options.decks) chosen.notRun.push(...selectFiles({ manifest, tier: 'smoke', fragments: d.fragments() }).notRun);
         entry.message = `${chosen.files.length} file(s) from ${new Set(chosen.files.map((file) => file.deck)).size} deck(s)${chosen.look.length ? `, ${chosen.look.length} slide(s) to look at` : ''}`;
         return chosen;
       });
@@ -475,6 +487,32 @@ export async function runNative(argv, deps = {}) {
       return finish(2);
     }
 
+    // NT-13: a release candidate opens only what changed since the baseline.
+    if (options.tier === CANDIDATE) {
+      built = await step('select changed', (entry) => {
+        const files = built.map((input) => {
+          try {
+            return { ...input, hashes: (d.hashExport ?? exportHashesOfFile)(input.path) };
+          } catch {
+            return { ...input, hashes: null };
+          }
+        });
+        const selection = selectCandidate({
+          files,
+          smoke: smokeIds(decksForTier(manifest, 'smoke')),
+          named: look.map((item) => ({ deck: item.deck, reason: item.reason === '--look' ? '--look' : `named by ${item.reason}` })),
+          baseline: baseline ? readBaseline(baseline.file) : null,
+          baselineVersion: baseline?.version ?? null,
+        });
+        for (const line of selectionTable(selection, { total: files.length, baselineVersion: baseline?.version ?? null })) say(line);
+        report.selection = { total: files.length, skipped: selection.skipped, selected: selection.selected, hashes: selection.hashes, changedSlides: selection.changedSlides, deckChanged: selection.deckChanged };
+        entry.message = `${selection.selected.length} of ${files.length} file(s) to open, ${selection.skipped.length} unchanged`;
+        const keep = new Set(selection.selected.map((item) => item.id));
+        return built.filter((input) => keep.has(input.id));
+      });
+      report.files = built.map((input) => input.id);
+    }
+
     if (target === 'impress') {
       const cases = built.map((input) => (input.variant === 'default' ? `q-${input.deck}` : `q-${input.deck}~${input.variant}`));
       const lo = path.join(out, 'libreoffice');
@@ -553,8 +591,11 @@ export async function runNative(argv, deps = {}) {
     });
     const { known, note } = knownFor(target, d.knownDir);
     if (note) report.notes.push(note);
+    // NT-13: the export hashes, from the exported files beside the run (also for a kept run directory).
+    const { exports, notes: exportNotes } = exportsOfResults(results(), inputRoot, { hash: d.hashExport ?? exportHashesOfFile, sha256: d.sha256 ?? fileSha256 });
+    report.notes.push(...exportNotes);
     classified = await step('classify', (entry) => {
-      const value = classifyRun({ runDir, known, baseline: baseline ? readBaseline(baseline.file) : null, options: { look: lookForTarget(target, look, manifest) } });
+      const value = classifyRun({ runDir, known, baseline: baseline ? readBaseline(baseline.file) : null, options: { look: lookForTarget(target, look, manifest), exports } });
       entry.message = `known records: ${known.records.length}; baseline: ${baseline ? `runs/${baseline.version}/${target}.json` : 'none'}`;
       return value;
     });
@@ -566,7 +607,7 @@ export async function runNative(argv, deps = {}) {
 
   const newItems = [];
   for (const file of classified.files) {
-    for (const slide of file.slides.filter((item) => item.class === 'new')) newItems.push({ file: file.id, slide: slide.index, score: slide.score, ...(slide.direction ? { direction: slide.direction } : {}), reason: slide.reasons.join('; ') });
+    for (const slide of file.slides.filter((item) => item.class === 'new')) newItems.push({ file: file.id, slide: slide.index, score: slide.score, ...(slide.direction ? { direction: slide.direction } : {}), ...(slide.changed ? { changed: true } : {}), reason: slide.reasons.join('; ') });
     for (const finding of file.findings.filter((item) => item.class === 'new')) newItems.push({ file: file.id, finding: finding.kind, text: finding.text, reason: finding.reasons.join('; ') });
   }
   if (options.sheets) {
@@ -576,7 +617,7 @@ export async function runNative(argv, deps = {}) {
         let written = 0;
         for (const item of sheetable) {
           try {
-            item.sheet = await slideSheet(runDir, item.file, item.slide, { caption: item.reason });
+            item.sheet = await slideSheet(runDir, item.file, item.slide, { caption: item.changed ? `${item.reason}; export changed since ${report.baseline}` : item.reason });
             written += 1;
           } catch (problem) {
             item.sheetError = problem.message;
@@ -601,7 +642,9 @@ export async function runNative(argv, deps = {}) {
     newWarnings: warningsNew,
     knownGone: classified.knownGone.length,
     new: counts.new,
+    exportChanged: classified.files.some((file) => file.export) && baseline && hasHashes(readBaseline(baseline.file)) ? classified.files.reduce((sum, file) => sum + file.slides.filter((slide) => slide.changed).length, 0) : null,
   };
+  if (baseline && report.counts.exportChanged === null) report.notes.push(`the ${baseline.version} baseline has no export hashes: which slides changed since it is not known`);
   report.new = newItems;
   report.knownGone = classified.knownGone;
 
@@ -678,6 +721,7 @@ export function printReport(report, log) {
     ['not compared', counts.slides['not-compared']],
     ['file findings', `${counts.findings['known-present']} known, ${counts.findings.new} new`],
     ['new import-warning lines', counts.newWarnings],
+    ...(counts.exportChanged === null || counts.exportChanged === undefined ? [] : [[`slides whose export changed since ${report.baseline}`, counts.exportChanged]]),
   ]))
     log(line);
   if (report.new.length > 0) {

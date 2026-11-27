@@ -49,8 +49,8 @@
       }
     },
     "tier": {
-      "enum": ["smoke", "release", "full", null],
-      "description": "Which set of decks the run covered: \"smoke\" (about ten decks), \"release\" (the qualification corpus), \"full\" (corpus, examples, gallery layouts, language decks); null for a hand-picked list."
+      "enum": ["smoke", "release", "full", "candidate", null],
+      "description": "Which set of decks the run covered: \"smoke\" (about ten decks), \"release\" (the qualification corpus), \"full\" (corpus, examples, gallery layouts, language decks), \"candidate\" (the smoke tier plus the release-tier files whose slides changed since the baseline); null for a hand-picked list."
     },
     "baseline": { "type": ["string", "null"], "description": "The OPF version whose results this run is compared with (for example \"0.36.0\"); null for none." },
     "started": { "type": "string", "format": "date-time", "description": "When the run began, UTC." },

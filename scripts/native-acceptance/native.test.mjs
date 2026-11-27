@@ -11,6 +11,7 @@ import { test } from 'node:test';
 import { validateSummary } from './core/classify/summary.mjs';
 import { sharp } from './core/compare/picture.mjs';
 import { picturePath } from './core/result/result.mjs';
+import { exportHashes } from './core/select/slide-parts.mjs';
 import { makePptx, sp } from './core/roundtrip/test-deck.mjs';
 import { defaultOut, impressDeck, opfLine, insideRepository, lookForTarget, parseArgs, ROOT, resolveBaseline, runNative, selectFiles, UsageError } from './native.mjs';
 
@@ -354,4 +355,54 @@ test('the default baseline of a release candidate is the newest summary below th
   assert.equal(resolveBaseline('keynote', undefined, runs, '0.37.0').version, '0.36.0');
   assert.equal(opfLine({ opf: { version: '0.36.0', commit: '0123456789abcdef' }, release: '0.37.0' }), 'OPF workspace 0.36.0 at 012345678, release candidate 0.37.0');
   assert.equal(opfLine({ opf: { version: '0.36.0' }, release: null }), 'OPF 0.36.0');
+});
+
+test('--tier candidate builds the release tier and opens the smoke tier and the files whose slides changed since the baseline', async () => {
+  assert.equal(parseArgs(['keynote', '--tier', 'candidate']).tier, 'candidate');
+  const { deps, driver, build, lines, out } = await setup();
+  // The baseline: alpha and beta as the fake build exports them, beta's native-body export with another slide 2.
+  const same = exportHashes(deckBytes());
+  const file = (id, slides) => ({ id, sha256: 'a'.repeat(64), open: 'done', slideCount: 2, scores: [0.001, 0.001], classes: 'ss', known: {}, export: { deck: same.deck, slides } });
+  const baseline = {
+    schemaVersion: 1,
+    target: 'keynote',
+    application: { name: 'Keynote', version: '16.0' },
+    system: { os: 'macOS', version: '26.6.2' },
+    opf: { version: '0.36.0' },
+    tier: 'release',
+    date: '2026-11-25',
+    settings: { threshold: 0.005, tolerance: 0.002 },
+    counts: { files: 3, slides: { same: 6, 'known-present': 0, 'known-gone': 0, new: 0, 'not-compared': 0 } },
+    warnings: [],
+    files: [file('alpha~default', same.slides), file('beta~default', same.slides), file('beta~native-body', [same.slides[0], 'f'.repeat(16)])],
+  };
+  assert.deepEqual(validateSummary(baseline), { ok: true, errors: [] });
+  mkdirSync(path.join(deps.runsDir, '0.36.0'));
+  writeFileSync(path.join(deps.runsDir, '0.36.0', 'keynote.json'), JSON.stringify(baseline));
+  const { exit, report } = await runNative(['keynote', '--tier', 'candidate', '--out', out, '--release', '0.37.0'], deps);
+  assert.equal(exit, 0, lines.join('\n'));
+  assert.deepEqual(build.calls, [['alpha', 'beta']], 'the whole release tier is built');
+  assert.deepEqual(
+    driver.calls.filter((call) => call.startsWith('open')),
+    ['open alpha~default', 'open beta~native-body'],
+  );
+  assert.deepEqual(report.selection.skipped, ['beta~default']);
+  assert.deepEqual(
+    report.selection.selected.map((item) => [item.id, item.reasons]),
+    [
+      ['alpha~default', ['smoke tier']],
+      ['beta~native-body', ['1 slide(s) changed since 0.36.0: 2']],
+    ],
+  );
+  const text = lines.join('\n');
+  assert.match(text, /files in the release tier {2}3[\s\S]*unchanged, skipped {9}1[\s\S]*selected {19}2[\s\S]*slides changed {13}1/u);
+  assert.match(text, /slides whose export changed since 0\.36\.0 {2}1/u);
+  assert.equal(JSON.parse(readFileSync(path.join(out, 'run', 'run.json'), 'utf8')).tier, 'candidate');
+  const classified = JSON.parse(readFileSync(path.join(out, 'run', 'classify.json'), 'utf8'));
+  const native = classified.files.find((item) => item.id === 'beta~native-body');
+  assert.deepEqual(native.export, { deck: same.deck, slides: same.slides });
+  assert.deepEqual(
+    native.slides.map((slide) => slide.changed ?? false),
+    [false, true],
+  );
 });
