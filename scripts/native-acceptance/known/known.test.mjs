@@ -12,6 +12,14 @@ test('keynote.json validates against known.schema.json', () => {
   assert.equal(known.target, 'keynote');
 });
 
+test('powerpoint.json validates: an empty set until the PowerPoint driver has a reviewed run (NT-16)', () => {
+  const powerpoint = loadKnown('powerpoint');
+  assert.deepEqual(validateKnown(powerpoint), []);
+  assert.equal(powerpoint.target, 'powerpoint');
+  assert.deepEqual(powerpoint.records, []);
+  assert.notDeepEqual(validateKnown({ ...powerpoint, target: 'impress' }), [], 'a target without a driver here is refused');
+});
+
 test('ids are unique and stable in form; findings are not recorded twice', () => {
   const ids = records.map((record) => record.id);
   for (const id of ids) assert.match(id, /^kn-[a-z0-9-]+$/);
