@@ -11,7 +11,7 @@ temporary ZIP between computers as the test distribution mechanism.
 it exports the decks, has the application open, draw and resave each file, and says what is new.
 
 ```sh
-pnpm native <target> [--tier smoke|release|full] [--decks a,b] [--variants default,native-body] [--baseline <opf version>|none]
+pnpm native <target> [--tier smoke|release|full|candidate] [--decks a,b] [--variants default,native-body] [--baseline <opf version>|none]
                      [--out <dir>] [--from-run <dir>] [--inputs <dir>] [--previews <dir>] [--warnings-dir <dir>]
                      [--look deck#slide,...] [--no-sheets] [--write-summary] [--release <x.y.z>] [--force-summary] [--json]
 ```
@@ -31,6 +31,8 @@ every deck and variant. `full` adds sources the runner cannot build yet (example
 they are listed as "not run" and the run exits with 2. `--decks` replaces the tier's decks (the tier still says which
 variants, unless `--variants` does), and a run narrowed by `--decks` is not stopped by a source it does not run. In every
 tier the slides the fragments name, and `--look deck#slide`, are new whatever their score: someone looks at each one.
+`candidate` (NT-13, `core/select/README.md`) builds the `release` tier and opens only the smoke tier, the files the fragments
+and `--look` name, and the files with a slide whose export hash changed since the baseline; it prints the selection first.
 
 **The steps**, each printed as it starts and with its duration when it ends:
 
@@ -42,6 +44,8 @@ tier the slides the fragments name, and `--look deck#slide`, are new whatever th
 3. **build**: the selected decks' `.pptx` files and OPF's previews (`qualification/build.mjs --only`) into `<out>/build`,
    with the OPF version of the workspace's CLI package and the checkout's commit. A workspace that is not built stops here
    with the command to run (`pnpm build:packages`).
+   With `--tier candidate`, **select changed** follows: it hashes each built file (`core/select/`), prints the release tier's
+   files, the unchanged ones it skips, the ones it selects with the reason, and the slides changed, and keeps only those.
 4. **run**: per file `open`, `probe`, `render`, `resave` and `close` through the driver (`apps/keynote/run-file.mjs`) into
    `<out>/run`, in the shared format (`core/result/README.md`) with the tier and the baseline in `run.json`.
    `--warnings-dir <dir>` gives the Keynote driver the text of Keynote's Warnings window per file (`<dir>/<fileId>.txt`).
@@ -52,7 +56,7 @@ tier the slides the fragments name, and `--look deck#slide`, are new whatever th
    given). Then a labeled sheet for every
    new slide (`<run>/sheets/`), unless `--no-sheets`.
 6. **report**: files opened; slides same, known and still there, known and gone, new, and not compared; file findings; new
-   import-warning lines. Then every new item with its reason and its sheet, then what was not run. `--json` prints the
+   import-warning lines; with a baseline that has export hashes, the slides whose export changed since it. Then every new item with its reason and its sheet, then what was not run. `--json` prints the
    same as one JSON object on standard output (the step lines go to standard error).
 
 **Exit codes.** 0: nothing new. 1: something new: look at each item, then add or extend a record in `known/<target>.json`
@@ -80,6 +84,7 @@ prints the report, says which file it would have replaced, and exits with 2. Bot
 reviewed candidate run is written later without opening the application again:
 
 ```sh
+pnpm native keynote --tier candidate --release 0.37.0                     # the candidate: what changed since 0.36.0
 pnpm native keynote --tier release --release 0.37.0                       # run, review the new items
 pnpm native keynote --from-run <out>/run --release 0.37.0 --write-summary   # after review: runs/0.37.0/keynote.json
 ```

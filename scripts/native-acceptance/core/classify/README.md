@@ -45,6 +45,10 @@ How records are matched:
   - `known` maps a slide number to its record ids.
   - `outcomes` counts the file's objects as `<kind>.<outcome>`; summed per kind they are the exported objects.
   - `import` and, when it failed, `importError` (the importer's error code).
+  - `export` (NT-13): `{ deck, slides }`, the export hashes of `core/select/slide-parts.mjs` (16 hex digits each). The next
+    release candidate (`--tier candidate`) opens only the files whose hashes differ. `classify.json` carries the same field per
+    file, and `changed: true` on a slide whose hash differs from a baseline that has hashes (every slide when the deck hash
+    differs or the baseline lacks the file). It changes no class. Summaries without `export` (0.36.0) stay valid.
 - `baseline-from-round.mjs`: a one-time importer that built `runs/0.36.0/keynote.json` from the 0.36.0 Keynote round's hand grades. Do not use it for later releases.
 
 ## When a slide is new

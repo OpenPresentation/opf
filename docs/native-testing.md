@@ -34,7 +34,7 @@ Impress runs on GitHub's runners.
 ## The command
 
 ```sh
-pnpm native <target> [--tier smoke|release|full] [--decks a,b] [--baseline <opf version>|none] [--out <dir>]
+pnpm native <target> [--tier smoke|release|full|candidate] [--decks a,b] [--baseline <opf version>|none] [--out <dir>]
                      [--from-run <dir>] [--warnings-dir <dir>] [--look deck#slide,...] [--release <x.y.z>]
                      [--write-summary] [--force-summary] [--json]
 ```
@@ -46,6 +46,7 @@ opens nothing. The full list of flags is in the command's reference.
 | --- | --- |
 | `smoke` (the default) | About ten decks named in `tiers.smoke` of the qualification manifest, plus the decks that unreleased changelog fragments name in `native:` |
 | `release` | Every deck and variant of the qualification corpus (`scripts/native-acceptance/qualification/`) |
+| `candidate` | For a release candidate: builds the `release` tier, hashes what each file's slides draw, and opens only the `smoke` tier, the files of the slides that fragments or `--look` name, and the files with a slide whose export changed since the baseline (every file of a deck whose masters, layouts or theme changed). It prints the selection before the run |
 | `full` | The corpus. The other sources (example decks, gallery layouts at three content sizes, language decks) cannot be built by the runner yet: they are listed as "not run" and the run exits with 2 |
 
 In every tier, the slides that unreleased fragments name and the slides given with `--look` are reported as `new` whatever their
@@ -59,7 +60,7 @@ the exported files and OPF's previews; `<out>/run` the run directory, `classify.
 **Exit codes.** 0: nothing new. 1: something new; look at each item. 2: refused, something not run, or the run could not finish.
 
 ```sh
-pnpm native keynote --tier smoke --release 0.37.0 --warnings-dir ~/opf-work/warnings-0.37.0
+pnpm native keynote --tier candidate --release 0.37.0 --warnings-dir ~/opf-work/warnings-0.37.0
 pnpm native keynote --tier release --release 0.37.0 --out ~/opf-work/native/keynote-0.37.0
 pnpm native powerpoint --from-run D:/opf-work/native/run --inputs D:/opf-work/native/build --previews D:/opf-work/native/build/preview
 ```
@@ -72,6 +73,14 @@ The baseline is, by default, the newest version under `scripts/native-acceptance
 both, for example "OPF workspace 0.36.0 at <commit>, release candidate 0.37.0": the workspace version is the previous release's,
 and the commit identifies the candidate. `run.json` and every `result.json` keep the workspace's version and commit; only the
 summary carries the release.
+
+**Changed slides.** A summary keeps, per file, a deck hash and one hash per slide of what the export draws
+(`scripts/native-acceptance/core/select/slide-parts.mjs`): the slide part and every part it reaches (charts with their
+workbooks, diagrams, pictures, media, notes, tags), and for the deck the masters, the layouts slides use, the theme and the
+presentation properties. Part names, relationship ids and `docProps` do not count, so inserting a slide changes no other
+slide's hash. `--tier candidate` compares these with the baseline's; a baseline without them (0.36.0) selects the `smoke` tier
+and the named files only, and says so. In every run, a slide whose hash changed gets `changed: true` in `classify.json` (and on
+its sheet when it is new), and the report counts the slides whose export changed since the baseline.
 
 ## Before a Keynote run
 
@@ -138,7 +147,7 @@ with 0.
 Decision D1: a Keynote run gates OPF's defects only. A release supervisor applies these rules:
 
 1. A release candidate is the commit of `main` that the Release workflow's dry run tested. Before the real run, Keynote runs the
-   `smoke` tier on it, then the `release` tier, both with `--release <the version being released>`.
+   `candidate` tier on it, then the `release` tier, both with `--release <the version being released>`.
 2. Each run must finish. Exit 2 is not a pass: fix the cause and run again.
 3. Every `new` item of both runs is reviewed and settled as above, until the run classified again exits with 0.
 4. A reviewed difference that is OPF's defect (`whose: opf-file`, `opf-importer` or `preview`) and first seen in this candidate

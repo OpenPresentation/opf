@@ -23,7 +23,7 @@
       "properties": { "version": { "type": "string" }, "commit": { "type": "string" } },
       "description": "The OPF that exported the files."
     },
-    "tier": { "enum": ["smoke", "release", "full", null], "description": "The run's tier, null for a run that was not a tier run." },
+    "tier": { "enum": ["smoke", "release", "full", "candidate", null], "description": "The run's tier, null for a run that was not a tier run." },
     "baseline": {
       "anyOf": [
         { "type": "null" },
@@ -85,6 +85,16 @@
           "deck": { "type": "string" },
           "variant": { "type": "string" },
           "open": { "enum": ["done", "failed", "timeout", "alert", "not-run"] },
+          "export": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["deck", "slides"],
+          "description": "NT-13: what the exported file draws, as hashes (scripts/native-acceptance/core/select/slide-parts.mjs, the first 16 hex digits of a SHA-256). deck covers the parts every slide shares (masters, the layouts slides use, theme, presentation properties); slides has one hash per slide, over the slide part and every part it reaches (charts, diagrams, pictures, media, notes, tags). A release candidate opens only the files whose hashes differ.",
+          "properties": {
+            "deck": { "type": "string", "pattern": "^[0-9a-f]{16}$" },
+            "slides": { "type": "array", "items": { "type": "string", "pattern": "^[0-9a-f]{16}$" } }
+          }
+          },
           "slides": {
             "type": "array",
             "items": {
@@ -97,6 +107,7 @@
                 "score": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
                 "known": { "$ref": "#/$defs/ids" },
                 "reasons": { "type": "array", "items": { "type": "string" } },
+                "changed": { "const": true, "description": "NT-13: the slide's export hash differs from the baseline's (or the deck hash does, or the baseline lacks the file). Present only when the baseline has export hashes." },
                 "direction": { "enum": ["up", "down"], "description": "For a slide whose score moved since the baseline: up (more differs) or down (less differs: usually a fix or an improvement, which someone confirms and then retires or narrows the record)." }
               }
             }
