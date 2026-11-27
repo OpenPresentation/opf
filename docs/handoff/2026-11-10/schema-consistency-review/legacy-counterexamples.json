@@ -1,0 +1,90 @@
+{
+  "sourceRef": "c7d396520c324c2d448757e906c00cf326dbd99e",
+  "sourcePath": "packages/pptx/src/legacy-tags.js",
+  "sourceGitBlob": "2254b3030537ca21de94192a7437353c501a6e14",
+  "sourceBytes": 6875,
+  "sourceSha256": "d14a85c8fa30ffc42f7e25aeb3f11c16805b93f960d734093723e8fad80df566",
+  "execution": "One dependency-free Node module import from exact git-show bytes; no build/install/native/full suite",
+  "scope": "Actual pure counterexample, not end-to-end native reproduction",
+  "cases": [
+    {
+      "id": "authored-text-exact-path",
+      "input": {
+        "text": "slides.0.left"
+      },
+      "output": {
+        "text": "slides.0.start"
+      }
+    },
+    {
+      "id": "authored-code-exact-path",
+      "input": {
+        "code": {
+          "source": "slides.0.left",
+          "language": "text"
+        }
+      },
+      "output": {
+        "code": {
+          "source": "slides.0.start",
+          "language": "text"
+        }
+      }
+    },
+    {
+      "id": "data-cell-exact-path",
+      "input": {
+        "table": {
+          "columns": [
+            "Field"
+          ],
+          "rows": [
+            [
+              "slides.0.left"
+            ]
+          ]
+        }
+      },
+      "output": {
+        "table": {
+          "columns": [
+            "Field"
+          ],
+          "rows": [
+            [
+              "slides.0.start"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "extension-exact-path",
+      "input": {
+        "extensions": {
+          "note": "slides.0.left"
+        }
+      },
+      "output": {
+        "extensions": {
+          "note": "slides.0.start"
+        }
+      }
+    },
+    {
+      "id": "known-structural-path-positive",
+      "input": {
+        "path": "slides.0.left",
+        "design": {
+          "titleAlignment": "left"
+        }
+      },
+      "output": {
+        "path": "slides.0.start",
+        "design": {
+          "titleAlignment": "start"
+        }
+      }
+    }
+  ]
+}
