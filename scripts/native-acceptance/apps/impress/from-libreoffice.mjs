@@ -8,10 +8,14 @@
 //   native/files/<fileId>/slides/slide-001.png ...   LibreOffice's rendering of each visible slide
 //   native/files/<fileId>/resaved.pptx               LibreOffice's own PowerPoint copy
 //
-// fileId: deck = the case id (lower case; the "~" of a qualification case id such as "q-smartart~shapes" written as "."),
-// variant = the font profile ("opf", "stock"). One run covers both profiles, so the variant keeps a file id unique per case
-// and profile, and `fonts` says the profile in each result.json. The input is <out>/inputs/<case id>.pptx, so file.path is
-// "<case id>.pptx" relative to that input root.
+// fileId (NT-14): <deck>~<variant>.<profile>. For a manifest deck, deck and variant are the manifest's own ("smartart",
+// "shapes"; "default" for a deck with one export), so the same deck and variant read the same in the Keynote and PowerPoint
+// runs; the font profile ("opf", "stock") is appended to the variant after a ".". Manifest variant names never contain a ".",
+// so the last "." splits the variant from the profile. A case that is not a manifest deck (LibreOffice's own cases, the shared
+// fixtures) has its case id as the deck (lower case, "~" written as ".") and the variant "default". One run covers both
+// profiles, so the profile in the variant keeps a file id unique, and `fonts` says the profile in each result.json. The input
+// is <out>/inputs/<case id>.pptx, so file.path is "<case id>.pptx" relative to that input root. Until NT-14 the id was
+// <case id>~<profile> (the case id of a qualification case with its "~" written as "." and a "q-" prefix).
 //
 // The four verbs, from what the runner really does:
 // - open: LibreOffice headless converting the file to PDF (`soffice --convert-to pdf`). "done" when the PDF exists, else
@@ -36,11 +40,16 @@ export const PICTURE_WIDTH = 1280;
 /** UTC date-time without milliseconds. */
 export const utc = (date = new Date()) => date.toISOString().replace(/\.\d{3}Z$/u, 'Z');
 
-/** { deck, variant, id } of a case in a font profile: deck = case id ("~" as "."), variant = profile. */
-export function fileIdentity(caseId, profile) {
-  const deck = String(caseId).toLowerCase().replaceAll('~', '.');
-  const variant = String(profile).toLowerCase();
-  return { deck, variant, id: fileId(deck, variant) };
+/**
+ * { deck, variant, id } of a case in a font profile: variant = "<variant>.<profile>". `deck` and `variant` are the manifest's
+ * deck and variant for a qualification case; without them the deck is the case id ("~" as ".") and the variant "default".
+ */
+export function fileIdentity(caseId, profile, { deck, variant } = {}) {
+  const name = String(deck ?? String(caseId).replaceAll('~', '.')).toLowerCase();
+  const base = String(variant ?? 'default').toLowerCase();
+  if (base.includes('.')) throw new Error(`from-libreoffice: variant "${base}" must not contain "." (the font profile follows it after one)`);
+  const joined = `${base}.${String(profile).toLowerCase()}`;
+  return { deck: name, variant: joined, id: fileId(name, joined) };
 }
 
 /**
@@ -75,15 +84,15 @@ const runnerFault = (measured) => (measured.defects ?? []).find((defect) => defe
 
 /**
  * One result.json.
- *   impressResult({ caseId, profile, environment, system, input: { path, sha256, unchangedAfterRun }, hidden, measured, facts, started, finished })
+ *   impressResult({ caseId, deck?, variant?, profile, environment, system, input: { path, sha256, unchangedAfterRun }, hidden, measured, facts, started, finished })
  * environment: results.json's environment. hidden: one boolean per slide of the input, in file order. measured: the runner's
  * cases/<id>/result-<profile>.json. facts (what run.mjs saw on disk; each falls back to `measured`):
  *   converted   the PDF exists               resaved     LibreOffice's PowerPoint copy was written to `resavedPath`
  *   slideCount  slides in LibreOffice's copy pictures    per visible slide, in order, the picture path written or null
  *   pixelSize   [w, h] when every picture has that size
  */
-export function impressResult({ caseId, profile, environment, system, input, hidden, measured, facts = {}, started, finished }) {
-  const { deck, variant } = fileIdentity(caseId, profile);
+export function impressResult({ caseId, deck: manifestDeck, variant: manifestVariant, profile, environment, system, input, hidden, measured, facts = {}, started, finished }) {
+  const { deck, variant } = fileIdentity(caseId, profile, { deck: manifestDeck, variant: manifestVariant });
   const result = emptyResult({
     target: TARGET,
     application: applicationFrom(environment.libreoffice),
@@ -149,9 +158,10 @@ export function impressResult({ caseId, profile, environment, system, input, hid
 /**
  * The run.json of one runner invocation. `results` are the result.json values in run order; `profiles` the font profiles
  * that ran (run.json's `fonts`, comma separated). check is "ready" (the runner has no check verb; it ran), with a reason
- * when the LibreOffice it ran is not the pinned one.
+ * when the LibreOffice it ran is not the pinned one. `tier` is the manifest tier whose decks the run covered (smoke, release,
+ * full), null for a hand-picked list; the run also opened LibreOffice's own cases beside them.
  */
-export function impressRun({ environment, system, profiles, started, finished, results }) {
+export function impressRun({ environment, system, profiles, started, finished, results, tier = null }) {
   return {
     schemaVersion: SCHEMA_VERSION,
     target: TARGET,
@@ -159,7 +169,7 @@ export function impressRun({ environment, system, profiles, started, finished, r
     system,
     fonts: profiles.join(','),
     opf: opfFrom(environment),
-    tier: null,
+    tier,
     baseline: null,
     started,
     finished,

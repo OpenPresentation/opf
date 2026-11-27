@@ -1,7 +1,7 @@
 # Native-app testing (NT)
 
 Opened 2026-11-25. Branches `codex/nt-<nn>-<slug>`, pull request titles `NT-<nn>: `. Items and status: [burndown.md](burndown.md). Every
-decision, with who gave it: [decisions.md](decisions.md).
+decision, with who gave it: [decisions.md](decisions.md). The corpus study: [corpus-study.md](corpus-study.md).
 
 ## Goal
 
@@ -9,7 +9,9 @@ OPF exports one `.pptx`. People open it in PowerPoint, Keynote and LibreOffice I
 is checked a different way, by a different session, with tools that mostly live outside the repository. This program gives them one
 corpus, one command (`pnpm native <target>`), one result format, one driver per application behind the same five verbs, known
 differences as data instead of prose, and a place in the release process. The proposal is opf#1468; its first use is the Keynote round
-of 0.36.0, opf#1466.
+of 0.36.0, opf#1466. State on 2026-11-27: items NT-00 to NT-09 are built, NT-02 and NT-05 are done (the first Keynote run and the smoke gate of
+0.37.0 ran that day), and NT-10 to NT-16 follow the corpus study ([corpus-study.md](corpus-study.md), decision D7): stress decks, a
+coverage report, a changed-slide tier, tiers for LibreOffice, Keynote warnings and the PowerPoint driver.
 
 ## What exists today
 
@@ -57,9 +59,10 @@ Each driver implements the same five verbs and writes only the shared result for
 
 | Tier | What it runs |
 | --- | --- |
-| `smoke` | About ten decks. |
+| `smoke` | About ten decks; gates every release. |
+| `candidate` | The smoke tier plus the files with a changed slide (NT-13, D7). |
 | `release` | The qualification corpus (`scripts/native-acceptance/qualification/`). |
-| `full` | The corpus, the example decks, the gallery layouts with little, ordinary and a lot of content, and the language decks. |
+| `full` | The corpus, the stress decks (NT-10), the example decks, the gallery layouts with little, ordinary and a lot of content, and the language decks. |
 
 NT-05 defines the exact lists from the qualification manifest (`tiers` in `qualification/manifest.json`, read by
 `qualification/tiers.mjs`). The `full` tier's sources beyond the corpus are not built by the runner yet; a `full` run lists them as

@@ -17,8 +17,11 @@ const byId = (id) => nightly.cases.find((entry) => entry.id === id);
 /** What run.mjs passes for a fixture case: a picture written for every visible slide, the copy saved. */
 function resultOf(entry, overrides = {}) {
   const visible = entry.hidden.map((hidden, position) => (hidden ? null : position + 1)).filter(Boolean);
+  // A qualification case (run.mjs: entry.qualification) names its manifest deck and variant.
+  const [qualified, variant = 'default'] = entry.id.startsWith('q-') ? entry.id.slice(2).split('~') : [];
   return impressResult({
     caseId: entry.id,
+    ...(qualified ? { deck: qualified, variant } : {}),
     profile: 'opf',
     environment: nightly.environment,
     system,
@@ -40,10 +43,15 @@ test('the application, system and OPF come from what the runner records', () => 
   assert.deepEqual(opfFrom(nightly.environment), { version: '0.36.0', commit: '293d956a9933a75859970ff8e633d18ea1652d49' });
 });
 
-test('file ids: deck = case id ("~" as "."), variant = font profile', () => {
-  assert.deepEqual(fileIdentity('tables', 'opf'), { deck: 'tables', variant: 'opf', id: 'tables~opf' });
-  assert.deepEqual(fileIdentity('q-smartart~shapes', 'stock'), { deck: 'q-smartart.shapes', variant: 'stock', id: 'q-smartart.shapes~stock' });
-  assert.notEqual(fileIdentity('q-smartart~shapes', 'opf').id, fileIdentity('q-smartart', 'opf').id);
+test('file ids: <deck>~<variant>.<profile>, with the manifest deck and variant when there are some', () => {
+  assert.deepEqual(fileIdentity('tables', 'opf'), { deck: 'tables', variant: 'default.opf', id: 'tables~default.opf' });
+  assert.deepEqual(fileIdentity('q-smartart~shapes', 'stock', { deck: 'smartart', variant: 'shapes' }), { deck: 'smartart', variant: 'shapes.stock', id: 'smartart~shapes.stock' });
+  assert.deepEqual(fileIdentity('q-smartart', 'opf', { deck: 'smartart', variant: 'default' }), { deck: 'smartart', variant: 'default.opf', id: 'smartart~default.opf' });
+  assert.deepEqual(fileIdentity('issue-925-rebuilt', 'opf'), { deck: 'issue-925-rebuilt', variant: 'default.opf', id: 'issue-925-rebuilt~default.opf' });
+  // Deck, variant and profile stay apart: no two of them give one id.
+  const ids = ['opf', 'stock'].flatMap((profile) => ['default', 'shapes'].map((variant) => fileIdentity('q-smartart', profile, { deck: 'smartart', variant }).id));
+  assert.equal(new Set(ids).size, 4);
+  assert.throws(() => fileIdentity('x', 'opf', { deck: 'x', variant: 'a.b' }), /must not contain/);
 });
 
 test('a clean case: open, render and resave done, probe not-run, warnings not read', () => {
@@ -51,7 +59,7 @@ test('a clean case: open, render and resave done, probe not-run, warnings not re
   assert.deepEqual(validateResult(result), { ok: true, errors: [] });
   assert.equal(result.target, 'impress');
   assert.equal(result.fonts, 'opf');
-  assert.deepEqual(result.file, { id: 'tables~opf', deck: 'tables', variant: 'opf', path: 'tables.pptx', sha256: byId('tables').pptxSha256, unchangedAfterRun: true });
+  assert.deepEqual(result.file, { id: 'tables~default.opf', deck: 'tables', variant: 'default.opf', path: 'tables.pptx', sha256: byId('tables').pptxSha256, unchangedAfterRun: true });
   assert.deepEqual(result.verbs, {
     open: { status: 'done', slideCount: 3, warnings: { status: 'not-read', source: null, lines: [] } },
     render: { status: 'done', pixelSize: [1280, 720] },
@@ -73,7 +81,7 @@ test('a case with defects and a hidden slide: the defects stay in results.json, 
   assert.equal(entry.result.status, 'fail', 'the fixture case has defects');
   const result = resultOf(entry);
   assert.deepEqual(validateResult(result), { ok: true, errors: [] });
-  assert.equal(result.file.id, 'q-coverage-composition~opf');
+  assert.equal(result.file.id, 'coverage-composition~default.opf');
   assert.deepEqual([result.verbs.open.status, result.verbs.render.status, result.verbs.probe.status, result.verbs.resave.status], ['done', 'done', 'not-run', 'done']);
   assert.equal(result.verbs.open.slideCount, 11);
   assert.equal(result.slides.length, 11);
@@ -135,16 +143,16 @@ test('run.json lists every case and profile and validates; an invalid result thr
   assert.deepEqual(
     run.files.map((file) => [file.id, file.open, file.slideCount]),
     [
-      ['tables~opf', 'done', 3],
-      ['tables~stock', 'done', 3],
-      ['q-coverage-composition~opf', 'done', 11],
-      ['q-coverage-composition~stock', 'done', 11],
-      ['q-singleton-combo-reference-lines~opf', 'done', 1],
-      ['q-singleton-combo-reference-lines~stock', 'done', 1],
+      ['tables~default.opf', 'done', 3],
+      ['tables~default.stock', 'done', 3],
+      ['coverage-composition~default.opf', 'done', 11],
+      ['coverage-composition~default.stock', 'done', 11],
+      ['singleton-combo-reference-lines~default.opf', 'done', 1],
+      ['singleton-combo-reference-lines~default.stock', 'done', 1],
     ],
   );
   const unpinned = impressRun({ environment: { ...nightly.environment, pinned: false }, system, profiles: ['opf'], ...when, results: [] });
   assert.deepEqual(unpinned.check.reasons, ['LibreOffice is not the pinned 26.8.2.2']);
   const broken = { ...results[0], file: { ...results[0].file, path: '/tmp/tables.pptx' } };
-  assert.throws(() => assertValid('result', broken, 'files/tables~opf/result.json'), /files\/tables~opf\/result\.json does not validate:\n {2}\/file\/path/);
+  assert.throws(() => assertValid('result', broken, 'files/tables~default.opf/result.json'), /files\/tables~default\.opf\/result\.json does not validate:\n {2}\/file\/path/);
 });

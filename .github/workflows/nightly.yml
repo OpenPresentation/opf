@@ -712,7 +712,7 @@ jobs:
 
       - name: Qualify the export
         run: |
-          args=(--out artifacts/libreoffice)
+          args=(--out artifacts/libreoffice --tier release)
           if [ -f artifacts/qualification/build.json ]; then args+=(--qualification artifacts/qualification); fi
           node scripts/libreoffice/run.mjs "${args[@]}"
 

@@ -5,10 +5,14 @@
 // against its box and the slide edge, ink past the slide edge, the faces LibreOffice drew, and the difference from OPF's preview.
 //
 //   node scripts/libreoffice/run.mjs [--out artifacts/libreoffice] [--profiles opf,stock] [--case <id|group|prefix*>,...]
-//                                    [--qualification <build dir>] [--soffice <path>] [--profiles none] [--no-control] [--fail-on-defect]
+//                                    [--qualification <build dir>] [--tier smoke|release|full] [--soffice <path>] [--profiles none]
+//                                    [--no-control] [--fail-on-defect]
 //
-// --qualification adds the release qualification corpus built by scripts/native-acceptance/qualification/build.mjs (the same PPTX
-// files the PowerPoint and Keynote streams open) and grades its manifest's features.
+// --qualification adds the decks of the manifest's tier from the build made by scripts/native-acceptance/qualification/build.mjs (the
+// same PPTX files the PowerPoint and Keynote streams open) and grades the manifest's features. --tier (default release) picks the
+// decks and variants exactly as `decksForTier` does for the Keynote runner; smoke is for a pull request. The tier's named sources
+// (native-fragments, examples, ...) are not resolved here. LibreOffice's own cases (LIBREOFFICE_CASES in corpus.mjs) run in every
+// tier and the shared native-acceptance fixtures in release and full.
 //
 // It reports and exits 0 unless --fail-on-defect is given and a baseline case fails in the opf profile (the switch the owner turns
 // on when the baseline is promoted). Needs the built packages (pnpm build), fontconfig and LibreOffice; in CI it runs in the pinned
@@ -23,7 +27,8 @@ import { prepareOutputDirectory, writeNativeRun } from "./output.mjs";
 import { fileIdentity, impressResult, impressRun, PICTURE_WIDTH, systemFrom, utc } from "../native-acceptance/apps/impress/from-libreoffice.mjs";
 import { picturePath } from "../native-acceptance/core/result/result.mjs";
 import { containment, compareStructure, inkOutside, missingWords, slideStructure, sourceBleeds, verdict } from "./checks.mjs";
-import { corpusCases, qualificationCases, qualificationManifest, selectCases } from "./corpus.mjs";
+import { corpusCases, qualificationManifest, qualificationSelection, selectCases } from "./corpus.mjs";
+import { TIERS } from "../native-acceptance/qualification/tiers.mjs";
 import { featuresMarkdown, gradeFeatures } from "./features.mjs";
 import { fontInventory, PROFILES, prepareProfile, resolveRequested } from "./fonts.mjs";
 import { openPdf, pageRuns, pageText, pdfFonts, rasterize, sharp } from "./pdf-model.mjs";
@@ -39,7 +44,7 @@ const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const json = (value) => `${JSON.stringify(value, null, 2)}\n`;
 
 function parseArgs(argv) {
-  const options = { out: path.join(root, "artifacts/libreoffice"), profiles: [...PROFILES], cases: [], soffice: null, failOnDefect: false, control: true };
+  const options = { out: path.join(root, "artifacts/libreoffice"), profiles: [...PROFILES], cases: [], soffice: null, failOnDefect: false, control: true, tier: "release" };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     const value = () => {
@@ -53,8 +58,10 @@ function parseArgs(argv) {
     else if (arg === "--fail-on-defect") options.failOnDefect = true;
     else if (arg === "--no-control") options.control = false;
     else if (arg === "--qualification") options.qualification = path.resolve(value());
+    else if (arg === "--tier") options.tier = value();
     else throw new Error(`unknown argument ${arg}`);
   }
+  if (!TIERS.includes(options.tier)) throw new Error(`unknown tier ${options.tier} (known: ${TIERS.join(", ")})`);
   for (const profile of options.profiles) if (!PROFILES.includes(profile)) throw new Error(`unknown profile ${profile} (known: ${PROFILES.join(", ")})`);
   return options;
 }
@@ -238,6 +245,7 @@ function summaryMarkdown(report) {
   lines.push(`- LibreOffice: ${env.libreoffice} (pinned ${env.libreofficePinned}${env.pinned ? "" : ", NOT the pinned version"})`);
   lines.push(`- OS: ${env.os}; image: ${env.image ?? "local"}; ${env.fontconfig ?? "fontconfig unknown"}; Node ${env.node}`);
   lines.push(`- Engines: ${Object.entries(env.packages).map(([name, version]) => `${name} ${version}`).join(", ")}; commit ${env.commit ?? "unknown"}`);
+  if (report.tier) lines.push(`- Tier \`${report.tier.name}\`: ${report.tier.files} manifest files${report.tier.failedToExport.length ? `, not exported: ${report.tier.failedToExport.join(", ")}` : ""}${report.tier.sourcesNotResolved.length ? `; sources not resolved by this runner: ${report.tier.sourcesNotResolved.join(", ")}` : ""}`);
   for (const [name, profile] of Object.entries(report.profiles)) lines.push(`- Profile \`${name}\`: ${profile.inventory.count} font files (digest ${String(profile.inventory.digest).slice(0, 12)}), ${profile.copied} OPF fonts, ${profile.aliases} aliases`);
   lines.push("");
   const order = ["control", "opf", "stock"];
@@ -273,9 +281,13 @@ async function main() {
   prepareOutputDirectory(options.out);
   const core = await import("@openpresentation/opf");
   engines.core = core;
-  const cases = selectCases([...(await corpusCases()), ...(options.qualification ? qualificationCases(options.qualification) : [])], options.cases);
+  const selection = options.qualification ? qualificationSelection(options.qualification, { tier: options.tier }) : null;
+  const cases = selectCases([...(await corpusCases({ tier: options.tier })), ...(selection?.cases ?? [])], options.cases);
   const report = { schemaVersion: 1, environment: identities(soffice), profiles: {}, cases: [] };
-  console.log(`libreoffice: ${report.environment.libreoffice}; ${cases.length} cases; profiles ${options.profiles.join(", ")}`);
+  console.log(`libreoffice: ${report.environment.libreoffice}; ${cases.length} cases; profiles ${options.profiles.join(", ")}${selection ? `; tier ${options.tier}: ${selection.cases.length} manifest files` : ""}`);
+  if (selection?.sources.length) console.log(`tier ${options.tier} names sources this runner does not resolve: ${selection.sources.join(", ")}`);
+  if (selection?.failed.length) console.log(`tier ${options.tier} files that did not export (not opened): ${selection.failed.join(", ")}`);
+  report.tier = selection ? { name: options.tier, files: selection.cases.length, failedToExport: selection.failed, sourcesNotResolved: selection.sources } : null;
 
   const inputs = path.join(options.out, "inputs");
   mkdirSync(inputs, { recursive: true });
@@ -349,7 +361,7 @@ async function main() {
     console.log(`${name}: converted in ${pdf.seconds} s (pdf) and ${roundTrip.seconds} s (pptx)`);
     for (const item of prepared) {
       const paths = { pdf: path.join(dir, "pdf", `${item.entry.id}.pdf`), roundTrip: path.join(dir, "roundtrip", `${item.entry.id}.pptx`), caseDir: item.caseDir, conversionLog: `soffice status ${pdf.status}: ${(pdf.stderr || pdf.error || "").trim().slice(0, 400)}` };
-      const native = nativeCase(item) ? { dir: path.join(nativeDir, "files", fileIdentity(item.entry.id, name).id), pictures: [] } : null;
+      const native = nativeCase(item) ? { dir: path.join(nativeDir, "files", fileIdentity(item.entry.id, name, item.entry.qualification).id), pictures: [] } : null;
       let result;
       try {
         result = await measure(item.entry, item.exported, item.model, profile, paths, { native });
@@ -388,17 +400,18 @@ ${featuresMarkdown(report.features)}
   if (judged) console.log(`baseline (opf profile): ${report.baseline.cases - baselineFailures.length}/${report.baseline.cases} pass${baselineFailures.length ? `; failing: ${baselineFailures.map((entry) => entry.id).join(", ")}` : ""}`);
   const controlFailures = report.cases.filter((entry) => entry.profiles.control?.status === "fail").map((entry) => entry.id);
   if (controlFailures.length) console.log(`control failures (the instrument or OPF's own PDF, not LibreOffice): ${controlFailures.join(", ")}`);
-  if (natives.length) writeNative(nativeDir, report.environment, options.profiles, natives, runStarted);
+  if (natives.length) writeNative(nativeDir, report.environment, options.profiles, natives, runStarted, selection && !options.cases.length ? options.tier : null);
   if (options.failOnDefect && judged && baselineFailures.length) process.exitCode = 1;
 }
 
 /** native/run.json and native/files/<id>/result.json (scripts/native-acceptance/apps/impress/from-libreoffice.mjs), validated. */
-function writeNative(directory, environment, profiles, natives, started) {
+function writeNative(directory, environment, profiles, natives, started, tier) {
   const system = systemFrom({ platform: process.platform, release: existsSync("/etc/os-release") ? environment.os : release() });
   const results = natives.map(({ item, name, result, native, resaved, converted, unchanged, started: from, finished }) => {
     const sizes = native.pictures.filter(Boolean).map((picture) => picture.size.join("x"));
     return impressResult({
       caseId: item.entry.id,
+      ...(item.entry.qualification ? { deck: item.entry.qualification.deck, variant: item.entry.qualification.variant } : {}),
       profile: name,
       environment,
       system,
@@ -416,7 +429,7 @@ function writeNative(directory, environment, profiles, natives, started) {
       finished,
     });
   });
-  writeNativeRun(directory, impressRun({ environment, system, profiles, started, finished: utc(), results }), results);
+  writeNativeRun(directory, impressRun({ environment, system, profiles, started, finished: utc(), results, tier }), results);
   const shown = path.relative(root, directory);
   console.log(`native: ${results.length} results in ${shown.startsWith("..") ? directory : shown}`);
 }

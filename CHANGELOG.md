@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.37.1 (2026-11-27)
+
+- The core's build includes the part of `jsonc-parser` it uses and the package no longer depends on it, so a server bundle made with esbuild for Node, which cannot follow `jsonc-parser`'s UMD build, now loads. The package also ships `THIRD-PARTY-NOTICES.md` for the bundled `jsonc-parser`, `ajv` and `ajv-formats` code.
+- A font scheme record may carry `x-` keys again: 0.37.0 refused them ("must NOT have additional properties"), so every published record with an `x-gallery` block failed `validateCatalogRecord("fontSchemes", record)`. The old `languageFamily` key and every other unknown key are still refused.
+
 ## 0.37.0 (2026-11-27)
 
 - A deck can carry a document id: an optional root `id`, an opaque non-empty string (the docs recommend a UUID, and a host keeps the id it already has) that says "this is the same deck" across saves, exports, imports and publishes. Core never makes one (it has no clock and no randomness): `opf create` gives every new deck, starter or example, its own UUID, and core's `fill` drops the template's id from each filled deck while `opf fill` gives each its own new one when the template had one. The id is a claim, not a credential: a file can carry any id, so a host must check who owns an id before it selects a stored deck. PowerPoint: `toPptx` writes the id into the `OPF_DOCUMENT_V1` tag (also in `references-only` mode) and `fromPptx` restores it; an export with `provenance: false` drops it and reports `document-provenance-omitted` at `id`. The MCP viewer keys an editing session on the deck's id when it has one (so two decks both named "Untitled" no longer share a session) and on its name otherwise. `diff` reports a changed id at `/id`, and `merge` keeps one side's id and reports a conflict at `/id` when the sides carry different ones. Conformance: two valid and two invalid cases for Core Reader and Core Writer. A deck without an `id` is unchanged.

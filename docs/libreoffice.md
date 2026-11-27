@@ -121,23 +121,23 @@ never block.
 
 ## Corpus
 
-`scripts/libreoffice/corpus.mjs` lists the cases:
+The run opens three groups (`scripts/libreoffice/corpus.mjs`):
 
-- `scripts/libreoffice/corpus/`: cover and text (wrapped titles, two columns, a statement, explicit breaks), long and nested lists
-  (wrapping bullets, three levels, numbered lists with nested letters, descriptions), images and crops (a cover crop beside text, a
-  square crop with focus, a contained picture with a caption, an ellipse, grayscale and an SVG), tables (numeric, long prose cells, a
-  formatted table beside text) and common charts (column, bar, line, pie, stacked column, area, scatter). The pictures are copies of
-  the MIT-licensed technical example assets (`examples/technical/assets`).
-- [opf#925](https://github.com/OpenPresentation/opf/issues/925): the retained seven-slide artifact of the report
-  (`packages/pptx/test/fixtures/native-long-text/llmreference.pptx`, unchanged), and its slides 3 and 5 rebuilt as an OPF deck and
-  exported by today's engines three ways: default, `typefaces: "safe"` and `bodyText: "native"`.
-- Two technical examples (`rich-text-runs`, `table-cell-types`).
-- The shared native-acceptance corpus (`scripts/native-acceptance`).
-- The release qualification corpus (`scripts/native-acceptance/qualification`, RR-105): with `--qualification <dir>` the runner
-  takes the very files `build.mjs --out <dir>` writes (the PPTX files and previews the PowerPoint and Keynote streams open) and grades
-  the manifest's features check by check (`features.mjs`): `opens`, `slides`, `noOverflow`, `noShrink` and `content` from the
-  rendered pages, `nativeChart`, `nativeTable`, `connectors` and `shapes` from LibreOffice's own saved copy, `roundtrip` by importing
-  that copy with OPF, `visual` as a number for a reviewer; `smartArt` and `footer` need the app's own model and are not graded.
+- **The manifest's tier.** With `--qualification <dir>` the runner takes the decks and variants of a tier of the release qualification
+  manifest (`scripts/native-acceptance/qualification/manifest.json`) from the very files `build.mjs --out <dir>` writes, selected by
+  `decksForTier` of `qualification/tiers.mjs`, the function the Keynote runner uses. `--tier smoke|release|full` picks the tier
+  (default `release`: every deck in every variant; `smoke` is for a pull request). The tier's named sources (`native-fragments`,
+  `examples`, ...) are not resolved by this runner. The runner grades the manifest's features check by check (`features.mjs`): `opens`, `slides`,
+  `noOverflow`, `noShrink` and `content` from the rendered pages, `nativeChart`, `nativeTable`, `connectors` and `shapes` from
+  LibreOffice's own saved copy, `roundtrip` by importing that copy with OPF, `visual` as a number for a reviewer; `smartArt` and
+  `footer` need the app's own model and are not graded.
+- **LibreOffice's own cases** (`LIBREOFFICE_CASES`, one named list with a line each saying why it is not a corpus deck; run in every
+  tier): cover and text, long and nested lists, images and crops, tables and common charts (`scripts/libreoffice/corpus/`, pictures are
+  copies of the MIT-licensed technical example assets); [opf#925](https://github.com/OpenPresentation/opf/issues/925), the retained
+  seven-slide artifact of the report (`packages/pptx/test/fixtures/native-long-text/llmreference.pptx`, unchanged) and its slides 3 and
+  5 rebuilt as an OPF deck and exported by today's engines three ways (default, `typefaces: "safe"`, `bodyText: "native"`); the
+  chart-type sampler with `charts: "picture"`; two technical examples (`rich-text-runs`, `table-cell-types`).
+- **The shared native-acceptance fixtures** (`scripts/native-acceptance`, 28 cases; `release` and `full` only).
 
 ## Running it
 
@@ -166,13 +166,18 @@ the same compare and classify steps can read Impress results. It is in the night
 
 ```
 native/run.json                                          the run: LibreOffice's version, the system, the profiles, one entry per file
-native/files/<case>~<profile>/result.json                one per case and font profile (target "impress", fonts = the profile)
-native/files/<case>~<profile>/slides/slide-001.png ...   LibreOffice's rendering of each visible slide
-native/files/<case>~<profile>/resaved.pptx               LibreOffice's own PowerPoint copy
+native/files/<deck>~<variant>.<profile>/result.json      one per deck, variant and font profile (target "impress", fonts = the profile)
+native/files/<deck>~<variant>.<profile>/slides/slide-001.png ...   LibreOffice's rendering of each visible slide
+native/files/<deck>~<variant>.<profile>/resaved.pptx     LibreOffice's own PowerPoint copy
 ```
 
-The file id is the case id (the `~` of a qualification case such as `q-smartart~shapes` written as `.`) and the font profile:
-`tables~opf`, `q-smartart.shapes~stock`. What each verb means for LibreOffice
+The file id is `<deck>~<variant>.<profile>`: for a manifest deck its own id and variant name (`default` for a deck with one export),
+for LibreOffice's own cases and the shared fixtures the case id and `default`, then the font profile after a `.` (manifest variant
+names have none, so the last `.` splits them): `smartart~shapes.opf`, `coverage-charts~default.stock`, `tables~default.opf`. In
+`result.json`, `file.deck` and `file.variant` (`shapes.opf`) are the parts of the id and `fonts` is the profile; `run.json` has the
+`tier` when the run was a whole tier (`--case` makes it null). Artifacts of runs before NT-14 name the files `<case id>~<profile>`,
+with a `q-` prefix and the `~` of the variant written as `.` for a qualification deck (`q-smartart.shapes~stock`) and `tier` null.
+What each verb means for LibreOffice
 (`scripts/native-acceptance/apps/impress/from-libreoffice.mjs` maps it):
 
 | Verb | Status | From |

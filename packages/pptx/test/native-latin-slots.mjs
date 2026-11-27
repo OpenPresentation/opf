@@ -54,7 +54,8 @@ test('native body rich faces',async()=>{
   const path='ppt/slides/slide1.xml',slide=strFromU8(result.zip[path]),body=bodies[0].xml;
   for(const[name,transform,update]of[
    ['text',xml=>xml.replace('Bonjour 1','Changed 7'),doc=>{doc.slides[0].text[0].text='Changed 7';}],
-   ['bold',xml=>xml.replace(/<a:rPr\b/,'<a:rPr b="1"'),doc=>{doc.slides[0].text[0].bold=true;}],
+   // opf#1552: a native run states its weight (b="0" for a regular run), so the control turns that attribute on.
+   ['bold',xml=>xml.replace(/(<a:rPr\b[^>]*?) b="0"/,'$1 b="1"'),doc=>{doc.slides[0].text[0].bold=true;}],
   ]){
    const changed=transform(body);assert.notEqual(changed,body,`The ${name} control actually changes the native body`);
    const entries={...result.zip,[path]:strToU8(slide.replace(body,changed))},current=structuredClone(expected);update(current);

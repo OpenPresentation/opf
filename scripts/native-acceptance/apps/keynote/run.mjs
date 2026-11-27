@@ -3,11 +3,14 @@
 // shared format. The general entry point is `pnpm native keynote` (native.mjs, NT-05); this command is the driver's own.
 //
 //   node scripts/native-acceptance/apps/keynote/run.mjs --out <dir> --opf <version> [--opf-commit <sha>]
-//        [--input-root <dir>] [--warnings-dir <dir>] <file.pptx>...
+//        [--input-root <dir>] [--warnings-dir <dir>] [--keep-going] <file.pptx>...
 //
-// check() runs before every file (as the 0.36.0 round's guards did); a refusal stops the run with exit code 2 and the
-// reasons. Exit 0: every verb of every file done; 1: some verb did not finish; 2: refused, bad arguments, or stopped (an
-// open that timed out, a document of the run's own that would not close).
+// check() runs before every file (as the 0.36.0 round's guards did), told how many files are left, so it also refuses
+// when Keynote is too worn to import them; a refusal stops the run with exit code 2 and the reasons. Exit 0: every verb
+// of every file done; 1: some verb did not finish; 2: refused, bad arguments, or stopped (an open that did not return a
+// document, a permission or write error on render or resave, a document of the run's own that would not close).
+// --keep-going: go on after a refused import or a write error (before NT-18 the run always did; on 2026-11-27 that left
+// a row of alerts in front of the owner). A timed-out open and a document left open still stop the run.
 // --warnings-dir: <dir>/<fileId>.txt holds the text of Keynote's Warnings window for that file, read by someone who could
 // see it; without one the file's import warnings are "not-read".
 import { existsSync, readFileSync } from 'node:fs';
@@ -20,14 +23,15 @@ import { buildRun, iso, runFile, writeRun } from './run-file.mjs';
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../..');
 const VARIANTS = new Set(['default', 'native', 'static', 'picture', 'shapes', 'native-body']);
 
-const usage = 'usage: run.mjs --out <dir> --opf <version> [--opf-commit <sha>] [--input-root <dir>] [--warnings-dir <dir>] <file.pptx>...';
+const usage = 'usage: run.mjs --out <dir> --opf <version> [--opf-commit <sha>] [--input-root <dir>] [--warnings-dir <dir>] [--keep-going] <file.pptx>...';
 
 export function parseArgs(argv) {
-  const options = { files: [] };
+  const options = { files: [], keepGoing: false };
   const valued = { '--out': 'out', '--opf': 'opf', '--opf-commit': 'opfCommit', '--input-root': 'inputRoot', '--warnings-dir': 'warningsDir' };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
-    if (valued[arg]) {
+    if (arg === '--keep-going') options.keepGoing = true;
+    else if (valued[arg]) {
       if (index + 1 >= argv.length) throw new Error(`${arg} needs a value`);
       options[valued[arg]] = argv[++index];
     } else if (arg.startsWith('--')) throw new Error(`unknown option ${arg}`);
@@ -102,18 +106,20 @@ export async function main(argv, { exec, machine, now, log = console.log, error 
     : undefined;
   const ctx = createContext({ runDir, ...(exec ? { exec } : {}), ...(machine ? { machine } : {}), ...(now ? { now } : {}), warningsText });
   const started = iso(ctx.now());
-  const first = await check(ctx);
+  const first = await check(ctx, { files: inputs.length });
   if (first.status !== 'ready') {
     error('run.mjs: check refused; nothing was opened:');
     for (const reason of first.reasons) error(`  - ${reason}`);
+    for (const note of first.notes ?? []) error(`  ${note}`);
     return 2;
   }
   log(`Keynote ${first.facts.application.version}${first.facts.application.build ? ` (${first.facts.application.build})` : ''} on macOS ${first.facts.system.version}; ${inputs.length} file(s) into ${runDir}`);
+  for (const note of first.notes ?? []) log(`  ${note}`);
   const results = [];
   let exit = 0;
   for (const [position, input] of inputs.entries()) {
     if (position > 0) {
-      const again = await check(ctx);
+      const again = await check(ctx, { files: inputs.length - position });
       if (again.status !== 'ready') {
         error(`run.mjs: check refused before ${input.id}; stopping:`);
         for (const reason of again.reasons) error(`  - ${reason}`);
@@ -121,7 +127,7 @@ export async function main(argv, { exec, machine, now, log = console.log, error 
         break;
       }
     }
-    const done = await runFile(ctx, input, { opf });
+    const done = await runFile(ctx, input, { opf, keepGoing: options.keepGoing });
     results.push(done.result);
     const { verbs } = done.result;
     log(`${input.id}\topen ${verbs.open.status}\tprobe ${verbs.probe.status}\trender ${verbs.render.status}\tresave ${verbs.resave.status}\tclose ${done.close.status}\tunchanged ${done.result.file.unchangedAfterRun}`);
@@ -133,7 +139,7 @@ export async function main(argv, { exec, machine, now, log = console.log, error 
     }
     if (Object.values(verbs).some((verb) => verb.status !== 'done')) exit = Math.max(exit, 1);
     if (done.stop) {
-      error(`run.mjs: stopping after ${input.id}: ${done.close.status !== 'done' && done.close.status !== 'not-run' ? `its document did not close (${done.close.message ?? done.close.state}); close it by hand` : 'open did not finish; look at Keynote before the next run'}`);
+      error(`run.mjs: stopping after ${input.id}: ${done.stopReason}`);
       exit = 2;
       break;
     }
