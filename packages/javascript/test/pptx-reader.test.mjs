@@ -6,7 +6,7 @@ import { describe, test } from "node:test";
 import { OPFApiError, Reporter, resolveExportOptions, runExport } from "../dist/node-engine.js";
 
 const deck = { name: "Reader", slides: [{ title: "A title" }] };
-const KEYNOTE = { typefaces: "safe", slideNumberFields: "static", smartArt: "shapes", bodyText: "native" };
+const KEYNOTE = { typefaces: "safe", slideNumberFields: "static" };
 const spy = ({ reader = true } = {}) => {
   const calls = [];
   const module = {

@@ -12,7 +12,7 @@
             "default",
             "reader-keynote"
           ],
-          "why": "A hidden slide (10) followed by a live slide number (11, kn-hidden-slide-numbering); titles, text, a bulleted list (6), a table (5), charts (3, 4), pictures, links on words (2), presenter notes and footer placeholders on one deck. The reader-keynote variant (--reader keynote: Office-safe typefaces, static slide numbers, SmartArt as shapes, native body text) runs here so each smoke run sees the whole Keynote profile on the deck with every object kind."
+          "why": "A hidden slide (10) followed by a live slide number (11, kn-hidden-slide-numbering); titles, text, a bulleted list (6), a table (5), charts (3, 4), pictures, links on words (2), presenter notes and footer placeholders on one deck. The reader-keynote variant (--reader keynote: Office-safe typefaces and static slide numbers) runs here so each smoke run sees the Keynote profile on the deck with every object kind."
         },
         {
           "deck": "footers",
@@ -26,10 +26,9 @@
           "deck": "layout-sampler",
           "variants": [
             "default",
-            "native-body",
-            "reader-keynote"
+            "native-body"
           ],
-          "why": "Every gallery layout; body placeholders in the native-body variant; the only open known difference in OPF's own file (kn-native-note-at-foot, slide 24 of native-body), long titles and grown table headers (kn-title-overprints, kn-table-header-split). The reader-keynote variant shows the Keynote profile on every layout; it runs here and not on the other profile decks to keep the tier small (those run in release)."
+          "why": "Every gallery layout; body placeholders in the native-body variant; the only open known difference in OPF's own file (kn-native-note-at-foot, slide 24 of native-body), long titles and grown table headers (kn-title-overprints, kn-table-header-split). The reader-keynote variant is not in the smoke tier: the smoke tier is the base of every release candidate and has a time budget, so the profile runs here on full-feature-tour only and on layout-sampler in release."
         },
         {
           "deck": "coverage-charts",
