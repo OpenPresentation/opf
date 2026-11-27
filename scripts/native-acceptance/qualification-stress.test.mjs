@@ -1,6 +1,7 @@
-// NT-10: the stress decks of the 0.36.0 Keynote round in the qualification corpus. Every known Keynote difference that names a
-// place has one the release tier runs, the sources gallery-layouts and languages are manifest decks the runner builds, and
-// each moved or committed deck builds with the slides the records and the 0.36.0 baseline (runs/0.36.0/keynote.json) name.
+// NT-10: the stress decks of the 0.36.0 Keynote round in the qualification corpus. The sources gallery-layouts and languages
+// are manifest decks the runner builds, and each moved or committed deck builds with the slides the records and the 0.36.0
+// baseline (runs/0.36.0/keynote.json) name. That every known place is in the release tier is NT-12's rule (a)
+// (core/coverage/, pnpm check:native-coverage).
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
@@ -9,7 +10,6 @@ import path from 'node:path';
 import { after, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { sameExport } from './core/classify/classify.mjs';
 import { fileId } from './core/result/result.mjs';
 import { selectFiles } from './native.mjs';
 import { loadManifest, pptxName } from './qualification/build.mjs';
@@ -24,17 +24,6 @@ const byId = new Map(manifest.decks.map((deck) => [deck.id, deck]));
 const variantsOf = (deck) => (deck.variants ?? [{ name: 'default', flags: [] }]);
 /** The decks NT-10 moved in (hand-written, m-*) or committed (the groups of the sources gallery-layouts and languages). */
 const STRESS = manifest.decks.filter((deck) => deck.group || deck.id.startsWith('m-'));
-const files = (tier) => decksForTier(manifest, tier).flatMap((entry) => entry.variants.map((variant) => ({ deck: entry.deck, variant })));
-
-test('stress decks: every known Keynote record that names a place has one the release tier runs', () => {
-  const release = files('release');
-  const runs = (place) => release.some((file) => file.deck === place.deck && sameExport(place.variant, file.variant));
-  const located = known.records.filter((record) => record.where.length > 0);
-  assert.ok(located.length >= 60, `${located.length} records with a place`);
-  for (const record of located) assert.ok(record.where.some(runs), `${record.id}: no place of ${record.where.map((place) => fileId(place.deck, place.variant)).join(', ')} is in the release tier`);
-  // A record without a place applies everywhere (a scope) or was seen but not placed (located: false); no tier can lose it.
-  for (const record of known.records.filter((item) => item.where.length === 0)) assert.ok(record.scope || record.located === false, `${record.id}: no place, no scope`);
-});
 
 test('stress decks: the sources gallery-layouts and languages are groups of manifest decks, all of them in the full tier', () => {
   for (const source of ['gallery-layouts', 'languages']) {

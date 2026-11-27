@@ -66,7 +66,7 @@ layouts at three content sizes, the language decks). `gallery-layouts` and `lang
 ### Stress decks and known differences
 
 Every record of `known/keynote.json` whose `where` names a place must have one place the release tier runs
-(`qualification-stress.test.mjs`; a place's variant `native` is the corpus's `native-body`, as in `core/classify/`). Most
+(NT-12's rule (a), `pnpm check:native-coverage`; a place's variant `native` is the corpus's `native-body`, as in `core/classify/`). Most
 records come from content stress, not from a format key: long names, many entries, mixed directions. So the corpus keeps the
 stress decks of the 0.36.0 Keynote round under their recorded ids, which the records and the baseline
 (`runs/0.36.0/keynote.json`) name with the same slide numbers:
