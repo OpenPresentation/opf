@@ -1,0 +1,10892 @@
+[
+ {
+  "area": "menu",
+  "path": [
+   "Keynote",
+   "About Keynote"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Keynote",
+   "Settings…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Keynote",
+   "Learn About Apple Creator Studio"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Keynote",
+   "Get Apple Creator Studio"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Keynote",
+   "Provide Keynote Feedback"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Keynote",
+   "Privacy & Analytics"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Keynote",
+   "Services"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Keynote",
+   "Hide Keynote"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Keynote",
+   "Hide Others"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Keynote",
+   "Show All"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Keynote",
+   "Quit Keynote"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Keynote",
+   "Quit and Keep Windows"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "New…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Open…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Open Recent"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Close"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Close All"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Save…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Save As…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Duplicate"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Rename…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Move To…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Revert To"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Share…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Activity Settings…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Export To"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Reduce File Size…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Advanced"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Set Password…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Change Theme..."
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Save Theme…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Print…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Export To",
+   "PDF…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Export To",
+   "PowerPoint…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Export To",
+   "Movie…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Export To",
+   "Animated GIF…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Export To",
+   "Images…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Export To",
+   "HTML…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Export To",
+   "Keynote ’09…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Export To",
+   "Keynote X…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Advanced",
+   "Change File Type"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Advanced",
+   "Language & Region…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "File",
+   "Revert To",
+   "Browse All Versions…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Undo"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Redo"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Cut"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Copy"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Paste"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Paste and Match Style"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Paste and Preserve Style"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Paste Formula Results"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Delete"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Clear All"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Duplicate Selection"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Select All"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Deselect All"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Select Parent"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Remove Highlights and Comments"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Find"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Writing Tools"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Spelling and Grammar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Substitutions"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Transformations"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Speech"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "AutoFill"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Start Dictation…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Emoji & Symbols"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Find",
+   "Find…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Find",
+   "Find Next"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Find",
+   "Find Previous"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Find",
+   "Hide Find Panel"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Find",
+   "Use Selection for Find"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Find",
+   "Use Selection for Replace"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Find",
+   "Jump to Selection"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Writing Tools",
+   "Show Writing Tools"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Writing Tools",
+   "Proofread"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Writing Tools",
+   "Rewrite"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Writing Tools",
+   "Make Friendly"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Writing Tools",
+   "Make Professional"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Writing Tools",
+   "Make Concise"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Writing Tools",
+   "Summarize"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Writing Tools",
+   "Create Key Points"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Writing Tools",
+   "Make List"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Writing Tools",
+   "Make Table"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Writing Tools",
+   "Compose…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Spelling and Grammar",
+   "Show Spelling and Grammar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Spelling and Grammar",
+   "Check Document Now"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Spelling and Grammar",
+   "Check Spelling While Typing"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Spelling and Grammar",
+   "Check Grammar With Spelling"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Spelling and Grammar",
+   "Correct Spelling Automatically"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Substitutions",
+   "Show Substitutions"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Substitutions",
+   "Smart Quotes"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Substitutions",
+   "Smart Dashes"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Substitutions",
+   "Smart Web and Email Links"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Substitutions",
+   "Smart Phone Number Links"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Substitutions",
+   "Text Replacement"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Transformations",
+   "Make Upper Case"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Transformations",
+   "Make Lower Case"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Transformations",
+   "Capitalize"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Speech",
+   "Start Speaking"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "Speech",
+   "Stop Speaking"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "AutoFill",
+   "Contact…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "AutoFill",
+   "Passwords…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Edit",
+   "AutoFill",
+   "Credit Card…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Line Break"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Column Break"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Table"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Text"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Line"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Highlight"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Comment"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Browse Content Hub"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Generate Image"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Generate Shape"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Image Playground…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Image Gallery"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Web Video…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Live Video"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Import From Device"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Record Audio"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Formula"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Equation..."
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Choose File"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Table",
+   "Headers"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Table",
+   "Basic"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Table",
+   "Plain"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Table",
+   "Sums"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Stacked Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Bar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Stacked Bar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Line"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Area"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Stacked Area"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Radar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Pie"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Donut"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Scatter"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Bubble"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D Mixed"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "2D 2-Axis"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "3D Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "3D Stacked Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "3D Bar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "3D Stacked Bar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "3D Line"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "3D Area"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "3D Stacked Area"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "3D Pie"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "Interactive Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "Interactive Bar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "Interactive Scatter"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Chart",
+   "Interactive Bubble"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape",
+   "Rectangle"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape",
+   "Rounded Rectangle"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape",
+   "Oval"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape",
+   "Triangle"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape",
+   "Right Triangle"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape",
+   "Arrow"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape",
+   "Double Arrow"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape",
+   "Diamond"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape",
+   "Quote Bubble"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape",
+   "Callout"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape",
+   "Polygon"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Shape",
+   "Star"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Line",
+   "Line"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Line",
+   "Line with Arrowhead"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Line",
+   "Line with Two Arrowheads"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Line",
+   "Straight Connection Line"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Line",
+   "Curved Connection Line"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Line",
+   "Angled Connection Line"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Line",
+   "Draw With Pen"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Formula",
+   "Sum"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Formula",
+   "Average"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Formula",
+   "Minimum"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Formula",
+   "Maximum"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Formula",
+   "Count"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Formula",
+   "Product"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Insert",
+   "Formula",
+   "New Formula"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "New Slide"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Skip Slide"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Expand"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Expand All"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Collapse"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Collapse All"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Hide Slide Numbers on All Slides"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Copy Guides"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Paste Guides"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Clean Up Slide"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Generate Slides from Text…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Generate Presenter Notes"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Go To"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Go To",
+   "Next Slide"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Go To",
+   "Previous Slide"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Go To",
+   "First Slide"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Go To",
+   "Last Slide"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Slide",
+   "Go To",
+   "Slide…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Text"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Image"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Movie"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Remove Watermarks"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Copy Style"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Paste Style"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Copy Animation"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Paste Animation"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Conditional Highlighting..."
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Add Link"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Remove Link"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Reapply Layout to Slide"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Advanced"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Show Fonts"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Bold"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Italic"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Underline"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Strikethrough"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Bigger"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Smaller"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Replace Fonts…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Character Spacing"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Ligature"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Baseline"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Capitalization"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Character Spacing",
+   "Use None"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Character Spacing",
+   "Tighten"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Character Spacing",
+   "Loosen"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Ligature",
+   "Use Default"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Ligature",
+   "Use None"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Ligature",
+   "Use All"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Baseline",
+   "Use Default"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Baseline",
+   "Superscript"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Baseline",
+   "Subscript"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Baseline",
+   "Raise"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Baseline",
+   "Lower"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Capitalization",
+   "None"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Capitalization",
+   "All Caps"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Capitalization",
+   "Small Caps"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Capitalization",
+   "Title Case"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Font",
+   "Capitalization",
+   "Start Case"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Text",
+   "Align Left"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Text",
+   "Align Center"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Text",
+   "Align Right"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Text",
+   "Justify"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Text",
+   "Auto-Align Table Cell"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Text",
+   "Increase Indent Level"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Text",
+   "Decrease Indent Level"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Add Row Above"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Add Row Below"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Add Column Before"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Add Column After"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Delete Row"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Delete Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Header Rows"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Header Columns"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Footer Rows"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Resize Row to Fit Content"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Resize Column to Fit Content"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Distribute Rows Evenly"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Distribute Columns Evenly"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Select"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Autofill Cells"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Merge Cells"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Unmerge Cells"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Header Rows",
+   "0"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Header Rows",
+   "1"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Header Rows",
+   "2"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Header Rows",
+   "3"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Header Rows",
+   "4"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Header Rows",
+   "5"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Footer Rows",
+   "0"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Footer Rows",
+   "1"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Footer Rows",
+   "2"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Footer Rows",
+   "3"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Footer Rows",
+   "4"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Footer Rows",
+   "5"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Select",
+   "Row"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Select",
+   "Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Select",
+   "First Value in Row"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Select",
+   "Last Value in Row"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Select",
+   "First Value in Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Select",
+   "Last Value in Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Select",
+   "Extend to First Value in Row"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Select",
+   "Extend to Last Value in Row"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Select",
+   "Extend to First Value in Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Select",
+   "Extend to Last Value in Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Autofill Cells",
+   "Autofill"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Autofill Cells",
+   "Autofill Right"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Autofill Cells",
+   "Autofill Left"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Autofill Cells",
+   "Autofill Down"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Autofill Cells",
+   "Autofill Up"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Autofill Cells",
+   "Autofill from Row Above"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Table",
+   "Autofill Cells",
+   "Autofill from Column Before"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Show Chart Data Editor"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Show Title"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Show Legend"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Show Borders"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Show Y Axis Title"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Show Y Axis Labels"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Show Y Axis 2 Title"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Show Y Axis 2 Labels"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Show X Axis Title"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Show X Axis Labels"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Show Series Names"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Show Series Value Labels"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "2D Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "2D Stacked Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "2D Bar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "2D Stacked Bar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "2D Line"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "2D Area"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "2D Stacked Area"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "2D Radar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "2D Pie"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "2D Donut"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "2D Bubble"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "2D 2-Axis"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "3D Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "3D Stacked Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "3D Bar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "3D Stacked Bar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "3D Line"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "3D Area"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "3D Stacked Area"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "3D Pie"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "Interactive Column"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "Interactive Bar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "Interactive Scatter"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type",
+   "Interactive Bubble"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Make Editable"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Make Motion Path from Shape"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Reset Text and Object Handles"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Break Apart"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Save to My Shapes"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Unite Shapes"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Intersect Shapes"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Subtract Shapes"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Exclude Shapes"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Make Sharp Point"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Make Smooth Point"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Make Bézier Point"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Shapes and Lines",
+   "Toggle Line Type"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Image",
+   "Edit in Pixelmator Pro"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Image",
+   "Edit Mask"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Image",
+   "Reset Mask"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Image",
+   "Mask with Shape"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Image",
+   "Generate from Image"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Image",
+   "Super Resolution"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Image",
+   "Remove Background"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Image",
+   "Reset Background"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Movie",
+   "Optimize for iPhone and iPad"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Advanced",
+   "Create Style"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Advanced",
+   "Define as Text Placeholder"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Advanced",
+   "Define as Media Placeholder"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Format",
+   "Advanced",
+   "Set as Default Text Box Appearance"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Bring Forward"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Bring to Front"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Send Backward"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Send to Back"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Align Objects"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Distribute Objects"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Flip Horizontally"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Flip Vertically"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Lock"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Unlock"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Group"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Ungroup"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Align Objects",
+   "Left"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Align Objects",
+   "Center"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Align Objects",
+   "Right"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Align Objects",
+   "Top"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Align Objects",
+   "Middle"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Align Objects",
+   "Bottom"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Distribute Objects",
+   "Horizontally"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Distribute Objects",
+   "Vertically"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Arrange",
+   "Distribute Objects",
+   "Evenly"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Tab Bar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show All Tabs"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Navigator"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Slide Only"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Light Table"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Outline"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Edit Slide Layouts"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Inspector"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Presenter Notes"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Object List"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Rulers"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Guides"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Activity Pane"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Hide Participant Cursors"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Content Hub"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Arrange Tools"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Build Order"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Colors"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Adjust Image"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Music Browser"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Photo and Video Browser"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Live Video Preview"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Zoom"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Hide Warnings"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Show Sync Status"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Enter Full Screen"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Hide Toolbar"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Customize Toolbar…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Inspector",
+   "Format"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Inspector",
+   "Animate"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Inspector",
+   "Document"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Inspector",
+   "Show Next Inspector Tab"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Inspector",
+   "Show Previous Inspector Tab"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Inspector",
+   "Hide Inspector"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Guides",
+   "Hide Guides"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Guides",
+   "Show Slide Layout Guides"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Guides",
+   "Clear All Guides on Slide"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Hide Comments"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Show Next Comment"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Show Previous Comment"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Author Color"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Author Color",
+   "Yellow"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Author Color",
+   "Green"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Author Color",
+   "Blue"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Author Color",
+   "Pink"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Author Color",
+   "Purple"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Author Color",
+   "Teal"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Author Color",
+   "Orange"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Author Color",
+   "Red"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Author Color",
+   "Brown"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Comments",
+   "Author Color",
+   "Gray Blue"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Zoom",
+   "Zoom In"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Zoom",
+   "Zoom Out"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Zoom",
+   "Actual Size"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Zoom",
+   "Fit Slide"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Zoom",
+   "Auto-Center"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Zoom",
+   "Zoom to Selection"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "View",
+   "Zoom",
+   "Zoom to Fit Content"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Play",
+   "Play Slideshow"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Play",
+   "Play Recorded Slideshow"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Play",
+   "In Fullscreen"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Play",
+   "In Window"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Play",
+   "Record Slideshow..."
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Play",
+   "Clear Recording…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Play",
+   "Rehearse Slideshow"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Play",
+   "Show Presenter Display in Window"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Play",
+   "Customize Presenter Display…"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Minimize"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Minimize All"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Zoom"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Zoom All"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Fill"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Center"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Move & Resize"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Full Screen Tile"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Remove Window from Set"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Bring All to Front"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Arrange in Front"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Show Previous Tab"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Show Next Tab"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Move Tab to New Window"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Window",
+   "Merge All Windows"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Help",
+   "Keynote Help"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Help",
+   "Keyboard Shortcuts"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Help",
+   "Formulas and Functions Help"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Help",
+   "What’s New in Keynote"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Help",
+   "Welcome to Keynote"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Help",
+   "About Premium Features"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "menu",
+  "path": [
+   "Help",
+   "Service and Support"
+  ],
+  "kind": "menu item",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Slide"
+  ],
+  "kind": "tab",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/slide-pane-nothing-selected.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Slide",
+   "Slide Layout"
+  ],
+  "kind": "pop-up",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/slide-pane-nothing-selected.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Slide",
+   "Appearance"
+  ],
+  "kind": "section",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/slide-pane-nothing-selected.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Slide",
+   "Appearance",
+   "Title"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/slide-pane-nothing-selected.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Slide",
+   "Appearance",
+   "Body"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/slide-pane-nothing-selected.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Slide",
+   "Appearance",
+   "Slide Number"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/slide-pane-nothing-selected.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Slide",
+   "Background"
+  ],
+  "kind": "section",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/slide-pane-nothing-selected.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Slide",
+   "Background",
+   "Standard"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/slide-pane-nothing-selected.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Slide",
+   "Background",
+   "Dynamic"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/slide-pane-nothing-selected.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Slide",
+   "Background",
+   "Current Fill"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/slide-pane-nothing-selected.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Slide",
+   "Background",
+   "Color Fill"
+  ],
+  "kind": "pop-up",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/slide-pane-nothing-selected.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Slide",
+   "Edit Slide Layout"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/slide-pane-nothing-selected.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Document"
+  ],
+  "kind": "tab",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-tab.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Document",
+   "Theme",
+   "Change Theme"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-tab.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Document",
+   "Slideshow Settings"
+  ],
+  "kind": "section",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-tab.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Document",
+   "Slideshow Settings",
+   "Automatically play upon open"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-tab.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Document",
+   "Slideshow Settings",
+   "Loop slideshow"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-tab.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Document",
+   "Slideshow Settings",
+   "Restart show if idle for"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-tab.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Document",
+   "Presentation Type"
+  ],
+  "kind": "pop-up",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-tab.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Document",
+   "Presentation Type",
+   "Delay Transitions"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-tab.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Document",
+   "Presentation Type",
+   "Delay Builds"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-tab.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Document",
+   "Slide Size"
+  ],
+  "kind": "pop-up",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-tab.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Document",
+   "Require password to open"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-tab.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Document",
+   "Change Password..."
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-tab.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Audio"
+  ],
+  "kind": "tab",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-audio.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Audio",
+   "Record Slideshow",
+   "Record..."
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-audio.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Audio",
+   "Record Slideshow",
+   "Clear"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-audio.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Audio",
+   "Soundtrack"
+  ],
+  "kind": "pop-up",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-audio.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Audio",
+   "Soundtrack",
+   "Add Audio Files"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-audio.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Audio",
+   "Soundtrack",
+   "play"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-audio.jpg"
+ },
+ {
+  "area": "document",
+  "path": [
+   "Document",
+   "Audio",
+   "Soundtrack",
+   "volume"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/document-audio.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions"
+  ],
+  "kind": "tab",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Start Transition"
+  ],
+  "kind": "pop-up",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Delay"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Order"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "None"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Magic Move"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Clothesline"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Confetti"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Dissolve"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Drop"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Droplet"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Fade and Move"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Fade Through Color"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Grid"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Iris"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Move In"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Push"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Radial Wipe"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Reveal"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Switch"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Transitions",
+   "Add an Effect",
+   "Wipe"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-transition-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In"
+  ],
+  "kind": "tab",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Action"
+  ],
+  "kind": "tab",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out"
+  ],
+  "kind": "tab",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "None"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Appear"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Blur"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Compress"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Dissolve"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Drift"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Drift and Scale"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Drop"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Fade and Move"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Fade and Scale"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Fly In"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Iris"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Keyboard"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Move In"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Radial Wipe"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Shift"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Shift and Scale"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build In",
+   "Add an Effect",
+   "Wipe"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/animate-buildin-list.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Play"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Add Slide"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Content Hub"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Table"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Chart"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Text"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Media"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Comment"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Zoom"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Format"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Animate"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Document"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": ""
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Action",
+   "Add an Effect",
+   "None"
+  ],
+  "kind": "control",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-action-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Action",
+   "Add an Effect",
+   "Move"
+  ],
+  "kind": "control",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-action-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Action",
+   "Add an Effect",
+   "Opacity"
+  ],
+  "kind": "control",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-action-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Action",
+   "Add an Effect",
+   "Rotate"
+  ],
+  "kind": "control",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-action-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Action",
+   "Add an Effect",
+   "Scale"
+  ],
+  "kind": "control",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-action-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Action",
+   "Add an Effect",
+   "Blink"
+  ],
+  "kind": "control",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-action-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Action",
+   "Add an Effect",
+   "Bounce"
+  ],
+  "kind": "control",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-action-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Action",
+   "Add an Effect",
+   "Flip"
+  ],
+  "kind": "control",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-action-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Action",
+   "Add an Effect",
+   "Jiggle"
+  ],
+  "kind": "control",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-action-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Action",
+   "Add an Effect",
+   "Pop"
+  ],
+  "kind": "control",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-action-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Action",
+   "Add an Effect",
+   "Pulse"
+  ],
+  "kind": "control",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-action-list.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "None"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Blur"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Disappear"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Dissolve"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Fade and Move"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Fade and Scale"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Iris"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Move Out"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Radial Wipe"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Wipe"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Blinds"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Cube"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Flip"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Pivot"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "animate",
+  "path": [
+   "Animate",
+   "Build Out",
+   "Add an Effect",
+   "Pop"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "ax",
+  "shot": "shots/animate-buildout-list-chart.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style"
+  ],
+  "kind": "tab",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Shape Styles"
+  ],
+  "kind": "section",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Fill"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Border"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Shadow"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Reflection"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Opacity"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text"
+  ],
+  "kind": "tab",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Paragraph Style"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Update"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style"
+  ],
+  "kind": "tab",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Font"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Font",
+   "Typeface"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Font",
+   "Size"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Font",
+   "Bold"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Font",
+   "Italic"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Font",
+   "Underline"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Font",
+   "Strikethrough"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Font",
+   "More Text Options"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-more-text-options.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "More Text Options",
+   "Character Spacing"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-more-text-options.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "More Text Options",
+   "Baseline Shift"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-more-text-options.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "More Text Options",
+   "Baseline"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-more-text-options.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "More Text Options",
+   "Capitalization"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-more-text-options.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "More Text Options",
+   "Ligatures"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-more-text-options.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "More Text Options",
+   "Outline"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-more-text-options.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "More Text Options",
+   "Shadow"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-more-text-options.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Character Styles"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Text Color"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Alignment",
+   "Left"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Alignment",
+   "Center"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Alignment",
+   "Right"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Alignment",
+   "Justify"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Decrease Indent"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Increase Indent"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Vertical Alignment",
+   "Top"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Vertical Alignment",
+   "Middle"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Vertical Alignment",
+   "Bottom"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Spacing"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Spacing",
+   "Lines"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Spacing",
+   "Before Paragraph"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Spacing",
+   "After Paragraph"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Bullets & Lists"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Bullets & Lists",
+   "Bullet type"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Bullets & Lists",
+   "Indent Bullet"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Bullets & Lists",
+   "Indent Text"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout"
+  ],
+  "kind": "tab",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Columns"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Columns",
+   "Column Gutter"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Columns",
+   "Equal column width"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Text Inset"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Indents",
+   "First"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Indents",
+   "Left"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Indents",
+   "Right"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Tabs",
+   "Decimal Character"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Tabs",
+   "Tab Stops Alignment Leader"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Paragraph Borders"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Paragraph Borders",
+   "Border Offset"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Paragraph Borders",
+   "Rounded Corners"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout",
+   "Paragraph Background"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-text-layout-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange"
+  ],
+  "kind": "tab",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Back"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Front"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Backward"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Forward"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Align"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Distribute"
+  ],
+  "kind": "pop-up",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Size Width"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Size Height"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Constrain proportions"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Position X"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Position Y"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Rotate Angle"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Flip Horizontal"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Flip Vertical"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Lock"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Unlock"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Group"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Ungroup"
+  ],
+  "kind": "control",
+  "object": "text box",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/textbox-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Fill",
+   "Color Fill"
+  ],
+  "kind": "pop-up",
+  "object": "shape",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/shape-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Border",
+   "Line"
+  ],
+  "kind": "pop-up",
+  "object": "shape",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/shape-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Border",
+   "Line Style"
+  ],
+  "kind": "pop-up",
+  "object": "shape",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/shape-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Border",
+   "Width"
+  ],
+  "kind": "control",
+  "object": "shape",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/shape-style-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Shadow"
+  ],
+  "kind": "pop-up",
+  "object": "shape",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/shape-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Reflection"
+  ],
+  "kind": "control",
+  "object": "shape",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/shape-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Opacity"
+  ],
+  "kind": "control",
+  "object": "shape",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/shape-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Title"
+  ],
+  "kind": "control",
+  "object": "shape",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/shape-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Title",
+   "Position"
+  ],
+  "kind": "pop-up",
+  "object": "shape",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/shape-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Caption"
+  ],
+  "kind": "control",
+  "object": "shape",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/shape-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Line Styles"
+  ],
+  "kind": "section",
+  "object": "line",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Stroke"
+  ],
+  "kind": "pop-up",
+  "object": "line",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Stroke",
+   "Line Style"
+  ],
+  "kind": "pop-up",
+  "object": "line",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Stroke",
+   "Width"
+  ],
+  "kind": "control",
+  "object": "line",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Endpoints",
+   "Start"
+  ],
+  "kind": "pop-up",
+  "object": "line",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Endpoints",
+   "End"
+  ],
+  "kind": "pop-up",
+  "object": "line",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Shadow"
+  ],
+  "kind": "pop-up",
+  "object": "line",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Reflection"
+  ],
+  "kind": "control",
+  "object": "line",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Start X Y"
+  ],
+  "kind": "control",
+  "object": "line",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "End X Y"
+  ],
+  "kind": "control",
+  "object": "line",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Image Styles"
+  ],
+  "kind": "section",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Border"
+  ],
+  "kind": "pop-up",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Shadow"
+  ],
+  "kind": "pop-up",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Reflection"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Opacity"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-style.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image"
+  ],
+  "kind": "tab",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "File Info"
+  ],
+  "kind": "section",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "Edit in Pixelmator Pro"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "Generate from Image"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "Edit Mask"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "Auto Crop"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "Super Resolution"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "Remove Background"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "Adjustments",
+   "Exposure"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "Adjustments",
+   "Saturation"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "Adjustments",
+   "Enhance"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "Adjustments",
+   "Adjust Image"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "Adjustments",
+   "Reset"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Image",
+   "Description"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-image-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Original Size"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table"
+  ],
+  "kind": "tab",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Table Styles"
+  ],
+  "kind": "section",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Table Options",
+   "Title"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Table Options",
+   "Caption"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Headers & Footer",
+   "Header Rows"
+  ],
+  "kind": "pop-up",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Headers & Footer",
+   "Header Columns"
+  ],
+  "kind": "pop-up",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Headers & Footer",
+   "Footer Rows"
+  ],
+  "kind": "pop-up",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Rows"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Columns"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Table Font Size"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Table Outline"
+  ],
+  "kind": "pop-up",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-mid.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Outline Table Title"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-mid.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Gridlines"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-mid.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Alternating Row Color"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-mid.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Row & Column Size",
+   "Height"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Row & Column Size",
+   "Width"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Row & Column Size",
+   "Fit"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Table",
+   "Resize rows to fit cell contents"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-table-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Cell"
+  ],
+  "kind": "tab",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-cell.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Cell",
+   "Data Format"
+  ],
+  "kind": "pop-up",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-cell.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Cell",
+   "Fill"
+  ],
+  "kind": "pop-up",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-cell.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Cell",
+   "Border"
+  ],
+  "kind": "section",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-cell.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Cell",
+   "Border",
+   "Border Styles"
+  ],
+  "kind": "pop-up",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-cell.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Cell",
+   "Border",
+   "Line Style"
+  ],
+  "kind": "pop-up",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-cell.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Cell",
+   "Conditional Highlighting..."
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-cell.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text"
+  ],
+  "kind": "tab",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-cell.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart"
+  ],
+  "kind": "tab",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Styles"
+  ],
+  "kind": "section",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Options",
+   "Title"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Options",
+   "Caption"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Options",
+   "Border"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Options",
+   "Legend"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Font"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Font",
+   "Typeface"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Font",
+   "Size smaller bigger"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Colors"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-top.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Rounded Corners"
+  ],
+  "kind": "section",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Rounded Corners",
+   "Corner Radius"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Rounded Corners",
+   "Outside Corners Only"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Gaps",
+   "Between Columns"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-gaps.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Gaps",
+   "Between Sets"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-gaps.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Background & Border Style"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-gaps.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Shadow"
+  ],
+  "kind": "section",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-chart-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Edit Chart Data"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-arrange-edit-chart-data.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis"
+  ],
+  "kind": "tab",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)"
+  ],
+  "kind": "tab",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)",
+   "Axis Name"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)",
+   "Axis Line"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)",
+   "Axis Scale"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)",
+   "Scale Max"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)",
+   "Scale Min"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)",
+   "Steps Major"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)",
+   "Steps Minor"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)",
+   "Value Labels"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)",
+   "Reference Lines",
+   "Add Reference Line"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)",
+   "Major Gridlines"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)",
+   "Minor Gridlines"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Value (Y)",
+   "Tick Marks"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-value-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Category (X)"
+  ],
+  "kind": "tab",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-category.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Category (X)",
+   "Axis Name"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-category.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Category (X)",
+   "Axis Line"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-category.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Category (X)",
+   "Series Names"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-category.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Category (X)",
+   "Category Labels"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-category.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Category (X)",
+   "Label Angle"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-category.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Category (X)",
+   "Gridlines"
+  ],
+  "kind": "section",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-category.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Axis",
+   "Category (X)",
+   "Tick Marks"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-axis-category.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series"
+  ],
+  "kind": "tab",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Value Labels"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Value Labels",
+   "Edit Custom Format..."
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Value Labels",
+   "Prefix"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Value Labels",
+   "Suffix"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Value Labels",
+   "Location"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Value Labels",
+   "Auto-Fit"
+  ],
+  "kind": "control",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Trendlines"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Error Bars"
+  ],
+  "kind": "pop-up",
+  "object": "chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Paragraph Style"
+  ],
+  "kind": "pop-up",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-text.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Font"
+  ],
+  "kind": "pop-up",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-text.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Alignment",
+   "Auto-Align"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-text.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Style",
+   "Wrap text in cell"
+  ],
+  "kind": "control",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-text.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Layout"
+  ],
+  "kind": "tab",
+  "object": "table",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/table-text.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Title"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Title",
+   "Position"
+  ],
+  "kind": "pop-up",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style",
+   "Caption"
+  ],
+  "kind": "control",
+  "object": "picture",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/image-style-bottom.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Text",
+   "Paragraph Style"
+  ],
+  "kind": "pop-up",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/title-text.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Style"
+  ],
+  "kind": "tab",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/title-text.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange"
+  ],
+  "kind": "tab",
+  "object": "title placeholder",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/title-text.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange"
+  ],
+  "kind": "tab",
+  "object": "group",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/group-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Arrange",
+   "Ungroup"
+  ],
+  "kind": "control",
+  "object": "group",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/group-arrange.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Shadow"
+  ],
+  "kind": "pop-up",
+  "object": "line chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-chart-chart.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Type"
+  ],
+  "kind": "pop-up",
+  "object": "line chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-chart-chart.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Value Labels"
+  ],
+  "kind": "pop-up",
+  "object": "line chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Data Symbols"
+  ],
+  "kind": "pop-up",
+  "object": "line chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Data Symbols",
+   "Size"
+  ],
+  "kind": "control",
+  "object": "line chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Connection Lines"
+  ],
+  "kind": "pop-up",
+  "object": "line chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Trendlines"
+  ],
+  "kind": "pop-up",
+  "object": "line chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Series",
+   "Error Bars"
+  ],
+  "kind": "pop-up",
+  "object": "line chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/line-chart-series.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Options",
+   "Title"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-chart.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Options",
+   "Title Position"
+  ],
+  "kind": "pop-up",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-chart.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Options",
+   "Caption"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-chart.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Chart Options",
+   "Legend"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-chart.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Chart",
+   "Background"
+  ],
+  "kind": "pop-up",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-chart.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Segments"
+  ],
+  "kind": "tab",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-segments.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Segments",
+   "Labels",
+   "Data Point Names"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-segments.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Segments",
+   "Labels",
+   "Values"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-segments.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Segments",
+   "Value Data Format"
+  ],
+  "kind": "section",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-segments.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Segments",
+   "Label Options",
+   "Distance from Center"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-segments.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Segments",
+   "Leader Lines"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-segments.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Segments",
+   "Segment Position",
+   "Rotation Angle"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-segments.jpg"
+ },
+ {
+  "area": "format",
+  "path": [
+   "Format",
+   "Segments",
+   "Inner Radius"
+  ],
+  "kind": "control",
+  "object": "donut chart",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/donut-segments.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Text"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Line"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Curve"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Rounded Rectangle"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Oval"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Triangle"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Pentagon"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Square"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Diamond"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Rounded Pill"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Parallelogram"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Arrow"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Draw with Pen"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Generate Shape"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Shape",
+   "Browse Content Hub"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-shape-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Table",
+   "Table styles (4 per page, 6 pages)"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-table-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Chart",
+   "2D Charts"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-chart-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Chart",
+   "3D Charts"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-chart-popover.jpg"
+ },
+ {
+  "area": "insert",
+  "path": [
+   "Toolbar",
+   "Chart",
+   "Interactive"
+  ],
+  "kind": "control",
+  "object": "",
+  "state": "unknown",
+  "seen": "screenshot",
+  "shot": "shots/insert-chart-popover.jpg"
+ }
+]

@@ -1,0 +1,20 @@
+# Menu checks in Keynote 16.0 under full-screen control (2026-11-27, 18:31 to 18:33 UTC)
+
+Done by the supervisor session itself: full-screen control, approved by the owner at the Mac, works only from the main session (three attempts from a subagent were aborted before any action as "user interrupt"). With Keynote as the active app the `app_menu` tool reaches Format > Chart > Show Chart Data Editor and Format > Edit Link. Keynote 16.0, restarted process. Four files opened, each closed without saving; input SHA-256 unchanged for all four (seen). One edit (C4), undone before closing.
+
+## Results (seen on screen)
+
+- **LY-05, layouts-lots default slide 30, chart data editor** (`shots/S6-LY05-lots-s30-chart-data.jpg`): one column of row headers, each category whole in one cell: "January: northern hubs", "February: coastal depots", "March: inland warehouses", "April: cross-dock terminals", "…: regional returns centers", "…: seasonal overflow sites", "July: partner fulfillment"; series columns "Parcels processed (thousands)", "On-time deliveries (th…". So Keynote's editor does not split a category at ": "; the two-level category cache appears only in Keynote's PowerPoint export (`back.pptx`, RT-02, #1478).
+- **C4, chart value doubled, layouts-ordinary default slide 30** (`shots/S6-C4-default-before.jpg`, `S6-C4-default-after.jpg`, `S6-C4-default-data-after.jpg`): data editor shows rows Jan to Jun, series "Parcels" and "Returns". Jan Parcels 52 changed to 104: the chart redraws at once, the value axis rescales (the other columns get shorter; the 104 column stays inside the plot), the data label follows ("104" above the column). The chart is a native chart in both export modes, so the native file was not edited as well. Edit > Undo Edit Chart Data (twice: the first try had left "104" plus a line break in the cell) restored 52 (seen in the editor).
+- **Autosave**: the edit turned the window title to "default 3 — Edited", and Keynote wrote `default 3.key` (2,096,497 bytes, 18:32 UTC) into the owner's iCloud Keynote folder. Undo and closing without saving did not remove it. Reported to the owner; not touched.
+- **m-charts default slide 5, Series tab** (`shots/S6-mcharts-s5-series-tab.jpg`): Value Labels pop-up reads "Multiple"; Trendlines "None"; Error Bars "None". The column labels show the value only (42, 12, 28, 9, 35, 14): the category name is not in the label (MX-05). The pop-up's options were not opened.
+- **slide-links (main) slide 1, linked group, Format > Edit Link** (`shots/S6-slide-links-s1-link-editor.jpg`): "Link to: Slide", the "Slide" radio button selected with slide 3; other choices Next slide, Previous slide, First slide, Last slide, Last slide viewed; buttons Remove and Go to Slide (neither pressed; popover closed with Escape). An OPF link to another slide of the deck arrives as a native Keynote slide link with the right target (slide 3 is "Roadmap").
+- **Warnings window for slide-links (main)** (`shots/S6-slide-links-warnings.jpg`): "Unsupported media were removed. Slide Layout(s): Cover, Gallery, Hero, Image, Image beside"; "The font Aptos Display is missing. Your text might look different."; "The font Aptos is missing. Your text might look different."
+
+## Not run
+
+C4 on the native file (same chart object; would leave another autosaved file); the "Wait" columns of m-charts slide 1 (read in the first session: series 1 South 28, West 31; series 2 North 42, East 35); m-charts slides 2 and 3; the lang-rtl chart data; a link on a word (type and target); the options inside the Value Labels pop-up; the Warnings lists of coverage-charts, data-story-academy, table-and-code, localized-chart-references, font test A and E, pic-placeholders d and e1.
+
+## End state
+
+Keynote's document list empty; all four documents closed without saving (`modified` false on three, true on the edited one before its close); app locks and full-screen control released at 18:33 UTC. iCloud Keynote folder after: `coverage-overlays 2.key`, `default 2.key`, `default 3.key` (new), `default.key`, `n1.key`, `native.key`.

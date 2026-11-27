@@ -1,0 +1,81 @@
+# Keynote 16.0 feature inventory: what OPF 0.36.0's export handles
+
+The owner asked (2026-11-25) for every feature of Keynote's interface, whether OPF relates to it, whether the export handles it in Keynote, and a fix where it does not. Data: `inventory.json`, rebuilt by `build_final.py`. Measured results cite a finding or report; the rest is "not tested".
+
+## Counts (rows of `inventory.json`)
+
+- **Features:** {total} = {desk} desk rows (none dropped) + {new} interface features the desk study lacked (`KN-GUI-*`).
+- **Interface (walk of 2026-11-27):** seen {seen} ({seen_desk} desk rows + {new} new), not found {notfound}, not walked {notwalked}.
+- **OPF relates:** has {has}, partly {partly}, not {nota}. {corr} desk rows were corrected to "not" (checkbox, rating, slider, stepper and pop-up cells; interactive chart; live video layouts; 3D and drawing descriptions).
+- **Measured in Keynote, of the {rel} rows OPF has or partly has** (default export mode):
+
+| | native | editable but changed | picture | dropped | not tested | total |
+|---|---|---|---|---|---|---|
+| OPF has | {h_n} | {h_c} | {h_p} | {h_d} | {h_t} | {hsum} |
+| OPF partly | {p_n} | {p_c} | {p_p} | {p_d} | {p_t} | {psum} |
+
+Rows are uneven: one concept can be twenty rows. No row is "picture": SmartArt and extended charts have no Keynote control (end of page).
+
+## Features OPF has or partly has whose result is not native ({nonnative} rows in {ngroups} groups)
+
+"changed" = editable in Keynote, but different. Ids: `report/tracking-body.md` section 6 ("Known §8": its section 8); C1 to C4: editing tests (`ui/REPORT-2.md`, `-3.md`). "Tested" = the file form was opened in Keynote 16.0, not in PowerPoint.
+
+| Group (changed unless marked) | Rows | Evidence | Fix (issue) |
+|---|---|---|---|
+{table}
+
+**Native, with look findings:** fonts (LY-01, LY-02, LG-01, SW-01, MX-08, EX-08; `--typefaces safe`, tested); bar charts (MX-02 #1492, MX-04); legends (LY-03, MX-07, QC-10); flush lines (MX-01 #1493); footer behind a picture (QC-03); layout copies (LY-06); link color (#1416 item 7, Keynote limit); highlight legend (MX-03 #1494).
+
+## The ten fixes that would help most
+
+1. **Pre-blend background opacity** (EX-02, EX-03, #1418): 135 example slides draw it at full strength over the text; tested for solid colors (#1416 item 3), not for pictures and patterns.
+2. **`--typefaces safe` in the opt-in Keynote route (#1298)**: removes the font-substitution family (layouts-lots wrong 12 to 2; tested).
+3. **Importer tolerance (#1477 closed, #1478, #1479, #1480)**: decks edited in Keynote fail to import (22 of 274 examples); proved on copies.
+4. **`--body-text native` in the route, after #1551, #1552, #1553**: lists, captions and paragraphs then edit like Keynote's (C1, C3): the largest group above.
+5. **Alt text where Keynote reads it** (RT-03, #1479): Description reads "OPF image N"; only the shape name works (tested; opt-in).
+6. **Inner plot area for every manual plot area, combos included** (MX-02 #1492 closed, EX-07): names cut or below the frame; tested for bars.
+7. **Square picture-bullet image** (EX-04): 39 decks draw the wide logo as the bullet; untested.
+8. **Axis steps and scaling** (QC-02, QC-08, #1416 item 2): omit `c:majorUnit` (tested), write the preview's scaling (untested).
+9. **Static slide numbers in the route** (#1298): "Page 1 of 4" reads right (tested).
+10. **Right-to-left table in visual column order** (LG-02, #1298), plus small tested chart forms: radar `a:noFill`, reference label above the plot (#1416 items 1, 5), line breaks in long names (MX-04).
+
+## Keynote features OPF cannot express that matter most (judgment, not measured)
+
+From the {nota} "not" rows; "yes" = OPF should relate.
+
+1. Slide transitions: yes, a small set (fade, push, wipe) as `p:transition`.
+2. Builds by paragraph or object: yes, appear and fade as `p:timing`.
+3. Bubble chart: yes, `c:bubbleChart`.
+4. Trendlines: yes, `c:trendline`.
+5. Error bars: yes, `c:errBars`.
+6. Axis minimum, maximum and step: yes; also removes QC-08.
+7. Bar gap width: yes, `c:gapWidth`.
+8. Pie rotation angle: maybe, `c:firstSliceAng`.
+9. Table header columns: yes, `firstCol`.
+10. Table total rows: yes, `lastRow`.
+11. Alternating row color: yes, `bandRow`.
+12. Text highlight: yes, `a:highlight`.
+13. Small caps and all caps: yes, `a:rPr cap`.
+14. Text outline and shadow: low.
+15. Gradient or image text fill: low.
+16. Equations: yes; Keynote's reading of OMML untested.
+17. Audio and soundtrack: maybe.
+18. Next, previous, first, last slide and Exit Slideshow links: yes, beside `slide:<id>`.
+19. Self-playing timing and loop: maybe, for kiosks.
+20. Lock objects: maybe; Keynote's reading of `a:spLocks` untested.
+21. Comments: through the cloud-editor program first.
+22. Chart background, border and shadow: no; OPF draws chart cards.
+23. Axis label and series-name options: no; engine choices.
+24. Image galleries, drop caps, phonetic guides, 3D objects: no PPTX carrier.
+25. Formulas: no; computed values only.
+
+## OPF features with no Keynote control (outside the rows)
+
+Extended charts and live SmartArt become pictures (`--smart-art shapes` gives editable shapes, tested); glow, soft edge, inner shadow and blur are dropped; sketch and compound lines draw plain (Known §8). The desk's ideas for them are untested.
+
+## What the inventory does not cover
+
+- **{notwalked} rows not walked**: 166 have no interface path; the rest are in dialogs, Settings, the presenter display, shortcuts, pop-ups background control could not open, or on objects not selected (3D, radar, bubble, pie charts, connection lines, right-to-left or CJK text, layout editing). "Seen" is a loose name match: a parent control marks its options seen.
+- **{a_t} OPF rows not tested**: themes, sections as slide groups, underline, strikethrough, superscript, caps, flip, opacity, reflection, object styles, table borders, text columns, media placeholders, the date field and others.
+- **Desk mapping:** many "has" rows are app operations on a concept (Translate); they inflate "has".
+- **Not run:** Play, PowerPoint, any minimal deck of the QC, QS or EX findings, any example-sweep improvement.

@@ -1,0 +1,16 @@
+## 12. Feature inventory (asked by the owner on 2026-11-25)
+
+{total} Keynote 16.0 features: {desk} from the desk study plus {new} found only in the walk of the interface (2026-11-27). Interface: seen {seen}, not found {notfound} (possible desk errors), not walked {notwalked}. OPF relates: has {has}, partly {partly}, not {nota} ({corr} desk rows corrected to "not").
+
+Of the {rel} rows OPF has or partly has, measured in Keynote (default mode): native {a_n}, editable but changed {a_c}, picture 0, dropped {a_d}, not tested {a_t}. Rows OPF fully has: native {h_n}, changed {h_c}, dropped {h_d}, not tested {h_t}. Counted per row; one concept can be many rows.
+
+Five most useful fixes:
+1. Pre-blend background opacity (EX-02, EX-03, #1418): 135 example slides.
+2. `--typefaces safe` in the opt-in Keynote route (#1298): the font-substitution family (tested).
+3. Importer tolerance (#1477, #1478, #1479, #1480): decks edited in Keynote come back.
+4. `--body-text native` in the route after #1551, #1552, #1553: lists and text edit like Keynote (C1, C3).
+5. Alt text in the shape name for Keynote (RT-03, #1479; tested, opt-in).
+
+Caveats: "seen" is a loose name match; {a_t} OPF rows have no measurement; nothing was checked in PowerPoint or in Play; the not-expressible list in gaps.md is judgment.
+
+Files on `codex/evidence-mac-036`: `inventory/final/gaps.md`, `inventory/final/inventory.json`.
