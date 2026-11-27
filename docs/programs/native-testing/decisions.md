@@ -3,8 +3,8 @@
 The questions are the "Decisions for the owner" of opf#1468, plus the choice of languages. Program: [README.md](README.md); items:
 [burndown.md](burndown.md).
 
-Who decided: all six were given by the owner (Michael Grimm) on 2026-11-25 in the supervisor session, answering a question that came
-with a recommendation. Each decision says whether he took the recommended option. An overruled or changed decision changes its section
+Who decided: D1 to D6 were given by the owner (Michael Grimm) on 2026-11-25 in the supervisor session, answering a question that came
+with a recommendation; D7 and D8 came on 2026-11-27. Each decision says whether he took the recommended option. An overruled or changed decision changes its section
 here and the items that depend on it.
 
 | ID | Question | Decision | Who |
@@ -15,6 +15,8 @@ here and the items that depend on it.
 | D4 | Self-hosted runners or agent-started runs? | Agent-started runs now | Owner, 2026-11-25, as recommended |
 | D5 | Where does the per-run record live? | A small JSON summary per release and target in the repository | Owner, 2026-11-25, as recommended |
 | D6 | Which languages? | Node for shared code; AppleScript and PowerShell only in their drivers | Owner, 2026-11-25, as recommended |
+| D7 | How big is the native corpus, and when does each part run? | Option A: one trimmed corpus, run in tiers | Owner, 2026-11-27, as recommended |
+| D8 | How is the Keynote gate handled for 0.37.0? | The smoke tier gates; the release tier runs after the release and is recorded | Owner, 2026-11-27, to the release supervisor |
 
 ## D1: a gate or a review
 
@@ -98,6 +100,39 @@ No compiled helpers in the repository.
 Who: the owner, 2026-11-25, as recommended.
 
 Follows: NT-02 ports the evidence branch's Python probe to Node or to AppleScript.
+
+## D7: the size of the corpus
+
+Question: after the corpus study ([corpus-study.md](corpus-study.md)), how many files should a native run open, and when? Today's chain
+opens about 400 files in Keynote.
+
+Options: A, one manifest trimmed to about 80 files, with tiers by what changed (recommended); B, a corpus chosen by coverage with
+merged decks; C, a generated corpus with one slide per unit.
+
+Decision: option A, "Yes, build A". One trimmed corpus for Keynote, PowerPoint and LibreOffice Impress. Every release candidate runs
+the smoke tier plus the files with a changed slide. Every release runs the corpus plus the stress decks. A new application version or
+a yearly sweep adds the examples (default variant), the gallery layouts at three sizes and the languages. It stays maintainable through a
+coverage report, checks, and a time budget per tier.
+
+Who: the owner, 2026-11-27, in the supervisor session, as recommended.
+
+Follows: NT-10 to NT-14 (the stress decks, the coverage report and checks, the changed-slide tier, LibreOffice reading the manifest's
+tiers) and NT-11 (trim smoke and settle the variants).
+
+## D8: the Keynote gate for 0.37.0
+
+Question: how should the first release after the Keynote driver handle the gate: smoke only, the full corpus, or none?
+
+Decision: "Yes, in 0.37.0", given by the owner on 2026-11-27 to the release supervisor. The supervisor's session relayed it and its reading
+is recorded on opf#1538: the smoke tier gates the release, and the release tier runs after the release and is recorded.
+
+Who: the owner, 2026-11-27, to the release supervisor; relayed by that session, which gave the reading.
+
+Follows: the smoke run of 2026-11-27 (NT-05) gated 0.37.0. The release tier's run is recorded in `runs/0.37.0/keynote.json` after it runs.
+
+Note on variants: the `static`, `picture` and `shapes` variants stay in the release tier until one PowerPoint run compares them with
+their default files. The Windows supervisor has no record of them showing anything; that is an absence of evidence, not a measurement
+(NT-11). The study found no reviewed finding in them on Keynote.
 
 ## Agreed after the decisions
 
