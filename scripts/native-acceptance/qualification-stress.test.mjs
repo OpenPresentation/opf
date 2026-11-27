@@ -1,6 +1,6 @@
 // NT-10: the stress decks of the 0.36.0 Keynote round in the qualification corpus. The sources gallery-layouts and languages
 // are manifest decks the runner builds, and each moved or committed deck builds with the slides the records and the 0.36.0
-// baseline (runs/0.36.0/keynote.json) name. That every known place is in the release tier is NT-12's rule (a)
+// baseline (runs/0.36.0/keynote.json, the round that graded them; later summaries need not have them) name. That every known place is in the release tier is NT-12's rule (a)
 // (core/coverage/, pnpm check:native-coverage).
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';

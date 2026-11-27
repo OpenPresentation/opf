@@ -10,7 +10,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { compareStructure, containment, inkOutside, missingWords, runExtent, shapeForRun, sourceBleeds, verdict } from "./checks.mjs";
 import { corpusCases, LIBREOFFICE_CASES, qualificationSelection, selectCases, sharedFixtureCases } from "./corpus.mjs";
-import { decksForTier } from "../native-acceptance/qualification/tiers.mjs";
+import { decksForTier, sourceDecks } from "../native-acceptance/qualification/tiers.mjs";
 import { fileIdentity } from "../native-acceptance/apps/impress/from-libreoffice.mjs";
 import { pinnedImage } from "./image.mjs";
 import { readPptx, slideWords, tokenize } from "./pptx-model.mjs";
@@ -203,7 +203,14 @@ test("a tier selects exactly the decks and variants decksForTier names, in the t
       assert.deepEqual(failed, []);
     }
     const release = qualificationSelection(dir).cases;
-    assert.equal(release.length, manifest.decks.reduce((total, deck) => total + (deck.variants?.length || 1), 0), "the default is release: every deck in every variant");
+    const files = (tier) => decksForTier(manifest, tier).reduce((total, entry) => total + entry.variants.length, 0);
+    assert.equal(release.length, files("release"), "the default is release");
+    const corpus = manifest.decks.filter((deck) => !deck.group);
+    const fromSources = (manifest.tiers.release.sources ?? []).flatMap((item) => (typeof item === "string" ? [] : item.decks));
+    assert.equal(release.length, corpus.reduce((total, deck) => total + (deck.variants?.length || 1), 0) + fromSources.reduce((total, item) => total + (item.variants?.length ?? (manifest.decks.find((deck) => deck.id === item.deck).variants?.length || 1)), 0), "release: every corpus deck in every variant, plus the source decks it names");
+    const full = qualificationSelection(dir, { tier: "full" });
+    assert.equal(full.cases.length, manifest.decks.reduce((total, deck) => total + (deck.variants?.length || 1), 0), "full: every manifest deck in every variant, the group decks included");
+    assert.ok(!full.sources.some((source) => sourceDecks(manifest, source).length > 0), "a source that is a group of decks is not reported as unresolved");
     const smoke = qualificationSelection(dir, { tier: "smoke" });
     assert.ok(smoke.cases.length < release.length / 2);
     assert.deepEqual(smoke.sources, ["native-fragments"], "named sources are reported, not resolved");
@@ -261,6 +268,8 @@ test("file ids of a whole release run are unique and valid in both profiles", as
     const cases = [...(await corpusCases({ tier: "release" })), ...qualificationSelection(dir, { tier: "release" }).cases];
     const ids = cases.flatMap((entry) => ["opf", "stock"].map((profile) => fileIdentity(entry.id, profile, entry.qualification).id));
     assert.equal(new Set(ids).size, ids.length);
-    assert.equal(ids.length, 2 * (LIBREOFFICE_CASES.length + 28 + 74));
+    const shared = await sharedFixtureCases();
+    const release = decksForTier(manifest, "release").reduce((total, entry) => total + entry.variants.length, 0);
+    assert.equal(ids.length, 2 * (LIBREOFFICE_CASES.length + shared.length + release));
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
