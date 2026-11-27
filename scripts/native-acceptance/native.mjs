@@ -38,7 +38,7 @@ import { exportHashesOfFile } from './core/select/slide-parts.mjs';
 import { fileId, TARGETS } from './core/result/result.mjs';
 import { importResaved } from './core/roundtrip/import.mjs';
 import { roundTripRun } from './core/roundtrip/roundtrip-run.mjs';
-import { decksForTier, sourcesForTier, TIERS } from './qualification/tiers.mjs';
+import { decksForTier, sourceDecks, sourcesForTier, TIERS } from './qualification/tiers.mjs';
 
 /** The tiers --tier takes: the manifest's, and the release candidate's selection (core/select/select.mjs). */
 const RUN_TIERS = [...TIERS, CANDIDATE];
@@ -146,7 +146,8 @@ export function selectFiles({ manifest, tier, decks, variants, fragments = [], l
         if (byId.has(deck)) picked.set(deck, pickVariants(byId.get(deck), variants ? undefined : ['default']));
         else notRun.push({ what: `deck ${deck}`, reason: `named by changes/${fragment}.md, but not a deck of qualification/manifest.json (the builder exports the manifest's decks only)`, blocking: !decks });
       }
-    } else {
+    } else if (sourceDecks(manifest, source).length === 0) {
+      // A source that is a group of manifest decks (gallery-layouts, languages) is already in decksForTier's list.
       notRun.push({ what: `source ${source}`, reason: `${manifest.sources?.[source] ?? 'a tier source'} The runner cannot build it yet.${decks ? ' (--decks narrowed the run.)' : ''}`, blocking: !decks });
     }
   }

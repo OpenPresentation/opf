@@ -236,7 +236,12 @@ function checkCatalogs(entry, catalogs) {
   if (catalogs !== undefined && !Array.isArray(catalogs)) throw new OPFCatalogsOptionError(entry, `got ${catalogs === null ? 'null' : typeof catalogs}`);
 }
 
+// NT-09: `reader` names the application the file is written for and stands for a set of the options below (src/reader-options.js).
+import {withReader} from './reader-options.js';
+export {READERS, readerOptions} from './reader-options.js';
+
 export async function toPptx(input, options = {}) {
+  options = withReader(options);
   if (options.bodyText !== undefined && !['measured', 'native'].includes(options.bodyText)) {
     throw new OPFPptxError('invalid-body-text-mode', 'bodyText must be measured or native.', {path: 'options.bodyText'});
   }

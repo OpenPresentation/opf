@@ -1,0 +1,180 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "Languages: lang-cjk",
+ "description": "Article 1 of the UDHR per language tag, to see which font each default language gets.",
+ "language": "en-US",
+ "slides": [
+  {
+   "language": "zh-Hans",
+   "title": "zh-Hans · Chinese (Simplified) · Hans · expects Microsoft YaHei",
+   "blocks": [
+    {
+     "text": "人人生而自由,在尊严和权利上一律平等。他们赋有理性和良心,并应以兄弟关系的精神相对待。\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "人人生而自由",
+      "在尊严和权利",
+      "上一律平等他们"
+     ]
+    },
+    {
+     "table": {
+      "columns": [
+       "人",
+       "人生",
+       "而"
+      ],
+      "rows": [
+       [
+        "自由",
+        "在",
+        "尊严"
+       ],
+       [
+        "和",
+        "权利",
+        "上"
+       ]
+      ]
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "人",
+        "Value"
+       ],
+       "rows": [
+        [
+         "人生",
+         3
+        ],
+        [
+         "而",
+         5
+        ],
+        [
+         "自由",
+         4
+        ]
+       ]
+      }
+     }
+    }
+   ],
+   "notes": "zh-Hans; expected default font: Microsoft YaHei"
+  },
+  {
+   "language": "zh-Hant",
+   "title": "zh-Hant · Chinese (Traditional) · Hant · expects Microsoft JhengHei",
+   "blocks": [
+    {
+     "text": "人人生而自由，在尊嚴和權利上一律平等。他們賦有理性和良心，並應以兄弟關係的精神相對待。\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "人人生而自由",
+      "在尊嚴和權利",
+      "上一律平等他們"
+     ]
+    }
+   ],
+   "notes": "zh-Hant; expected default font: Microsoft JhengHei"
+  },
+  {
+   "language": "ja",
+   "title": "ja · Japanese · Jpan · expects Yu Gothic",
+   "blocks": [
+    {
+     "text": "すべての人間は、生まれながらにして自由であり、かつ、尊厳と権利とについて平等である。人間は、理性と良心とを授けられており、互いに同胞の精神をもって行動しなければならない。\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "すべての人間",
+      "は生まれながら",
+      "にして自由で"
+     ]
+    },
+    {
+     "table": {
+      "columns": [
+       "すべて",
+       "の",
+       "人間"
+      ],
+      "rows": [
+       [
+        "は",
+        "生まれながら",
+        "にし"
+       ],
+       [
+        "て",
+        "自由",
+        "で"
+       ]
+      ]
+     }
+    },
+    {
+     "chart": {
+      "type": "column",
+      "data": {
+       "columns": [
+        "すべて",
+        "Value"
+       ],
+       "rows": [
+        [
+         "の",
+         3
+        ],
+        [
+         "人間",
+         5
+        ],
+        [
+         "は",
+         4
+        ]
+       ]
+      }
+     }
+    }
+   ],
+   "notes": "ja; expected default font: Yu Gothic"
+  },
+  {
+   "language": "ko",
+   "title": "ko · Korean · Kore · expects Malgun Gothic",
+   "blocks": [
+    {
+     "text": "모든 인간은 태어날 때부터 자유로우며 그 존엄과 권리에 있어 동등하다.인간은 천부적으로 이성과 양심을 부여받았으며 서로 형제애의 정신으로 행동하여야 한다.\n\nLatin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "text": "Latin line: All human beings are born free and equal in dignity and rights. 0123456789"
+    },
+    {
+     "items": [
+      "모든 인간은 태어날",
+      "때부터 자유로우며 그",
+      "존엄과 권리에 있어"
+     ]
+    }
+   ],
+   "notes": "ko; expected default font: Malgun Gothic"
+  }
+ ]
+}

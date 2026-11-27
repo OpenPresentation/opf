@@ -7,7 +7,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { decksForTier, sourcesForTier } from "../native-acceptance/qualification/tiers.mjs";
+import { decksForTier, sourceDecks, sourcesForTier } from "../native-acceptance/qualification/tiers.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "../..");
@@ -79,7 +79,8 @@ const ADVANCED_QUALIFICATION = new Set(["smartart", "chart-type-sampler"]);
  * decks and variants a tier runs, and the build (`node scripts/native-acceptance/qualification/build.mjs --out <dir>`) supplies the
  * very PPTX files and previews the PowerPoint and Keynote streams open, read from `<dir>/build.json`. One case per deck and variant of
  * the tier, in the tier's order. A tier entry the build lacks throws; a variant that did not export (`ok: false`) is left out and listed
- * in `failed`. `sources` are the tier's named sources (native-fragments, examples, ...), which this runner does not resolve.
+ * in `failed`. A source that is a group of manifest decks (gallery-layouts, languages) is in `decksForTier`'s list already;
+ * `sources` are the tier's other named sources (native-fragments, examples), which this runner does not resolve.
  */
 export function qualificationSelection(buildDir, { tier = "release", manifest = qualificationManifest() } = {}) {
   if (!manifest) throw new Error("the qualification manifest is not in this checkout");
@@ -109,7 +110,7 @@ export function qualificationSelection(buildDir, { tier = "release", manifest = 
       });
     }
   }
-  return { cases, failed, sources: sourcesForTier(manifest, tier) };
+  return { cases, failed, sources: sourcesForTier(manifest, tier).filter((source) => sourceDecks(manifest, source).length === 0) };
 }
 
 export const qualificationCases = (buildDir, options) => qualificationSelection(buildDir, options).cases;

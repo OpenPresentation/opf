@@ -44,10 +44,10 @@ opens nothing. The full list of flags is in the command's reference.
 
 | Tier | What it runs today |
 | --- | --- |
-| `smoke` (the default) | About ten decks named in `tiers.smoke` of the qualification manifest, plus the decks that unreleased changelog fragments name in `native:` |
-| `release` | Every deck and variant of the qualification corpus (`scripts/native-acceptance/qualification/`) |
+| `smoke` (the default) | About a dozen decks named in `tiers.smoke` of the qualification manifest, plus the decks that unreleased changelog fragments name in `native:` |
+| `release` | Every deck and variant of the qualification corpus (`scripts/native-acceptance/qualification/`), plus the gallery-layout and language decks that a known difference needs (`layouts-lots`, `lang-rtl`, `lang-cjk~native-body`), so every known difference that names a place can show again |
 | `candidate` | For a release candidate: builds the `release` tier, hashes what each file's slides draw, and opens only the `smoke` tier, the files of the slides that fragments or `--look` name, and the files with a slide whose export changed since the baseline (every file of a deck whose masters, layouts or theme changed). It prints the selection before the run |
-| `full` | The corpus. The other sources (example decks, gallery layouts at three content sizes, language decks) cannot be built by the runner yet: they are listed as "not run" and the run exits with 2 |
+| `full` | The corpus, plus every deck of the sources `gallery-layouts` (every gallery layout at three content sizes) and `languages` in every variant. The example decks cannot be built by the runner yet: they are listed as "not run" and the run exits with 2 |
 
 In every tier, the slides that unreleased fragments name and the slides given with `--look` are reported as `new` whatever their
 score, so someone looks at each one.

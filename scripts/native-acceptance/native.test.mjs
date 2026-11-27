@@ -39,13 +39,13 @@ const picture = (at = 40) => sharp()(Buffer.from(`<svg xmlns="http://www.w3.org/
 const deckBytes = () => makePptx({ slides: [{ shapes: [sp(2, 'Title 1', { ph: { type: 'title' }, box: [40, 40, 600, 80], paragraphs: ['One'] })] }, { shapes: [sp(2, 'Title 1', { ph: { type: 'title' }, box: [40, 40, 600, 80], paragraphs: ['Two'] })] }] });
 
 /** A build stub: two-slide decks and their previews, and a build.json as qualification/build.mjs writes it. */
-function fakeBuild(previewPng) {
+function fakeBuild(previewPng, manifest = MANIFEST) {
   const calls = [];
   const build = ({ out, decks }) => {
     calls.push(decks);
     const record = { manifestVersion: 'test', revision: 'abc', opfVersion: '0.37.0', decks: [] };
     for (const id of decks) {
-      const deck = MANIFEST.decks.find((item) => item.id === id);
+      const deck = manifest.decks.find((item) => item.id === id);
       mkdirSync(path.join(out, 'preview', id), { recursive: true });
       mkdirSync(path.join(out, 'pptx'), { recursive: true });
       for (const n of [1, 2]) writeFileSync(path.join(out, 'preview', id, `slide-${n}.png`), previewPng);
@@ -111,18 +111,18 @@ function fakeDriver({ refuse = false, failRender = false, pictures }) {
   };
 }
 
-async function setup({ appPictures, refuse = false, failRender = false, fragments = [] } = {}) {
+async function setup({ appPictures, refuse = false, failRender = false, fragments = [], manifest = MANIFEST } = {}) {
   const preview = await picture(40);
   const pictures = appPictures ?? [preview, preview];
   const driver = fakeDriver({ refuse, failRender, pictures: await Promise.all(pictures) });
-  const build = fakeBuild(preview);
+  const build = fakeBuild(preview, manifest);
   const knownDir = temp('known');
   writeFileSync(path.join(knownDir, 'keynote.json'), JSON.stringify({ schemaVersion: 1, target: 'keynote', records: [] }));
   const lines = [];
   const deps = {
     log: (line) => lines.push(line),
     error: (line) => lines.push(line),
-    manifest: () => MANIFEST,
+    manifest: () => manifest,
     fragments: () => fragments,
     workspace: () => ({ version: '0.37.0', commit: 'abc1234', built: true }),
     build,
@@ -495,4 +495,19 @@ test('--tier candidate for powerpoint on Windows: the shared selection, then one
     classified.files.find((item) => item.id === 'beta~native-body').slides.map((slide) => slide.changed ?? false),
     [false, true],
   );
+});
+
+test('--tier candidate builds the source decks the release tier names (NT-10 groups), not the rest of their group', async () => {
+  const manifest = {
+    ...MANIFEST,
+    tiers: { ...MANIFEST.tiers, release: { ...MANIFEST.tiers.release, sources: [{ source: 'stress', decks: [{ deck: 'gamma', why: 'a known record names it' }] }] } },
+    sources: { ...MANIFEST.sources, stress: 'Stress decks.' },
+    decks: [...MANIFEST.decks, { id: 'gamma', source: 'gamma.opf.json', group: 'stress' }, { id: 'delta', source: 'delta.opf.json', group: 'stress' }],
+  };
+  const { deps, build, lines, out } = await setup({ manifest });
+  const { exit, report } = await runNative(['keynote', '--tier', 'candidate', '--out', out, '--baseline', 'none'], deps);
+  assert.ok(exit === 0 || exit === 1, lines.join('\n'));
+  assert.deepEqual(build.calls, [['alpha', 'beta', 'gamma']], 'the release tier with its source deck is built');
+  assert.equal(report.selection.total, 4, 'gamma~default is among the hashed release files');
+  assert.deepEqual(report.notRun, []);
 });

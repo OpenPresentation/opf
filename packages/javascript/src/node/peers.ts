@@ -26,7 +26,7 @@ export function atLeast(version: string, minimum: string): boolean {
 }
 
 /** Refuse `bodyText: "native"` and `slideNumbers` on an opf-pptx that predates them: it would write the default and say nothing. */
-export function requirePptxOptions(pptx: Peer<unknown>, options: { bodyText?: string; slideNumbers?: string; typefaces?: string; as?: string }, flags = false) {
+export function requirePptxOptions(pptx: Peer<unknown>, options: { bodyText?: string; slideNumbers?: string; typefaces?: string; reader?: string; as?: string }, flags = false) {
 	const asked = [options.bodyText === "native" ? (flags ? "--body-text native" : "bodyText: \"native\"") : undefined, options.slideNumbers ? (flags ? "--slide-numbers" : "slideNumbers") : undefined].filter(Boolean);
 	if (asked.length && pptx.version !== "unknown" && !atLeast(pptx.version, PPTX_TEXT_OPTIONS_FROM))
 		throw new OPFApiError(`${asked.join(" and ")} needs ${pptx.name}@${PPTX_TEXT_OPTIONS_FROM} or later; ${pptx.version} is installed and would ignore it.`, "peer-too-old", { details: { package: pptx.name } });
@@ -34,6 +34,9 @@ export function requirePptxOptions(pptx: Peer<unknown>, options: { bodyText?: st
 	const newer = [options.typefaces === "safe" ? (flags ? "--typefaces safe" : "typefaces: \"safe\"") : undefined, options.as === "images" ? (flags ? "--as images" : "as: \"images\"") : undefined].filter(Boolean);
 	if (newer.length && typeof (pptx.module as Partial<PptxModule> | undefined)?.typefacesNotOfficeSafe !== "function")
 		throw new OPFApiError(`${newer.join(" and ")} needs a newer ${pptx.name}; ${pptx.version} is installed and would ignore it.`, "peer-too-old", { details: { package: pptx.name } });
+	// NT-09: the opf-pptx that reads `reader` is the one that exports readerOptions.
+	if (options.reader !== undefined && typeof (pptx.module as Partial<PptxModule> | undefined)?.readerOptions !== "function")
+		throw new OPFApiError(`${flags ? `--reader ${options.reader}` : `reader: "${options.reader}"`} needs a newer ${pptx.name}; ${pptx.version} is installed and would ignore it.`, "peer-too-old", { details: { package: pptx.name } });
 }
 
 export interface Diagnostic {
@@ -98,6 +101,8 @@ export interface PptxModule {
 	typefacesNotOfficeSafe?(input: Uint8Array): string[];
 	/** The note's sentence for those families; shared with the MCP viewer. Absent from releases before it. */
 	typefacesNotOfficeSafeMessage?(families: readonly string[]): string | undefined;
+	/** NT-09: the opf-pptx options a `reader` stands for. Absent from releases before NT-09. */
+	readerOptions?(reader: string): { typefaces?: string; slideNumberFields?: string; smartArt?: string; bodyText?: string };
 }
 export interface Peer<T> {
 	module: T;
