@@ -43,8 +43,6 @@ async function bundle(contents, { splitting = false, worker = false, format = "e
 		outdir: path.join(packageRoot, "bundle-out"),
 		write: false,
 		metafile: true,
-		// The ESM builds first, as webpack and Next.js resolve a server package (jsonc-parser's UMD main hides its requires).
-		mainFields: ["module", "main"],
 		// An ESM bundle for Node gives its CommonJS dependencies (yaml) a require for the builtins they need.
 		...(worker || format === "cjs" ? {} : { banner: { js: 'import { createRequire as bannerRequire } from "node:module"; const require = bannerRequire(import.meta.url);' } }),
 		logLevel: "silent",

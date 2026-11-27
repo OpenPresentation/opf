@@ -70,6 +70,7 @@ try {
 
   for (const entry of [
     "package/LICENSE",
+    "package/THIRD-PARTY-NOTICES.md",
     "package/README.md",
     "package/package.json",
     "package/dist/index.js",
