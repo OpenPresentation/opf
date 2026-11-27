@@ -8,7 +8,11 @@
       "decks": [
         {
           "deck": "full-feature-tour",
-          "why": "A hidden slide (10) followed by a live slide number (11, kn-hidden-slide-numbering); titles, text, a bulleted list (6), a table (5), charts (3, 4), pictures, links on words (2), presenter notes and footer placeholders on one deck."
+          "variants": [
+            "default",
+            "reader-keynote"
+          ],
+          "why": "A hidden slide (10) followed by a live slide number (11, kn-hidden-slide-numbering); titles, text, a bulleted list (6), a table (5), charts (3, 4), pictures, links on words (2), presenter notes and footer placeholders on one deck. The reader-keynote variant (--reader keynote: Office-safe typefaces and static slide numbers) runs here so each smoke run sees the Keynote profile on the deck with every object kind."
         },
         {
           "deck": "footers",
@@ -24,7 +28,7 @@
             "default",
             "native-body"
           ],
-          "why": "Every gallery layout; body placeholders in the native-body variant; the only open known difference in OPF's own file (kn-native-note-at-foot, slide 24 of native-body), long titles and grown table headers (kn-title-overprints, kn-table-header-split)."
+          "why": "Every gallery layout; body placeholders in the native-body variant; the only open known difference in OPF's own file (kn-native-note-at-foot, slide 24 of native-body), long titles and grown table headers (kn-title-overprints, kn-table-header-split). The reader-keynote variant is not in the smoke tier: the smoke tier is the base of every release candidate and has a time budget, so the profile runs here on full-feature-tour only and on layout-sampler in release."
         },
         {
           "deck": "coverage-charts",
@@ -158,6 +162,13 @@
             "--smart-art",
             "shapes"
           ]
+        },
+        {
+          "name": "reader-keynote",
+          "flags": [
+            "--reader",
+            "keynote"
+          ]
         }
       ]
     },
@@ -199,6 +210,13 @@
           "flags": [
             "--slide-numbers",
             "static"
+          ]
+        },
+        {
+          "name": "reader-keynote",
+          "flags": [
+            "--reader",
+            "keynote"
           ]
         }
       ]
@@ -270,6 +288,13 @@
             "--body-text",
             "native"
           ]
+        },
+        {
+          "name": "reader-keynote",
+          "flags": [
+            "--reader",
+            "keynote"
+          ]
         }
       ]
     },
@@ -291,7 +316,20 @@
     },
     {
       "id": "full-feature-tour",
-      "source": "examples/technical/full-feature-tour.opf.json"
+      "source": "examples/technical/full-feature-tour.opf.json",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "reader-keynote",
+          "flags": [
+            "--reader",
+            "keynote"
+          ]
+        }
+      ]
     },
     {
       "id": "data-story-academy",
@@ -435,7 +473,20 @@
     },
     {
       "id": "coverage-languages",
-      "source": "scripts/native-acceptance/qualification/decks/coverage-languages.opf.json"
+      "source": "scripts/native-acceptance/qualification/decks/coverage-languages.opf.json",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "reader-keynote",
+          "flags": [
+            "--reader",
+            "keynote"
+          ]
+        }
+      ]
     },
     {
       "id": "coverage-catalogs",
