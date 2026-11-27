@@ -1,0 +1,11 @@
+{
+  "name": "EX-06 native list centered",
+  "language": "en-US",
+  "design": {"contentBox": true, "contentAlignment": "center"},
+  "slides": [
+    {
+      "title": "Carded Content Override",
+      "items": ["Content can opt into card rendering.", "Alignment can change per slide."]
+    }
+  ]
+}

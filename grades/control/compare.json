@@ -1,0 +1,9684 @@
+{
+ "settings": {
+  "picture": "tools/compare.py compare_pair: ICC->sRGB, alpha over white, 1280 wide, gray, blur 1.5, tol 24, shift 2; score = share of differing pixels (ranks only)",
+  "xml": "slide part + every part it references (layout, master, charts, chart rels, embeddings, media, diagrams), compared by content with r:id values blanked; notes slides and p:tags parts (OPF metadata, not drawn) ignored; slideXmlIdentical compares the slide part alone (r:id values blanked)"
+ },
+ "decks": {
+  "chart-point-overlays": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.01091,
+     "regions": [
+      [
+       0.7812,
+       0.5667,
+       0.85,
+       0.6
+      ],
+      [
+       0.7812,
+       0.4667,
+       0.8438,
+       0.5
+      ],
+      [
+       0.6062,
+       0.5667,
+       0.6687,
+       0.6
+      ],
+      [
+       0.7812,
+       0.6667,
+       0.8438,
+       0.7
+      ],
+      [
+       0.6062,
+       0.4667,
+       0.6687,
+       0.5
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "chart-type-sampler": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "columns": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 2,
+    "0351": 2
+   }
+  },
+  "compliance-readiness-review": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05048,
+     "regions": [
+      [
+       0.0437,
+       0.7111,
+       0.4625,
+       0.9222
+      ],
+      [
+       0.3812,
+       0.7111,
+       0.6687,
+       0.8222
+      ],
+      [
+       0.675,
+       0.7111,
+       0.875,
+       0.8222
+      ],
+      [
+       0.0437,
+       0.6333,
+       0.175,
+       0.6889
+      ]
+     ]
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.12029,
+     "regions": [
+      [
+       0.2687,
+       0.2889,
+       0.7312,
+       0.7667
+      ],
+      [
+       0.725,
+       0.4444,
+       0.9375,
+       0.8889
+      ],
+      [
+       0.0938,
+       0.4444,
+       0.25,
+       0.6667
+      ],
+      [
+       0.075,
+       0.6778,
+       0.275,
+       0.8222
+      ],
+      [
+       0.3,
+       0.7778,
+       0.4813,
+       0.8222
+      ]
+     ]
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.04878,
+     "regions": [
+      [
+       0.0437,
+       0.6556,
+       0.4813,
+       0.9222
+      ],
+      [
+       0.4437,
+       0.3111,
+       0.55,
+       0.4111
+      ],
+      [
+       0.05,
+       0.3889,
+       0.1875,
+       0.4222
+      ],
+      [
+       0.1187,
+       0.3,
+       0.1938,
+       0.3667
+      ],
+      [
+       0.4313,
+       0.4333,
+       0.5687,
+       0.4667
+      ]
+     ]
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": null,
+     "note": "no 0.36.0 Keynote picture"
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 10,
+    "0351": 10
+   }
+  },
+  "coverage-backgrounds": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 17,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 18,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 19,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 19,
+    "0351": 19
+   }
+  },
+  "coverage-catalogs": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "coverage-catalogs-off": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 1,
+    "0351": 1
+   }
+  },
+  "coverage-charts": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0004,
+     "regions": [
+      [
+       0.5188,
+       0.7111,
+       0.5437,
+       0.8667
+      ],
+      [
+       0.3312,
+       0.5222,
+       0.4125,
+       0.5444
+      ]
+     ]
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.00217,
+     "regions": [
+      [
+       0.0875,
+       0.2778,
+       0.1375,
+       0.3222
+      ],
+      [
+       0.1938,
+       0.3222,
+       0.2375,
+       0.3667
+      ],
+      [
+       0.55,
+       0.3,
+       0.6,
+       0.3222
+      ],
+      [
+       0.6562,
+       0.3444,
+       0.7063,
+       0.3667
+      ]
+     ]
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02397,
+     "regions": [
+      [
+       0.0938,
+       0.2778,
+       0.4375,
+       0.4111
+      ],
+      [
+       0.5625,
+       0.3,
+       0.9,
+       0.4444
+      ],
+      [
+       0.2125,
+       0.2,
+       0.325,
+       0.2333
+      ],
+      [
+       0.2125,
+       0.2444,
+       0.325,
+       0.2889
+      ],
+      [
+       0.6875,
+       0.2,
+       0.775,
+       0.2333
+      ]
+     ]
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0595,
+     "regions": [
+      [
+       0.7625,
+       0.2778,
+       0.9,
+       0.9556
+      ],
+      [
+       0.0938,
+       0.5333,
+       0.2375,
+       0.9111
+      ],
+      [
+       0.3187,
+       0.4556,
+       0.4562,
+       0.9111
+      ],
+      [
+       0.5437,
+       0.7,
+       0.6813,
+       0.9111
+      ],
+      [
+       0.5437,
+       0.3556,
+       0.6125,
+       0.4222
+      ]
+     ]
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.08995,
+     "regions": [
+      [
+       0.0,
+       0.3778,
+       0.9688,
+       0.9556
+      ],
+      [
+       0.4375,
+       0.1889,
+       0.5813,
+       0.2667
+      ],
+      [
+       0.0,
+       0.2444,
+       0.0875,
+       0.3111
+      ],
+      [
+       0.0,
+       0.4111,
+       0.0875,
+       0.4556
+      ],
+      [
+       0.025,
+       0.8889,
+       0.0688,
+       0.9556
+      ]
+     ]
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0342,
+     "regions": [
+      [
+       0.1375,
+       0.6222,
+       0.225,
+       0.7
+      ],
+      [
+       0.2125,
+       0.7889,
+       0.2938,
+       0.8667
+      ],
+      [
+       0.3063,
+       0.4667,
+       0.3625,
+       0.5444
+      ],
+      [
+       0.3063,
+       0.6222,
+       0.3625,
+       0.7
+      ],
+      [
+       0.3063,
+       0.3,
+       0.3625,
+       0.3778
+      ]
+     ]
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.19824,
+     "regions": [
+      [
+       0.125,
+       0.2333,
+       0.8063,
+       0.3889
+      ],
+      [
+       0.125,
+       0.6222,
+       0.6937,
+       0.7667
+      ],
+      [
+       0.125,
+       0.4444,
+       0.5813,
+       0.5556
+      ],
+      [
+       0.4188,
+       0.8556,
+       0.5563,
+       0.8889
+      ],
+      [
+       0.0312,
+       0.4444,
+       0.0625,
+       0.5556
+      ]
+     ]
+    },
+    {
+     "slide": 17,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 18,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.06972,
+     "regions": [
+      [
+       0.1125,
+       0.2778,
+       0.2938,
+       0.9111
+      ],
+      [
+       0.4125,
+       0.4111,
+       0.5875,
+       0.9111
+      ],
+      [
+       0.7063,
+       0.6667,
+       0.8875,
+       0.9111
+      ],
+      [
+       0.7562,
+       0.9222,
+       0.8375,
+       0.9556
+      ],
+      [
+       0.1688,
+       0.9222,
+       0.2313,
+       0.9556
+      ]
+     ]
+    },
+    {
+     "slide": 19,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 19,
+    "0351": 19
+   }
+  },
+  "coverage-composition": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.03338,
+     "regions": [
+      [
+       0.7688,
+       0.2222,
+       0.85,
+       0.3111
+      ],
+      [
+       0.7688,
+       0.3222,
+       0.85,
+       0.4222
+      ],
+      [
+       0.35,
+       0.5778,
+       0.4813,
+       0.6222
+      ],
+      [
+       0.35,
+       0.7222,
+       0.4813,
+       0.7667
+      ],
+      [
+       0.1562,
+       0.2222,
+       0.2188,
+       0.3111
+      ]
+     ]
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.01837,
+     "regions": [
+      [
+       0.6312,
+       0.3444,
+       0.925,
+       0.8667
+      ],
+      [
+       0.675,
+       0.5444,
+       0.7063,
+       0.5778
+      ],
+      [
+       0.85,
+       0.6333,
+       0.8688,
+       0.6667
+      ]
+     ]
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.07814,
+     "regions": [
+      [
+       0.5062,
+       0.2,
+       0.9563,
+       0.3556
+      ],
+      [
+       0.725,
+       0.6556,
+       0.9375,
+       0.8444
+      ],
+      [
+       0.525,
+       0.6556,
+       0.6813,
+       0.8444
+      ],
+      [
+       0.7812,
+       0.7222,
+       0.9,
+       0.7889
+      ],
+      [
+       0.5625,
+       0.7222,
+       0.6562,
+       0.7889
+      ]
+     ]
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": [
+      [
+       0.7,
+       0.5222,
+       0.7063,
+       0.5333
+      ]
+     ]
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.11438,
+     "regions": [
+      [
+       0.0437,
+       0.2556,
+       0.9563,
+       0.8778
+      ],
+      [
+       0.0625,
+       0.7333,
+       0.1187,
+       0.8111
+      ]
+     ]
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.08644,
+     "regions": [
+      [
+       0.5062,
+       0.5667,
+       0.9625,
+       0.7
+      ],
+      [
+       0.5062,
+       0.4222,
+       0.9625,
+       0.5444
+      ],
+      [
+       0.075,
+       0.4444,
+       0.3563,
+       0.5333
+      ],
+      [
+       0.075,
+       0.5556,
+       0.2938,
+       0.6333
+      ],
+      [
+       0.3,
+       0.5556,
+       0.3812,
+       0.6333
+      ]
+     ]
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": null,
+     "note": "no 0.36.0 Keynote picture"
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 11,
+    "0351": 11
+   }
+  },
+  "coverage-design": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.04812,
+     "regions": [
+      [
+       0.7812,
+       0.2778,
+       0.8812,
+       0.9111
+      ],
+      [
+       0.1187,
+       0.5778,
+       0.2188,
+       0.9556
+      ],
+      [
+       0.3375,
+       0.8556,
+       0.4375,
+       0.9556
+      ],
+      [
+       0.5625,
+       0.8556,
+       0.6625,
+       0.9556
+      ],
+      [
+       0.5625,
+       0.3667,
+       0.6562,
+       0.4444
+      ]
+     ]
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.01448,
+     "regions": [
+      [
+       0.35,
+       0.4778,
+       0.9563,
+       0.5667
+      ],
+      [
+       0.325,
+       0.4778,
+       0.3438,
+       0.5444
+      ]
+     ]
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.18412,
+     "regions": [
+      [
+       0.725,
+       0.3111,
+       0.9125,
+       0.9556
+      ],
+      [
+       0.3438,
+       0.5,
+       0.4375,
+       0.8667
+      ],
+      [
+       0.5625,
+       0.4333,
+       0.6562,
+       0.9111
+      ],
+      [
+       0.125,
+       0.6111,
+       0.2188,
+       0.8667
+      ],
+      [
+       0.4625,
+       0.6111,
+       0.525,
+       0.9111
+      ]
+     ]
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.03754,
+     "regions": [
+      [
+       0.8625,
+       0.2778,
+       0.9187,
+       0.9444
+      ],
+      [
+       0.5437,
+       0.5778,
+       0.6,
+       0.9444
+      ],
+      [
+       0.7625,
+       0.3667,
+       0.8125,
+       0.9444
+      ],
+      [
+       0.65,
+       0.4444,
+       0.7063,
+       0.9444
+      ],
+      [
+       0.6625,
+       0.2,
+       0.8063,
+       0.2333
+      ]
+     ]
+    },
+    {
+     "slide": 17,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.04579,
+     "regions": [
+      [
+       0.7812,
+       0.2778,
+       0.8875,
+       0.8222
+      ],
+      [
+       0.1125,
+       0.5111,
+       0.2188,
+       0.8222
+      ],
+      [
+       0.5625,
+       0.3444,
+       0.6625,
+       0.8222
+      ],
+      [
+       0.3375,
+       0.4111,
+       0.4375,
+       0.8222
+      ],
+      [
+       0.425,
+       0.1889,
+       0.575,
+       0.2333
+      ]
+     ]
+    },
+    {
+     "slide": 18,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.03288,
+     "regions": [
+      [
+       0.7812,
+       0.2667,
+       0.8875,
+       0.6444
+      ],
+      [
+       0.1125,
+       0.4111,
+       0.2188,
+       0.6444
+      ],
+      [
+       0.3375,
+       0.3556,
+       0.4375,
+       0.6444
+      ],
+      [
+       0.5625,
+       0.3444,
+       0.6625,
+       0.6444
+      ],
+      [
+       0.4313,
+       0.2444,
+       0.5687,
+       0.2778
+      ]
+     ]
+    },
+    {
+     "slide": 19,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.03201,
+     "regions": [
+      [
+       0.7812,
+       0.5778,
+       0.8875,
+       0.9444
+      ],
+      [
+       0.1125,
+       0.7222,
+       0.2188,
+       0.9444
+      ],
+      [
+       0.3375,
+       0.6556,
+       0.4375,
+       0.9444
+      ],
+      [
+       0.5625,
+       0.6556,
+       0.6625,
+       0.9444
+      ],
+      [
+       0.4313,
+       0.5,
+       0.5687,
+       0.5444
+      ]
+     ]
+    },
+    {
+     "slide": 20,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.13643,
+     "regions": [
+      [
+       0.0437,
+       0.2778,
+       0.9563,
+       0.9
+      ],
+      [
+       0.425,
+       0.1889,
+       0.575,
+       0.2333
+      ],
+      [
+       0.425,
+       0.2444,
+       0.575,
+       0.2889
+      ]
+     ]
+    },
+    {
+     "slide": 21,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.13643,
+     "regions": [
+      [
+       0.0437,
+       0.2778,
+       0.9563,
+       0.9
+      ],
+      [
+       0.425,
+       0.1889,
+       0.575,
+       0.2333
+      ],
+      [
+       0.425,
+       0.2444,
+       0.575,
+       0.2889
+      ]
+     ]
+    },
+    {
+     "slide": 22,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 23,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 24,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 25,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 26,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 27,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 28,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 29,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 30,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 31,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 32,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 33,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 34,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 35,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 36,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 36,
+    "0351": 36
+   }
+  },
+  "coverage-diagrams": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0377,
+     "regions": [
+      [
+       0.3,
+       0.3333,
+       0.9375,
+       0.7889
+      ],
+      [
+       0.0563,
+       0.4667,
+       0.2938,
+       0.6556
+      ],
+      [
+       0.4,
+       0.5444,
+       0.5,
+       0.6
+      ],
+      [
+       0.3625,
+       0.5444,
+       0.3937,
+       0.6
+      ]
+     ]
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.01733,
+     "regions": [
+      [
+       0.2062,
+       0.4778,
+       0.4938,
+       0.6444
+      ],
+      [
+       0.5687,
+       0.4778,
+       0.725,
+       0.6444
+      ],
+      [
+       0.0563,
+       0.4778,
+       0.2,
+       0.6444
+      ],
+      [
+       0.8125,
+       0.4778,
+       0.9375,
+       0.6444
+      ],
+      [
+       0.1062,
+       0.5333,
+       0.2,
+       0.5889
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.29856,
+     "regions": [
+      [
+       0.0437,
+       0.3111,
+       0.9563,
+       0.8111
+      ]
+     ]
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.21277,
+     "regions": [
+      [
+       0.3563,
+       0.5667,
+       0.675,
+       0.9222
+      ],
+      [
+       0.3063,
+       0.2,
+       0.575,
+       0.5556
+      ],
+      [
+       0.1313,
+       0.2,
+       0.275,
+       0.5556
+      ],
+      [
+       0.0437,
+       0.5667,
+       0.1688,
+       0.9222
+      ],
+      [
+       0.6875,
+       0.8111,
+       0.9125,
+       0.8667
+      ]
+     ]
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.21445,
+     "regions": [
+      [
+       0.3563,
+       0.2,
+       0.8187,
+       0.5556
+      ],
+      [
+       0.2938,
+       0.5667,
+       0.575,
+       0.9222
+      ],
+      [
+       0.1313,
+       0.5667,
+       0.275,
+       0.9222
+      ],
+      [
+       0.0437,
+       0.2,
+       0.1625,
+       0.5556
+      ],
+      [
+       0.6625,
+       0.6222,
+       0.8063,
+       0.6889
+      ]
+     ]
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 17,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.13816,
+     "regions": [
+      [
+       0.0437,
+       0.2,
+       0.9625,
+       0.9333
+      ],
+      [
+       0.7063,
+       0.5444,
+       0.9,
+       0.6222
+      ],
+      [
+       0.5437,
+       0.2778,
+       0.6875,
+       0.3556
+      ],
+      [
+       0.3563,
+       0.5444,
+       0.4938,
+       0.6111
+      ],
+      [
+       0.0875,
+       0.3333,
+       0.2313,
+       0.4111
+      ]
+     ]
+    },
+    {
+     "slide": 18,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 18,
+    "0351": 18
+   }
+  },
+  "coverage-furniture": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.03677,
+     "regions": [
+      [
+       0.2437,
+       0.7111,
+       0.5375,
+       0.8333
+      ],
+      [
+       0.55,
+       0.7111,
+       0.725,
+       0.8222
+      ],
+      [
+       0.0437,
+       0.7111,
+       0.2375,
+       0.8222
+      ],
+      [
+       0.0437,
+       0.8333,
+       0.1938,
+       0.9111
+      ],
+      [
+       0.2,
+       0.8333,
+       0.3187,
+       0.9111
+      ]
+     ]
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.00507,
+     "regions": [
+      [
+       0.0437,
+       0.9,
+       0.2687,
+       0.9556
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 9,
+    "0351": 9
+   }
+  },
+  "coverage-images": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.03521,
+     "regions": [
+      [
+       0.075,
+       0.4556,
+       0.425,
+       0.6556
+      ],
+      [
+       0.075,
+       0.6556,
+       0.3187,
+       0.7778
+      ],
+      [
+       0.0437,
+       0.4667,
+       0.0625,
+       0.5
+      ],
+      [
+       0.0437,
+       0.7,
+       0.0625,
+       0.7333
+      ],
+      [
+       0.0437,
+       0.5111,
+       0.0563,
+       0.5444
+      ]
+     ]
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.00694,
+     "regions": [
+      [
+       0.2375,
+       0.2778,
+       0.3,
+       0.3556
+      ],
+      [
+       0.1,
+       0.3222,
+       0.1625,
+       0.4
+      ],
+      [
+       0.375,
+       0.2222,
+       0.4375,
+       0.3
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 16,
+    "0351": 16
+   }
+  },
+  "coverage-languages": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02762,
+     "regions": [
+      [
+       0.7375,
+       0.5111,
+       0.9563,
+       0.6222
+      ],
+      [
+       0.7375,
+       0.2222,
+       0.9563,
+       0.2778
+      ],
+      [
+       0.1437,
+       0.3,
+       0.1938,
+       0.4111
+      ],
+      [
+       0.0938,
+       0.5333,
+       0.1437,
+       0.8556
+      ],
+      [
+       0.3063,
+       0.4444,
+       0.3625,
+       0.5333
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.04963,
+     "regions": [
+      [
+       0.6,
+       0.4111,
+       0.9313,
+       0.5111
+      ],
+      [
+       0.6188,
+       0.5222,
+       0.9563,
+       0.6
+      ],
+      [
+       0.525,
+       0.6111,
+       0.7875,
+       0.7111
+      ],
+      [
+       0.7875,
+       0.6111,
+       0.925,
+       0.7111
+      ],
+      [
+       0.4813,
+       0.5333,
+       0.6125,
+       0.6
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.06721,
+     "regions": [
+      [
+       0.075,
+       0.3889,
+       0.575,
+       0.5889
+      ],
+      [
+       0.075,
+       0.6,
+       0.5312,
+       0.7111
+      ],
+      [
+       0.4,
+       0.5111,
+       0.4875,
+       0.5889
+      ],
+      [
+       0.0437,
+       0.4222,
+       0.0625,
+       0.4556
+      ],
+      [
+       0.0437,
+       0.6556,
+       0.0625,
+       0.6889
+      ]
+     ]
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.03934,
+     "regions": [
+      [
+       0.175,
+       0.4556,
+       0.825,
+       0.6778
+      ],
+      [
+       0.75,
+       0.5556,
+       0.8562,
+       0.6667
+      ],
+      [
+       0.1437,
+       0.5667,
+       0.25,
+       0.6778
+      ],
+      [
+       0.1562,
+       0.6889,
+       0.2313,
+       0.7444
+      ],
+      [
+       0.1688,
+       0.3667,
+       0.2313,
+       0.4333
+      ]
+     ]
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.06256,
+     "regions": [
+      [
+       0.1062,
+       0.4556,
+       0.8938,
+       0.6778
+      ],
+      [
+       0.4688,
+       0.6889,
+       0.5312,
+       0.7444
+      ],
+      [
+       0.4688,
+       0.3667,
+       0.525,
+       0.4333
+      ],
+      [
+       0.7688,
+       0.6889,
+       0.8375,
+       0.7556
+      ],
+      [
+       0.1625,
+       0.6889,
+       0.2313,
+       0.7444
+      ]
+     ]
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 10,
+    "0351": 10
+   }
+  },
+  "coverage-lists": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.06801,
+     "regions": [
+      [
+       0.0688,
+       0.4556,
+       0.525,
+       0.6222
+      ],
+      [
+       0.0688,
+       0.3444,
+       0.525,
+       0.4444
+      ],
+      [
+       0.0688,
+       0.2111,
+       0.4,
+       0.2667
+      ],
+      [
+       0.0688,
+       0.2778,
+       0.3688,
+       0.3333
+      ],
+      [
+       0.0688,
+       0.6333,
+       0.2875,
+       0.6889
+      ]
+     ]
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.08129,
+     "regions": [
+      [
+       0.075,
+       0.3778,
+       0.575,
+       0.5556
+      ],
+      [
+       0.075,
+       0.5667,
+       0.6375,
+       0.7556
+      ],
+      [
+       0.5062,
+       0.4778,
+       0.6188,
+       0.5444
+      ],
+      [
+       0.6312,
+       0.3778,
+       0.7375,
+       0.4333
+      ],
+      [
+       0.3125,
+       0.5778,
+       0.3688,
+       0.6444
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.04101,
+     "regions": [
+      [
+       0.0437,
+       0.4111,
+       0.3,
+       0.6
+      ],
+      [
+       0.0437,
+       0.6111,
+       0.2687,
+       0.7333
+      ],
+      [
+       0.3063,
+       0.4222,
+       0.425,
+       0.5
+      ],
+      [
+       0.275,
+       0.5222,
+       0.3812,
+       0.6
+      ],
+      [
+       0.275,
+       0.6444,
+       0.3625,
+       0.7333
+      ]
+     ]
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05921,
+     "regions": [
+      [
+       0.0437,
+       0.4,
+       0.5188,
+       0.7222
+      ],
+      [
+       0.4437,
+       0.6556,
+       0.5625,
+       0.7333
+      ],
+      [
+       0.4062,
+       0.6556,
+       0.4375,
+       0.7111
+      ]
+     ]
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.06878,
+     "regions": [
+      [
+       0.0437,
+       0.5222,
+       0.4313,
+       0.7333
+      ],
+      [
+       0.0437,
+       0.4111,
+       0.3187,
+       0.5222
+      ],
+      [
+       0.4313,
+       0.5222,
+       0.6,
+       0.6
+      ],
+      [
+       0.325,
+       0.4111,
+       0.4125,
+       0.5111
+      ],
+      [
+       0.475,
+       0.6444,
+       0.6062,
+       0.7111
+      ]
+     ]
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05442,
+     "regions": [
+      [
+       0.075,
+       0.5222,
+       0.5563,
+       0.7333
+      ],
+      [
+       0.075,
+       0.4,
+       0.4875,
+       0.5222
+      ],
+      [
+       0.3312,
+       0.5222,
+       0.4625,
+       0.6
+      ],
+      [
+       0.0437,
+       0.4222,
+       0.0625,
+       0.4556
+      ],
+      [
+       0.0437,
+       0.6556,
+       0.0625,
+       0.6889
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 13,
+    "0351": 13
+   }
+  },
+  "coverage-metadata": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05966,
+     "regions": [
+      [
+       0.075,
+       0.5275,
+       0.4938,
+       0.7143
+      ],
+      [
+       0.075,
+       0.4066,
+       0.4,
+       0.5165
+      ],
+      [
+       0.4062,
+       0.4066,
+       0.5563,
+       0.4945
+      ],
+      [
+       0.5062,
+       0.6374,
+       0.6438,
+       0.7253
+      ],
+      [
+       0.3563,
+       0.5275,
+       0.4188,
+       0.5934
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "coverage-overlays": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.04598,
+     "regions": [
+      [
+       0.5125,
+       0.2778,
+       0.6438,
+       0.4556
+      ],
+      [
+       0.7625,
+       0.3556,
+       0.9187,
+       0.6
+      ],
+      [
+       0.325,
+       0.4333,
+       0.3937,
+       0.5444
+      ],
+      [
+       0.1062,
+       0.5111,
+       0.175,
+       0.6111
+      ],
+      [
+       0.3875,
+       0.5444,
+       0.4562,
+       0.6333
+      ]
+     ]
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.00394,
+     "regions": [
+      [
+       0.4938,
+       0.3444,
+       0.65,
+       0.3889
+      ],
+      [
+       0.6562,
+       0.3444,
+       0.8125,
+       0.3889
+      ],
+      [
+       0.4938,
+       0.7333,
+       0.65,
+       0.7778
+      ],
+      [
+       0.6562,
+       0.7333,
+       0.8125,
+       0.7778
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.04392,
+     "regions": [
+      [
+       0.0437,
+       0.2111,
+       0.4875,
+       0.3778
+      ],
+      [
+       0.6,
+       0.2111,
+       0.85,
+       0.3
+      ],
+      [
+       0.5188,
+       0.2111,
+       0.5938,
+       0.3
+      ],
+      [
+       0.4938,
+       0.2222,
+       0.5125,
+       0.3
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 6,
+    "0351": 6
+   }
+  },
+  "coverage-regions": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.04751,
+     "regions": [
+      [
+       0.3937,
+       0.4889,
+       0.6062,
+       0.5778
+      ],
+      [
+       0.3937,
+       0.2222,
+       0.6,
+       0.3111
+      ],
+      [
+       0.7937,
+       0.4889,
+       0.9,
+       0.5778
+      ],
+      [
+       0.7937,
+       0.2222,
+       0.9,
+       0.3111
+      ],
+      [
+       0.75,
+       0.3444,
+       0.8688,
+       0.3889
+      ]
+     ]
+    },
+    {
+     "slide": 17,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02526,
+     "regions": [
+      [
+       0.2812,
+       0.4889,
+       0.4062,
+       0.5778
+      ],
+      [
+       0.2812,
+       0.2222,
+       0.4062,
+       0.3111
+      ],
+      [
+       0.275,
+       0.3444,
+       0.4125,
+       0.3889
+      ],
+      [
+       0.275,
+       0.6111,
+       0.4125,
+       0.6556
+      ],
+      [
+       0.7562,
+       0.3444,
+       0.8625,
+       0.3889
+      ]
+     ]
+    },
+    {
+     "slide": 18,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0429,
+     "regions": [
+      [
+       0.6312,
+       0.4889,
+       0.775,
+       0.6
+      ],
+      [
+       0.6312,
+       0.2222,
+       0.775,
+       0.3333
+      ],
+      [
+       0.1313,
+       0.4889,
+       0.25,
+       0.5778
+      ],
+      [
+       0.1313,
+       0.2222,
+       0.25,
+       0.3111
+      ],
+      [
+       0.5375,
+       0.4889,
+       0.625,
+       0.5778
+      ]
+     ]
+    },
+    {
+     "slide": 19,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 20,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 21,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0454,
+     "regions": [
+      [
+       0.4125,
+       0.4778,
+       0.5,
+       0.5889
+      ],
+      [
+       0.4125,
+       0.2222,
+       0.5,
+       0.3222
+      ],
+      [
+       0.1437,
+       0.4889,
+       0.2313,
+       0.5778
+      ],
+      [
+       0.775,
+       0.4889,
+       0.8438,
+       0.5778
+      ],
+      [
+       0.1437,
+       0.2222,
+       0.2313,
+       0.3111
+      ]
+     ]
+    },
+    {
+     "slide": 22,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02892,
+     "regions": [
+      [
+       0.7063,
+       0.4889,
+       0.9125,
+       0.5778
+      ],
+      [
+       0.7063,
+       0.2222,
+       0.9125,
+       0.3111
+      ],
+      [
+       0.3,
+       0.6111,
+       0.3875,
+       0.6556
+      ],
+      [
+       0.3,
+       0.3556,
+       0.3875,
+       0.3889
+      ],
+      [
+       0.325,
+       0.2222,
+       0.3625,
+       0.3111
+      ]
+     ]
+    },
+    {
+     "slide": 23,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.03582,
+     "regions": [
+      [
+       0.5938,
+       0.2222,
+       0.7188,
+       0.3111
+      ],
+      [
+       0.5938,
+       0.4889,
+       0.7188,
+       0.5778
+      ],
+      [
+       0.175,
+       0.4889,
+       0.2812,
+       0.5778
+      ],
+      [
+       0.175,
+       0.2222,
+       0.2812,
+       0.3111
+      ],
+      [
+       0.5875,
+       0.3444,
+       0.725,
+       0.3889
+      ]
+     ]
+    },
+    {
+     "slide": 24,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 25,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 25,
+    "0351": 25
+   }
+  },
+  "coverage-shape-presets": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.00779,
+     "regions": [
+      [
+       0.0437,
+       0.1889,
+       0.2625,
+       0.4111
+      ],
+      [
+       0.275,
+       0.1889,
+       0.4938,
+       0.4111
+      ]
+     ]
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.04129,
+     "regions": [
+      [
+       0.275,
+       0.1889,
+       0.4938,
+       0.4111
+      ],
+      [
+       0.0375,
+       0.1889,
+       0.2625,
+       0.4111
+      ],
+      [
+       0.7375,
+       0.7444,
+       0.9062,
+       0.7778
+      ],
+      [
+       0.7375,
+       0.5778,
+       0.9062,
+       0.6111
+      ],
+      [
+       0.0938,
+       0.7444,
+       0.2625,
+       0.7778
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02436,
+     "regions": [
+      [
+       0.0437,
+       0.2444,
+       0.2062,
+       0.3556
+      ],
+      [
+       0.2,
+       0.2,
+       0.2625,
+       0.4111
+      ],
+      [
+       0.5062,
+       0.2,
+       0.5687,
+       0.4111
+      ],
+      [
+       0.6625,
+       0.2,
+       0.725,
+       0.4111
+      ],
+      [
+       0.7375,
+       0.7444,
+       0.8,
+       0.8667
+      ]
+     ]
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02328,
+     "regions": [
+      [
+       0.5125,
+       0.6889,
+       0.725,
+       0.9111
+      ],
+      [
+       0.2812,
+       0.6889,
+       0.4938,
+       0.9111
+      ],
+      [
+       0.7375,
+       0.6889,
+       0.9563,
+       0.9111
+      ],
+      [
+       0.275,
+       0.6889,
+       0.3063,
+       0.7222
+      ],
+      [
+       0.5062,
+       0.8889,
+       0.5375,
+       0.9111
+      ]
+     ]
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.01988,
+     "regions": [
+      [
+       0.275,
+       0.6889,
+       0.4938,
+       0.7333
+      ],
+      [
+       0.7375,
+       0.6889,
+       0.9563,
+       0.9111
+      ],
+      [
+       0.5125,
+       0.6889,
+       0.7188,
+       0.7222
+      ],
+      [
+       0.275,
+       0.8778,
+       0.4938,
+       0.9111
+      ],
+      [
+       0.5125,
+       0.8778,
+       0.7188,
+       0.9111
+      ]
+     ]
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.03083,
+     "regions": [
+      [
+       0.5062,
+       0.4444,
+       0.725,
+       0.6333
+      ],
+      [
+       0.0437,
+       0.4444,
+       0.2625,
+       0.6333
+      ],
+      [
+       0.0437,
+       0.1889,
+       0.2625,
+       0.2222
+      ],
+      [
+       0.3625,
+       0.5556,
+       0.4938,
+       0.6667
+      ],
+      [
+       0.5938,
+       0.2889,
+       0.7312,
+       0.3222
+      ]
+     ]
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.07205,
+     "regions": [
+      [
+       0.275,
+       0.1889,
+       0.4938,
+       0.4111
+      ],
+      [
+       0.5062,
+       0.1889,
+       0.725,
+       0.4111
+      ],
+      [
+       0.7375,
+       0.1889,
+       0.9563,
+       0.4111
+      ],
+      [
+       0.0437,
+       0.4444,
+       0.2625,
+       0.6667
+      ],
+      [
+       0.275,
+       0.4444,
+       0.4938,
+       0.6667
+      ]
+     ]
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.00778,
+     "regions": [
+      [
+       0.5062,
+       0.5889,
+       0.725,
+       0.6667
+      ],
+      [
+       0.5062,
+       0.4444,
+       0.725,
+       0.5111
+      ]
+     ]
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.00802,
+     "regions": [
+      [
+       0.0375,
+       0.1889,
+       0.2625,
+       0.3
+      ],
+      [
+       0.0437,
+       0.3111,
+       0.2625,
+       0.4111
+      ]
+     ]
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 16,
+    "0351": 16
+   }
+  },
+  "coverage-shape-styles": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02106,
+     "regions": [
+      [
+       0.2687,
+       0.1889,
+       0.5,
+       0.4222
+      ],
+      [
+       0.5,
+       0.1889,
+       0.7312,
+       0.4222
+      ],
+      [
+       0.0375,
+       0.1889,
+       0.2625,
+       0.4222
+      ]
+     ]
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.04243,
+     "regions": [
+      [
+       0.0437,
+       0.5667,
+       0.3375,
+       0.8889
+      ],
+      [
+       0.6625,
+       0.2,
+       0.9625,
+       0.5222
+      ],
+      [
+       0.35,
+       0.5667,
+       0.65,
+       0.8444
+      ],
+      [
+       0.6625,
+       0.6111,
+       0.9563,
+       0.8889
+      ],
+      [
+       0.35,
+       0.6111,
+       0.65,
+       0.8889
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 12,
+    "0351": 12
+   }
+  },
+  "coverage-size-16x10": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.05114,
+     "regions": [
+      [
+       0.0563,
+       0.31,
+       0.9437,
+       0.95
+      ],
+      [
+       0.4125,
+       0.25,
+       0.5875,
+       0.29
+      ],
+      [
+       0.4125,
+       0.2,
+       0.5875,
+       0.24
+      ],
+      [
+       0.8063,
+       0.28,
+       0.85,
+       0.31
+      ],
+      [
+       0.5938,
+       0.92,
+       0.625,
+       0.95
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.08964,
+     "regions": [
+      [
+       0.0813,
+       0.52,
+       0.6438,
+       0.73
+      ],
+      [
+       0.0813,
+       0.41,
+       0.5938,
+       0.51
+      ],
+      [
+       0.7625,
+       0.64,
+       0.9062,
+       0.71
+      ],
+      [
+       0.725,
+       0.41,
+       0.8375,
+       0.48
+      ],
+      [
+       0.6,
+       0.41,
+       0.7125,
+       0.48
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "coverage-size-16x9": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.04283,
+     "regions": [
+      [
+       0.7812,
+       0.3111,
+       0.8875,
+       0.9111
+      ],
+      [
+       0.1125,
+       0.4111,
+       0.2188,
+       0.9111
+      ],
+      [
+       0.5625,
+       0.8556,
+       0.6625,
+       0.9556
+      ],
+      [
+       0.3375,
+       0.8556,
+       0.4375,
+       0.9556
+      ],
+      [
+       0.4125,
+       0.1889,
+       0.5875,
+       0.2333
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.08175,
+     "regions": [
+      [
+       0.075,
+       0.5222,
+       0.5813,
+       0.7333
+      ],
+      [
+       0.075,
+       0.4111,
+       0.5312,
+       0.5111
+      ],
+      [
+       0.6813,
+       0.6444,
+       0.8125,
+       0.7111
+      ],
+      [
+       0.65,
+       0.4111,
+       0.7562,
+       0.4778
+      ],
+      [
+       0.5625,
+       0.6556,
+       0.675,
+       0.7333
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "coverage-size-1x1": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.06385,
+     "regions": [
+      [
+       0.0938,
+       0.2812,
+       0.9062,
+       0.9125
+      ],
+      [
+       0.35,
+       0.1938,
+       0.65,
+       0.2313
+      ],
+      [
+       0.35,
+       0.25,
+       0.65,
+       0.2812
+      ],
+      [
+       0.375,
+       0.9187,
+       0.4188,
+       0.95
+      ],
+      [
+       0.5813,
+       0.9187,
+       0.625,
+       0.95
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "coverage-size-4x3": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.05441,
+     "regions": [
+      [
+       0.0688,
+       0.3083,
+       0.9313,
+       0.9083
+      ],
+      [
+       0.3875,
+       0.25,
+       0.6125,
+       0.2833
+      ],
+      [
+       0.3875,
+       0.1917,
+       0.6125,
+       0.2333
+      ],
+      [
+       0.7937,
+       0.2833,
+       0.8438,
+       0.3167
+      ],
+      [
+       0.375,
+       0.9167,
+       0.4125,
+       0.95
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.07102,
+     "regions": [
+      [
+       0.1,
+       0.6083,
+       0.7812,
+       0.7083
+      ],
+      [
+       0.1,
+       0.525,
+       0.675,
+       0.6
+      ],
+      [
+       0.1,
+       0.425,
+       0.4813,
+       0.5083
+      ],
+      [
+       0.4875,
+       0.425,
+       0.7438,
+       0.5083
+      ],
+      [
+       0.7937,
+       0.6333,
+       0.9375,
+       0.6917
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "coverage-size-4x5": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.06687,
+     "regions": [
+      [
+       0.0938,
+       0.225,
+       0.9062,
+       0.93
+      ],
+      [
+       0.35,
+       0.155,
+       0.65,
+       0.185
+      ],
+      [
+       0.35,
+       0.2,
+       0.65,
+       0.225
+      ],
+      [
+       0.375,
+       0.935,
+       0.4188,
+       0.96
+      ],
+      [
+       0.5813,
+       0.935,
+       0.625,
+       0.96
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "coverage-size-9x16": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.05935,
+     "regions": [
+      [
+       0.0938,
+       0.2246,
+       0.9062,
+       0.8842
+      ],
+      [
+       0.35,
+       0.1754,
+       0.65,
+       0.1965
+      ],
+      [
+       0.35,
+       0.2035,
+       0.65,
+       0.2246
+      ],
+      [
+       0.1812,
+       0.3684,
+       0.2313,
+       0.3825
+      ],
+      [
+       0.5813,
+       0.8877,
+       0.625,
+       0.9053
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "coverage-size-a4": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.05328,
+     "regions": [
+      [
+       0.0688,
+       0.307,
+       0.9313,
+       0.9123
+      ],
+      [
+       0.4,
+       0.193,
+       0.6062,
+       0.2368
+      ],
+      [
+       0.4,
+       0.2456,
+       0.6,
+       0.2895
+      ],
+      [
+       0.8,
+       0.2807,
+       0.8438,
+       0.3158
+      ],
+      [
+       0.375,
+       0.9211,
+       0.4062,
+       0.9474
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0682,
+     "regions": [
+      [
+       0.0938,
+       0.614,
+       0.7438,
+       0.7105
+      ],
+      [
+       0.0938,
+       0.5263,
+       0.6438,
+       0.6053
+      ],
+      [
+       0.0938,
+       0.4298,
+       0.4562,
+       0.5088
+      ],
+      [
+       0.4625,
+       0.4298,
+       0.7063,
+       0.5088
+      ],
+      [
+       0.75,
+       0.6316,
+       0.8938,
+       0.693
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "coverage-size-letter": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.05587,
+     "regions": [
+      [
+       0.0688,
+       0.3145,
+       0.9313,
+       0.9113
+      ],
+      [
+       0.3875,
+       0.25,
+       0.6125,
+       0.2823
+      ],
+      [
+       0.3875,
+       0.1935,
+       0.6125,
+       0.2339
+      ],
+      [
+       0.7937,
+       0.2823,
+       0.8438,
+       0.3145
+      ],
+      [
+       0.375,
+       0.9194,
+       0.4125,
+       0.9516
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.04909,
+     "regions": [
+      [
+       0.1,
+       0.6129,
+       0.8625,
+       0.6855
+      ],
+      [
+       0.1062,
+       0.5323,
+       0.6188,
+       0.5968
+      ],
+      [
+       0.1,
+       0.4435,
+       0.5,
+       0.5081
+      ],
+      [
+       0.5,
+       0.4435,
+       0.8,
+       0.5081
+      ],
+      [
+       0.0625,
+       0.4597,
+       0.0813,
+       0.4919
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "coverage-size-standard": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.05441,
+     "regions": [
+      [
+       0.0688,
+       0.3083,
+       0.9313,
+       0.9083
+      ],
+      [
+       0.3875,
+       0.25,
+       0.6125,
+       0.2833
+      ],
+      [
+       0.3875,
+       0.1917,
+       0.6125,
+       0.2333
+      ],
+      [
+       0.7937,
+       0.2833,
+       0.8438,
+       0.3167
+      ],
+      [
+       0.375,
+       0.9167,
+       0.4125,
+       0.95
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.07102,
+     "regions": [
+      [
+       0.1,
+       0.6083,
+       0.7812,
+       0.7083
+      ],
+      [
+       0.1,
+       0.525,
+       0.675,
+       0.6
+      ],
+      [
+       0.1,
+       0.425,
+       0.4813,
+       0.5083
+      ],
+      [
+       0.4875,
+       0.425,
+       0.7438,
+       0.5083
+      ],
+      [
+       0.7937,
+       0.6333,
+       0.9375,
+       0.6917
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "coverage-tables": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 6,
+    "0351": 6
+   }
+  },
+  "coverage-template": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "coverage-text": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 13,
+    "0351": 13
+   }
+  },
+  "coverage-variables": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.04649,
+     "regions": [
+      [
+       0.075,
+       0.3667,
+       0.3688,
+       0.5444
+      ],
+      [
+       0.075,
+       0.6444,
+       0.4688,
+       0.7333
+      ],
+      [
+       0.075,
+       0.5667,
+       0.2875,
+       0.6333
+      ],
+      [
+       0.0437,
+       0.4889,
+       0.0625,
+       0.5222
+      ],
+      [
+       0.0437,
+       0.5778,
+       0.0625,
+       0.6222
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 5,
+    "0351": 5
+   }
+  },
+  "coverage-warnings": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0549,
+     "regions": [
+      [
+       0.0437,
+       0.3889,
+       0.9563,
+       0.7333
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "data-story-academy": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.01291,
+     "regions": [
+      [
+       0.2313,
+       0.1444,
+       0.7688,
+       0.2333
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.03998,
+     "regions": [
+      [
+       0.075,
+       0.3333,
+       0.6188,
+       0.8667
+      ],
+      [
+       0.1812,
+       0.2778,
+       0.5062,
+       0.3222
+      ],
+      [
+       0.0875,
+       0.8778,
+       0.2375,
+       0.9111
+      ],
+      [
+       0.3063,
+       0.6667,
+       0.3812,
+       0.7444
+      ],
+      [
+       0.275,
+       0.8778,
+       0.4125,
+       0.9111
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 16,
+    "0351": 16
+   }
+  },
+  "diagram-connectors": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02302,
+     "regions": [
+      [
+       0.2437,
+       0.4556,
+       0.8812,
+       0.6667
+      ],
+      [
+       0.7,
+       0.4556,
+       0.9187,
+       0.6667
+      ],
+      [
+       0.075,
+       0.4556,
+       0.2562,
+       0.6667
+      ],
+      [
+       0.1187,
+       0.5333,
+       0.2188,
+       0.6
+      ]
+     ]
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.04136,
+     "regions": [
+      [
+       0.1375,
+       0.3333,
+       0.8562,
+       0.8667
+      ],
+      [
+       0.35,
+       0.2556,
+       0.6562,
+       0.4667
+      ],
+      [
+       0.4125,
+       0.6556,
+       0.6,
+       0.8667
+      ],
+      [
+       0.1812,
+       0.7333,
+       0.2812,
+       0.8
+      ],
+      [
+       0.45,
+       0.7333,
+       0.5563,
+       0.8
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 2,
+    "0351": 2
+   }
+  },
+  "diagrams": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02941,
+     "regions": [
+      [
+       0.0625,
+       0.3889,
+       0.9375,
+       0.7333
+      ],
+      [
+       0.8187,
+       0.5333,
+       0.9,
+       0.6
+      ],
+      [
+       0.1,
+       0.5333,
+       0.175,
+       0.6
+      ]
+     ]
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02817,
+     "regions": [
+      [
+       0.1375,
+       0.5111,
+       0.8125,
+       0.7444
+      ],
+      [
+       0.55,
+       0.3556,
+       0.9437,
+       0.5111
+      ],
+      [
+       0.3312,
+       0.4222,
+       0.5312,
+       0.5778
+      ],
+      [
+       0.4062,
+       0.4778,
+       0.5062,
+       0.5222
+      ],
+      [
+       0.0563,
+       0.5556,
+       0.1187,
+       0.6222
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 7,
+    "0351": 7
+   }
+  },
+  "diagrams-markdown": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0105,
+     "regions": [
+      [
+       0.2062,
+       0.5222,
+       0.5938,
+       0.7
+      ],
+      [
+       0.3187,
+       0.4889,
+       0.45,
+       0.5444
+      ],
+      [
+       0.2313,
+       0.3778,
+       0.3812,
+       0.5778
+      ],
+      [
+       0.625,
+       0.6444,
+       0.7125,
+       0.7
+      ],
+      [
+       0.8063,
+       0.4333,
+       0.9125,
+       0.4778
+      ]
+     ]
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02361,
+     "regions": [
+      [
+       0.525,
+       0.2222,
+       0.7812,
+       0.9
+      ],
+      [
+       0.5563,
+       0.7889,
+       0.6375,
+       0.8556
+      ],
+      [
+       0.5563,
+       0.2778,
+       0.6375,
+       0.3444
+      ],
+      [
+       0.8063,
+       0.5222,
+       0.9187,
+       0.6
+      ],
+      [
+       0.7188,
+       0.7444,
+       0.8313,
+       0.9
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.03029,
+     "regions": [
+      [
+       0.1313,
+       0.3889,
+       0.8688,
+       0.7333
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "diagrams~picture": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02655,
+     "regions": [
+      [
+       0.0625,
+       0.3889,
+       0.9375,
+       0.7333
+      ],
+      [
+       0.8187,
+       0.5333,
+       0.9,
+       0.5889
+      ],
+      [
+       0.1,
+       0.5333,
+       0.175,
+       0.5889
+      ]
+     ]
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02654,
+     "regions": [
+      [
+       0.1375,
+       0.5111,
+       0.8125,
+       0.7444
+      ],
+      [
+       0.55,
+       0.3556,
+       0.9437,
+       0.5111
+      ],
+      [
+       0.3312,
+       0.4222,
+       0.5312,
+       0.5778
+      ],
+      [
+       0.4062,
+       0.4778,
+       0.5062,
+       0.5222
+      ],
+      [
+       0.0563,
+       0.5556,
+       0.1187,
+       0.6222
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 7,
+    "0351": 7
+   }
+  },
+  "dot-diagrams": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.03404,
+     "regions": [
+      [
+       0.0563,
+       0.4222,
+       0.5375,
+       0.7
+      ],
+      [
+       0.5563,
+       0.4222,
+       0.9062,
+       0.7
+      ],
+      [
+       0.7688,
+       0.3778,
+       0.9375,
+       0.7444
+      ],
+      [
+       0.4062,
+       0.5333,
+       0.5125,
+       0.6
+      ],
+      [
+       0.0875,
+       0.5333,
+       0.1625,
+       0.6
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.02763,
+     "regions": [
+      [
+       0.0563,
+       0.4,
+       0.6188,
+       0.7222
+      ],
+      [
+       0.625,
+       0.4889,
+       0.8875,
+       0.6333
+      ],
+      [
+       0.775,
+       0.4667,
+       0.9375,
+       0.6556
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 5,
+    "0351": 5
+   }
+  },
+  "duration-timeline": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.10845,
+     "regions": [
+      [
+       0.0437,
+       0.2889,
+       0.9563,
+       0.8444
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 1,
+    "0351": 1
+   }
+  },
+  "explicit-chart-reference-lines": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 5,
+    "0351": 5
+   }
+  },
+  "footers": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 4,
+    "0351": 4
+   }
+  },
+  "footers~static": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 4,
+    "0351": 4
+   }
+  },
+  "full-feature-tour": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0327,
+     "regions": [
+      [
+       0.1625,
+       0.7111,
+       0.3688,
+       0.8222
+      ],
+      [
+       0.0437,
+       0.8333,
+       0.2062,
+       0.9111
+      ],
+      [
+       0.375,
+       0.7111,
+       0.5062,
+       0.8222
+      ],
+      [
+       0.3125,
+       0.8444,
+       0.4188,
+       0.9111
+      ],
+      [
+       0.2125,
+       0.8333,
+       0.3063,
+       0.9111
+      ]
+     ]
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.06207,
+     "regions": [
+      [
+       0.0437,
+       0.2556,
+       0.2875,
+       0.5889
+      ],
+      [
+       0.675,
+       0.3333,
+       0.9125,
+       0.6
+      ],
+      [
+       0.4,
+       0.6222,
+       0.6188,
+       0.7333
+      ],
+      [
+       0.2188,
+       0.2889,
+       0.2875,
+       0.4222
+      ],
+      [
+       0.0437,
+       0.6556,
+       0.2812,
+       0.7
+      ]
+     ]
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.06181,
+     "regions": [
+      [
+       0.1125,
+       0.2778,
+       0.2938,
+       0.9444
+      ],
+      [
+       0.7063,
+       0.5444,
+       0.8875,
+       0.9444
+      ],
+      [
+       0.4125,
+       0.4889,
+       0.5875,
+       0.9444
+      ],
+      [
+       0.4938,
+       0.4111,
+       0.5875,
+       0.4889
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.24228,
+     "regions": [
+      [
+       0.0437,
+       0.2,
+       0.9563,
+       0.5
+      ],
+      [
+       0.0437,
+       0.5222,
+       0.9062,
+       0.6222
+      ],
+      [
+       0.5938,
+       0.6889,
+       1.0,
+       0.7444
+      ],
+      [
+       0.0437,
+       0.6222,
+       0.3812,
+       0.6667
+      ],
+      [
+       0.0437,
+       0.7556,
+       0.3812,
+       0.7889
+      ]
+     ]
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.14543,
+     "regions": [
+      [
+       0.0688,
+       0.3667,
+       0.95,
+       0.7222
+      ],
+      [
+       0.5062,
+       0.6333,
+       0.725,
+       0.7222
+      ],
+      [
+       0.3187,
+       0.2556,
+       0.5125,
+       0.3444
+      ],
+      [
+       0.525,
+       0.2556,
+       0.6875,
+       0.3333
+      ],
+      [
+       0.05,
+       0.8111,
+       0.2687,
+       0.8778
+      ]
+     ]
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": null,
+     "note": "no 0.36.0 Keynote picture"
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 11,
+    "0351": 11
+   }
+  },
+  "header-footer-logo-set": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 2,
+    "0351": 2
+   }
+  },
+  "image-callouts": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.29782,
+     "regions": [
+      [
+       0.05,
+       0.2,
+       0.95,
+       1.0
+      ],
+      [
+       0.1625,
+       0.3222,
+       0.3812,
+       0.4111
+      ],
+      [
+       0.6188,
+       0.3222,
+       0.8438,
+       0.4111
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 1,
+    "0351": 1
+   }
+  },
+  "inverted-pyramids": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.19901,
+     "regions": [
+      [
+       0.3563,
+       0.2,
+       0.625,
+       0.5556
+      ],
+      [
+       0.2812,
+       0.5667,
+       0.5687,
+       0.9222
+      ],
+      [
+       0.1313,
+       0.5667,
+       0.275,
+       0.9222
+      ],
+      [
+       0.0437,
+       0.2,
+       0.1625,
+       0.5556
+      ],
+      [
+       0.6312,
+       0.2556,
+       0.8313,
+       0.3222
+      ]
+     ]
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.03243,
+     "regions": [
+      [
+       0.425,
+       0.6222,
+       0.9313,
+       0.7
+      ],
+      [
+       0.6062,
+       0.4,
+       0.975,
+       0.4778
+      ],
+      [
+       0.425,
+       0.8111,
+       0.7875,
+       0.8778
+      ],
+      [
+       0.45,
+       0.2222,
+       0.7188,
+       0.2889
+      ],
+      [
+       0.725,
+       0.2222,
+       0.9062,
+       0.2889
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "layout-harvest": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.14493,
+     "regions": [
+      [
+       0.3688,
+       0.4111,
+       0.6312,
+       0.8333
+      ],
+      [
+       0.0563,
+       0.6778,
+       0.3187,
+       0.8333
+      ],
+      [
+       0.6813,
+       0.3444,
+       0.8438,
+       0.5667
+      ],
+      [
+       0.6813,
+       0.6778,
+       0.9,
+       0.8222
+      ],
+      [
+       0.0625,
+       0.3444,
+       0.2437,
+       0.4111
+      ]
+     ]
+    },
+    {
+     "slide": 17,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 18,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 19,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 20,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 20,
+    "0351": 20
+   }
+  },
+  "layout-harvest~native-body": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.14493,
+     "regions": [
+      [
+       0.3688,
+       0.4111,
+       0.6312,
+       0.8333
+      ],
+      [
+       0.0563,
+       0.6778,
+       0.3187,
+       0.8333
+      ],
+      [
+       0.6813,
+       0.3444,
+       0.8438,
+       0.5667
+      ],
+      [
+       0.6813,
+       0.6778,
+       0.9,
+       0.8222
+      ],
+      [
+       0.0625,
+       0.3444,
+       0.2437,
+       0.4111
+      ]
+     ]
+    },
+    {
+     "slide": 17,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 18,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 19,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 20,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 20,
+    "0351": 20
+   }
+  },
+  "layout-sampler": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05718,
+     "regions": [
+      [
+       0.45,
+       0.4556,
+       0.7812,
+       0.6667
+      ],
+      [
+       0.45,
+       0.3444,
+       0.8375,
+       0.4556
+      ],
+      [
+       0.7875,
+       0.4556,
+       0.9688,
+       0.5333
+      ],
+      [
+       0.7625,
+       0.5778,
+       0.925,
+       0.6444
+      ],
+      [
+       0.4188,
+       0.3667,
+       0.4375,
+       0.3889
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05644,
+     "regions": [
+      [
+       0.4875,
+       0.8333,
+       0.7438,
+       0.9222
+      ],
+      [
+       0.0437,
+       0.6889,
+       0.2062,
+       0.8222
+      ],
+      [
+       0.3125,
+       0.8444,
+       0.4813,
+       0.9222
+      ],
+      [
+       0.3125,
+       0.6889,
+       0.4375,
+       0.8222
+      ],
+      [
+       0.7,
+       0.7,
+       0.825,
+       0.8
+      ]
+     ]
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.10865,
+     "regions": [
+      [
+       0.0563,
+       0.5333,
+       0.3812,
+       0.7222
+      ],
+      [
+       0.475,
+       0.2667,
+       0.8063,
+       0.3667
+      ],
+      [
+       0.425,
+       0.4222,
+       0.8187,
+       0.5333
+      ],
+      [
+       0.0563,
+       0.4222,
+       0.4188,
+       0.5111
+      ],
+      [
+       0.0437,
+       0.2667,
+       0.225,
+       0.3667
+      ]
+     ]
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.10575,
+     "regions": [
+      [
+       0.05,
+       0.3889,
+       0.95,
+       0.7222
+      ],
+      [
+       0.5188,
+       0.4667,
+       0.9062,
+       0.5222
+      ],
+      [
+       0.5188,
+       0.5333,
+       0.9125,
+       0.5889
+      ],
+      [
+       0.6625,
+       0.4,
+       0.8,
+       0.4556
+      ],
+      [
+       0.8063,
+       0.4,
+       0.9187,
+       0.4444
+      ]
+     ]
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.14411,
+     "regions": [
+      [
+       0.3563,
+       0.5,
+       0.95,
+       0.6778
+      ],
+      [
+       0.05,
+       0.2889,
+       0.9187,
+       0.3556
+      ],
+      [
+       0.05,
+       0.6889,
+       0.5312,
+       0.8333
+      ],
+      [
+       0.05,
+       0.3556,
+       0.5687,
+       0.4889
+      ],
+      [
+       0.675,
+       0.3667,
+       0.9,
+       0.4889
+      ]
+     ]
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.10322,
+     "regions": [
+      [
+       0.0563,
+       0.5556,
+       0.3063,
+       0.7556
+      ],
+      [
+       0.3688,
+       0.5556,
+       0.6062,
+       0.7667
+      ],
+      [
+       0.675,
+       0.5556,
+       0.925,
+       0.7667
+      ],
+      [
+       0.675,
+       0.3889,
+       0.8625,
+       0.5444
+      ],
+      [
+       0.3688,
+       0.3889,
+       0.5563,
+       0.4667
+      ]
+     ]
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05136,
+     "regions": [
+      [
+       0.1562,
+       0.3889,
+       0.8438,
+       0.5667
+      ],
+      [
+       0.6875,
+       0.5,
+       0.9313,
+       0.5667
+      ],
+      [
+       0.1062,
+       0.5,
+       0.2875,
+       0.5667
+      ],
+      [
+       0.7312,
+       0.5889,
+       0.875,
+       0.6667
+      ],
+      [
+       0.4062,
+       0.3111,
+       0.5938,
+       0.3778
+      ]
+     ]
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 17,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.00164,
+     "regions": [
+      [
+       0.6438,
+       0.8,
+       0.7063,
+       0.8333
+      ],
+      [
+       0.35,
+       0.8,
+       0.3937,
+       0.8333
+      ],
+      [
+       0.7688,
+       0.8,
+       0.8063,
+       0.8333
+      ],
+      [
+       0.5062,
+       0.8,
+       0.5437,
+       0.8333
+      ],
+      [
+       0.9187,
+       0.8111,
+       0.9563,
+       0.8333
+      ]
+     ]
+    },
+    {
+     "slide": 18,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.06756,
+     "regions": [
+      [
+       0.6813,
+       0.4889,
+       0.825,
+       0.6333
+      ],
+      [
+       0.0625,
+       0.4889,
+       0.1812,
+       0.6333
+      ],
+      [
+       0.3688,
+       0.4889,
+       0.4875,
+       0.6333
+      ],
+      [
+       0.6813,
+       0.3333,
+       0.8063,
+       0.4667
+      ],
+      [
+       0.0625,
+       0.3333,
+       0.1625,
+       0.4667
+      ]
+     ]
+    },
+    {
+     "slide": 19,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.18834,
+     "regions": [
+      [
+       0.1375,
+       0.2,
+       0.8625,
+       1.0
+      ]
+     ]
+    },
+    {
+     "slide": 20,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05334,
+     "regions": [
+      [
+       0.5062,
+       0.4889,
+       0.9625,
+       0.7111
+      ],
+      [
+       0.5062,
+       0.4222,
+       0.85,
+       0.4778
+      ],
+      [
+       0.8562,
+       0.4222,
+       0.9,
+       0.4778
+      ]
+     ]
+    },
+    {
+     "slide": 21,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 22,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.08403,
+     "regions": [
+      [
+       0.1375,
+       0.4222,
+       0.2687,
+       0.7333
+      ],
+      [
+       0.3563,
+       0.4,
+       0.475,
+       0.7333
+      ],
+      [
+       0.575,
+       0.3889,
+       0.675,
+       0.7333
+      ],
+      [
+       0.7875,
+       0.3556,
+       0.8875,
+       0.7333
+      ],
+      [
+       0.4125,
+       0.2556,
+       0.625,
+       0.3333
+      ]
+     ]
+    },
+    {
+     "slide": 23,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.16265,
+     "regions": [
+      [
+       0.075,
+       0.3889,
+       0.2062,
+       0.9
+      ],
+      [
+       0.5938,
+       0.2111,
+       0.9375,
+       0.3556
+      ],
+      [
+       0.2313,
+       0.3889,
+       0.3125,
+       0.9
+      ],
+      [
+       0.3563,
+       0.3667,
+       0.425,
+       0.9
+      ],
+      [
+       0.5938,
+       0.4556,
+       0.9625,
+       0.5111
+      ]
+     ]
+    },
+    {
+     "slide": 24,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 25,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.12188,
+     "regions": [
+      [
+       0.0437,
+       0.4222,
+       0.5813,
+       0.7111
+      ],
+      [
+       0.5938,
+       0.4222,
+       0.9437,
+       0.6778
+      ]
+     ]
+    },
+    {
+     "slide": 26,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.09779,
+     "regions": [
+      [
+       0.5938,
+       0.4111,
+       0.975,
+       0.6556
+      ],
+      [
+       0.0437,
+       0.3889,
+       0.5813,
+       0.4667
+      ],
+      [
+       0.0563,
+       0.4778,
+       0.4188,
+       0.6444
+      ],
+      [
+       0.5938,
+       0.6667,
+       0.6625,
+       0.7111
+      ],
+      [
+       0.0563,
+       0.4778,
+       0.0625,
+       0.4889
+      ]
+     ]
+    },
+    {
+     "slide": 27,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 28,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.08976,
+     "regions": [
+      [
+       0.5125,
+       0.7333,
+       0.9,
+       0.8667
+      ],
+      [
+       0.075,
+       0.6222,
+       0.1812,
+       0.8667
+      ],
+      [
+       0.5125,
+       0.6,
+       0.8562,
+       0.6778
+      ],
+      [
+       0.2,
+       0.6111,
+       0.275,
+       0.8667
+      ],
+      [
+       0.6312,
+       0.5,
+       0.8375,
+       0.5667
+      ]
+     ]
+    },
+    {
+     "slide": 29,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.01749,
+     "regions": [
+      [
+       0.3688,
+       0.5444,
+       0.5813,
+       0.6
+      ],
+      [
+       0.675,
+       0.6,
+       0.9062,
+       0.6556
+      ],
+      [
+       0.7438,
+       0.3889,
+       0.875,
+       0.4444
+      ],
+      [
+       0.3688,
+       0.3889,
+       0.4688,
+       0.4444
+      ],
+      [
+       0.1375,
+       0.3889,
+       0.2188,
+       0.4444
+      ]
+     ]
+    },
+    {
+     "slide": 30,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 31,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 32,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 33,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 34,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.47119,
+     "regions": [
+      [
+       0.0437,
+       0.2,
+       0.9563,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 35,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.21173,
+     "regions": [
+      [
+       0.4188,
+       0.3889,
+       0.5875,
+       0.6111
+      ],
+      [
+       0.7875,
+       0.3889,
+       0.9563,
+       0.6111
+      ],
+      [
+       0.4188,
+       0.7,
+       0.5938,
+       0.9222
+      ],
+      [
+       0.7812,
+       0.7,
+       0.9563,
+       0.9222
+      ],
+      [
+       0.4188,
+       0.0778,
+       0.5938,
+       0.2889
+      ]
+     ]
+    },
+    {
+     "slide": 36,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 37,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 38,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05708,
+     "regions": [
+      [
+       0.6438,
+       0.2778,
+       0.8187,
+       0.5222
+      ],
+      [
+       0.1938,
+       0.6222,
+       0.3438,
+       0.8556
+      ],
+      [
+       0.1875,
+       0.2778,
+       0.35,
+       0.5222
+      ],
+      [
+       0.6625,
+       0.7444,
+       0.8,
+       0.8556
+      ],
+      [
+       0.7125,
+       0.6222,
+       0.75,
+       0.7333
+      ]
+     ]
+    },
+    {
+     "slide": 39,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.07969,
+     "regions": [
+      [
+       0.1375,
+       0.5556,
+       0.2687,
+       0.9
+      ],
+      [
+       0.3563,
+       0.5333,
+       0.475,
+       0.9
+      ],
+      [
+       0.575,
+       0.5222,
+       0.6813,
+       0.9
+      ],
+      [
+       0.7875,
+       0.4889,
+       0.8875,
+       0.9
+      ],
+      [
+       0.4125,
+       0.4,
+       0.625,
+       0.4667
+      ]
+     ]
+    },
+    {
+     "slide": 40,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.07736,
+     "regions": [
+      [
+       0.075,
+       0.4111,
+       0.1875,
+       0.8444
+      ],
+      [
+       0.2,
+       0.4222,
+       0.275,
+       0.8444
+      ],
+      [
+       0.3063,
+       0.4,
+       0.3625,
+       0.8444
+      ],
+      [
+       0.1875,
+       0.2556,
+       0.3875,
+       0.3222
+      ],
+      [
+       0.4062,
+       0.3556,
+       0.4562,
+       0.8444
+      ]
+     ]
+    },
+    {
+     "slide": 41,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.07741,
+     "regions": [
+      [
+       0.075,
+       0.3444,
+       0.1875,
+       0.7889
+      ],
+      [
+       0.2,
+       0.3556,
+       0.275,
+       0.7889
+      ],
+      [
+       0.3063,
+       0.3444,
+       0.3625,
+       0.7889
+      ],
+      [
+       0.1875,
+       0.1889,
+       0.3875,
+       0.2667
+      ],
+      [
+       0.4062,
+       0.3,
+       0.4562,
+       0.7889
+      ]
+     ]
+    },
+    {
+     "slide": 42,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 43,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 44,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 45,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 46,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 47,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 48,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.1425,
+     "regions": [
+      [
+       0.6875,
+       0.3333,
+       0.95,
+       0.6333
+      ],
+      [
+       0.075,
+       0.4111,
+       0.2125,
+       0.9
+      ],
+      [
+       0.2562,
+       0.3889,
+       0.3438,
+       0.9
+      ],
+      [
+       0.3937,
+       0.3667,
+       0.4688,
+       0.9
+      ],
+      [
+       0.2625,
+       0.1889,
+       0.475,
+       0.2667
+      ]
+     ]
+    },
+    {
+     "slide": 49,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.19794,
+     "regions": [
+      [
+       0.3563,
+       0.2,
+       0.625,
+       0.5556
+      ],
+      [
+       0.3125,
+       0.5667,
+       0.5687,
+       0.7333
+      ],
+      [
+       0.2812,
+       0.7444,
+       0.4188,
+       0.9222
+      ],
+      [
+       0.0437,
+       0.2,
+       0.1625,
+       0.5556
+      ],
+      [
+       0.1812,
+       0.7444,
+       0.275,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 50,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 51,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.13502,
+     "regions": [
+      [
+       0.0437,
+       0.2,
+       0.9625,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 52,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 52,
+    "0351": 52
+   }
+  },
+  "layout-sampler~native-body": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05729,
+     "regions": [
+      [
+       0.45,
+       0.4556,
+       0.7812,
+       0.6667
+      ],
+      [
+       0.45,
+       0.3444,
+       0.8375,
+       0.4556
+      ],
+      [
+       0.7875,
+       0.4556,
+       0.9688,
+       0.5333
+      ],
+      [
+       0.7625,
+       0.5778,
+       0.925,
+       0.6444
+      ],
+      [
+       0.4188,
+       0.3667,
+       0.4375,
+       0.4333
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05641,
+     "regions": [
+      [
+       0.4875,
+       0.8444,
+       0.7438,
+       0.9222
+      ],
+      [
+       0.0437,
+       0.6889,
+       0.2062,
+       0.8222
+      ],
+      [
+       0.3125,
+       0.6889,
+       0.4375,
+       0.8222
+      ],
+      [
+       0.7,
+       0.7,
+       0.825,
+       0.8
+      ],
+      [
+       0.8375,
+       0.6889,
+       0.9563,
+       0.8
+      ]
+     ]
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.10865,
+     "regions": [
+      [
+       0.0563,
+       0.5333,
+       0.3812,
+       0.7222
+      ],
+      [
+       0.475,
+       0.2667,
+       0.8063,
+       0.3667
+      ],
+      [
+       0.425,
+       0.4222,
+       0.8187,
+       0.5333
+      ],
+      [
+       0.0563,
+       0.4222,
+       0.4188,
+       0.5111
+      ],
+      [
+       0.0437,
+       0.2667,
+       0.225,
+       0.3667
+      ]
+     ]
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.10581,
+     "regions": [
+      [
+       0.05,
+       0.3889,
+       0.95,
+       0.6667
+      ],
+      [
+       0.5188,
+       0.4667,
+       0.9125,
+       0.5889
+      ],
+      [
+       0.05,
+       0.6667,
+       0.2562,
+       0.7222
+      ],
+      [
+       0.6625,
+       0.4,
+       0.8,
+       0.4556
+      ],
+      [
+       0.8063,
+       0.4,
+       0.9187,
+       0.4444
+      ]
+     ]
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.14613,
+     "regions": [
+      [
+       0.3563,
+       0.3667,
+       0.95,
+       0.6667
+      ],
+      [
+       0.05,
+       0.2889,
+       0.9187,
+       0.3556
+      ],
+      [
+       0.05,
+       0.6889,
+       0.5312,
+       0.8333
+      ],
+      [
+       0.05,
+       0.3556,
+       0.5687,
+       0.4889
+      ],
+      [
+       0.5375,
+       0.6778,
+       0.8187,
+       0.7778
+      ]
+     ]
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.10322,
+     "regions": [
+      [
+       0.0563,
+       0.5556,
+       0.3063,
+       0.7556
+      ],
+      [
+       0.3688,
+       0.5556,
+       0.6062,
+       0.7667
+      ],
+      [
+       0.675,
+       0.5556,
+       0.925,
+       0.7667
+      ],
+      [
+       0.675,
+       0.3889,
+       0.8625,
+       0.5444
+      ],
+      [
+       0.3688,
+       0.3889,
+       0.5563,
+       0.4667
+      ]
+     ]
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05136,
+     "regions": [
+      [
+       0.1562,
+       0.3889,
+       0.8438,
+       0.5667
+      ],
+      [
+       0.6875,
+       0.5,
+       0.9313,
+       0.5667
+      ],
+      [
+       0.1062,
+       0.5,
+       0.2875,
+       0.5667
+      ],
+      [
+       0.7312,
+       0.5889,
+       0.875,
+       0.6667
+      ],
+      [
+       0.4062,
+       0.3111,
+       0.5938,
+       0.3778
+      ]
+     ]
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 17,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.00164,
+     "regions": [
+      [
+       0.6438,
+       0.8,
+       0.7063,
+       0.8333
+      ],
+      [
+       0.35,
+       0.8,
+       0.3937,
+       0.8333
+      ],
+      [
+       0.7688,
+       0.8,
+       0.8063,
+       0.8333
+      ],
+      [
+       0.5062,
+       0.8,
+       0.5437,
+       0.8333
+      ],
+      [
+       0.9187,
+       0.8111,
+       0.9563,
+       0.8333
+      ]
+     ]
+    },
+    {
+     "slide": 18,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.06756,
+     "regions": [
+      [
+       0.6813,
+       0.4889,
+       0.825,
+       0.6333
+      ],
+      [
+       0.0625,
+       0.4889,
+       0.1812,
+       0.6333
+      ],
+      [
+       0.3688,
+       0.4889,
+       0.4875,
+       0.6333
+      ],
+      [
+       0.6813,
+       0.3333,
+       0.8063,
+       0.4667
+      ],
+      [
+       0.0625,
+       0.3333,
+       0.1625,
+       0.4667
+      ]
+     ]
+    },
+    {
+     "slide": 19,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.18834,
+     "regions": [
+      [
+       0.1375,
+       0.2,
+       0.8625,
+       1.0
+      ]
+     ]
+    },
+    {
+     "slide": 20,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05406,
+     "regions": [
+      [
+       0.5062,
+       0.4889,
+       0.9625,
+       0.6333
+      ],
+      [
+       0.5062,
+       0.6444,
+       0.85,
+       0.7111
+      ],
+      [
+       0.5062,
+       0.4222,
+       0.85,
+       0.4778
+      ],
+      [
+       0.8562,
+       0.4222,
+       0.9,
+       0.4778
+      ]
+     ]
+    },
+    {
+     "slide": 21,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 22,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.08403,
+     "regions": [
+      [
+       0.1375,
+       0.4222,
+       0.2687,
+       0.7333
+      ],
+      [
+       0.3563,
+       0.4,
+       0.475,
+       0.7333
+      ],
+      [
+       0.575,
+       0.3889,
+       0.675,
+       0.7333
+      ],
+      [
+       0.7875,
+       0.3556,
+       0.8875,
+       0.7333
+      ],
+      [
+       0.4125,
+       0.2556,
+       0.625,
+       0.3333
+      ]
+     ]
+    },
+    {
+     "slide": 23,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.16271,
+     "regions": [
+      [
+       0.075,
+       0.3889,
+       0.2062,
+       0.9
+      ],
+      [
+       0.5938,
+       0.2111,
+       0.9375,
+       0.3556
+      ],
+      [
+       0.2313,
+       0.3889,
+       0.3125,
+       0.9
+      ],
+      [
+       0.3563,
+       0.3667,
+       0.425,
+       0.9
+      ],
+      [
+       0.5938,
+       0.4556,
+       0.9625,
+       0.5222
+      ]
+     ]
+    },
+    {
+     "slide": 24,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 25,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.12098,
+     "regions": [
+      [
+       0.0437,
+       0.4222,
+       0.5813,
+       0.7111
+      ],
+      [
+       0.5938,
+       0.4333,
+       0.9437,
+       0.6778
+      ]
+     ]
+    },
+    {
+     "slide": 26,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.09633,
+     "regions": [
+      [
+       0.5938,
+       0.4111,
+       0.9563,
+       0.6556
+      ],
+      [
+       0.0437,
+       0.3889,
+       0.5813,
+       0.4667
+      ],
+      [
+       0.0563,
+       0.4778,
+       0.4188,
+       0.6444
+      ],
+      [
+       0.8125,
+       0.6,
+       0.9313,
+       0.6444
+      ],
+      [
+       0.5938,
+       0.6667,
+       0.6625,
+       0.7111
+      ]
+     ]
+    },
+    {
+     "slide": 27,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 28,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.08976,
+     "regions": [
+      [
+       0.5125,
+       0.7333,
+       0.9,
+       0.8667
+      ],
+      [
+       0.075,
+       0.6222,
+       0.1812,
+       0.8667
+      ],
+      [
+       0.5125,
+       0.6,
+       0.8562,
+       0.6778
+      ],
+      [
+       0.2,
+       0.6111,
+       0.275,
+       0.8667
+      ],
+      [
+       0.6312,
+       0.5,
+       0.8375,
+       0.5667
+      ]
+     ]
+    },
+    {
+     "slide": 29,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.01749,
+     "regions": [
+      [
+       0.3688,
+       0.5444,
+       0.5813,
+       0.6
+      ],
+      [
+       0.675,
+       0.6,
+       0.9062,
+       0.6556
+      ],
+      [
+       0.7438,
+       0.3889,
+       0.875,
+       0.4444
+      ],
+      [
+       0.3688,
+       0.3889,
+       0.4688,
+       0.4444
+      ],
+      [
+       0.1375,
+       0.3889,
+       0.2188,
+       0.4444
+      ]
+     ]
+    },
+    {
+     "slide": 30,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 31,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 32,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 33,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 34,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.47119,
+     "regions": [
+      [
+       0.0437,
+       0.2,
+       0.9563,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 35,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.21173,
+     "regions": [
+      [
+       0.4188,
+       0.3889,
+       0.5875,
+       0.6111
+      ],
+      [
+       0.7875,
+       0.3889,
+       0.9563,
+       0.6111
+      ],
+      [
+       0.4188,
+       0.7,
+       0.5938,
+       0.9222
+      ],
+      [
+       0.7812,
+       0.7,
+       0.9563,
+       0.9222
+      ],
+      [
+       0.4188,
+       0.0778,
+       0.5938,
+       0.2889
+      ]
+     ]
+    },
+    {
+     "slide": 36,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.00926,
+     "regions": [
+      [
+       0.175,
+       0.4,
+       0.2188,
+       0.4667
+      ],
+      [
+       0.5375,
+       0.4111,
+       0.5938,
+       0.4667
+      ],
+      [
+       0.1688,
+       0.5,
+       0.2188,
+       0.5778
+      ],
+      [
+       0.15,
+       0.5778,
+       0.1812,
+       0.6333
+      ],
+      [
+       0.575,
+       0.5778,
+       0.6125,
+       0.6333
+      ]
+     ]
+    },
+    {
+     "slide": 37,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 38,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05708,
+     "regions": [
+      [
+       0.6438,
+       0.2778,
+       0.8187,
+       0.5222
+      ],
+      [
+       0.1938,
+       0.6222,
+       0.3438,
+       0.8556
+      ],
+      [
+       0.1875,
+       0.2778,
+       0.35,
+       0.5222
+      ],
+      [
+       0.6625,
+       0.7444,
+       0.8,
+       0.8556
+      ],
+      [
+       0.7125,
+       0.6222,
+       0.75,
+       0.7333
+      ]
+     ]
+    },
+    {
+     "slide": 39,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.07969,
+     "regions": [
+      [
+       0.1375,
+       0.5556,
+       0.2687,
+       0.9
+      ],
+      [
+       0.3563,
+       0.5333,
+       0.475,
+       0.9
+      ],
+      [
+       0.575,
+       0.5222,
+       0.6813,
+       0.9
+      ],
+      [
+       0.7875,
+       0.4889,
+       0.8875,
+       0.9
+      ],
+      [
+       0.4125,
+       0.4,
+       0.625,
+       0.4667
+      ]
+     ]
+    },
+    {
+     "slide": 40,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.07736,
+     "regions": [
+      [
+       0.075,
+       0.4111,
+       0.1875,
+       0.8444
+      ],
+      [
+       0.2,
+       0.4222,
+       0.275,
+       0.8444
+      ],
+      [
+       0.3063,
+       0.4,
+       0.3625,
+       0.8444
+      ],
+      [
+       0.1875,
+       0.2556,
+       0.3875,
+       0.3222
+      ],
+      [
+       0.4062,
+       0.3556,
+       0.4562,
+       0.8444
+      ]
+     ]
+    },
+    {
+     "slide": 41,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.07741,
+     "regions": [
+      [
+       0.075,
+       0.3444,
+       0.1875,
+       0.7889
+      ],
+      [
+       0.2,
+       0.3556,
+       0.275,
+       0.7889
+      ],
+      [
+       0.3063,
+       0.3444,
+       0.3625,
+       0.7889
+      ],
+      [
+       0.1875,
+       0.1889,
+       0.3875,
+       0.2667
+      ],
+      [
+       0.4062,
+       0.3,
+       0.4562,
+       0.7889
+      ]
+     ]
+    },
+    {
+     "slide": 42,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.00961,
+     "regions": [
+      [
+       0.3812,
+       0.5,
+       0.5125,
+       0.6889
+      ],
+      [
+       0.4875,
+       0.5,
+       0.5813,
+       0.5556
+      ],
+      [
+       0.6562,
+       0.5778,
+       0.7438,
+       0.6333
+      ],
+      [
+       0.6,
+       0.4222,
+       0.6875,
+       0.4778
+      ],
+      [
+       0.6813,
+       0.5,
+       0.7438,
+       0.5556
+      ]
+     ]
+    },
+    {
+     "slide": 43,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 44,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 45,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 46,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 47,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 48,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.1425,
+     "regions": [
+      [
+       0.6875,
+       0.3333,
+       0.95,
+       0.6333
+      ],
+      [
+       0.075,
+       0.4111,
+       0.2125,
+       0.9
+      ],
+      [
+       0.2562,
+       0.3889,
+       0.3438,
+       0.9
+      ],
+      [
+       0.3937,
+       0.3667,
+       0.4688,
+       0.9
+      ],
+      [
+       0.2625,
+       0.1889,
+       0.475,
+       0.2667
+      ]
+     ]
+    },
+    {
+     "slide": 49,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.19794,
+     "regions": [
+      [
+       0.3563,
+       0.2,
+       0.625,
+       0.5556
+      ],
+      [
+       0.3125,
+       0.5667,
+       0.5687,
+       0.7333
+      ],
+      [
+       0.2812,
+       0.7444,
+       0.4188,
+       0.9222
+      ],
+      [
+       0.0437,
+       0.2,
+       0.1625,
+       0.5556
+      ],
+      [
+       0.1812,
+       0.7444,
+       0.275,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 50,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 51,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.13502,
+     "regions": [
+      [
+       0.0437,
+       0.2,
+       0.9625,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 52,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": false,
+   "deckPartsDiffer": [
+    "ppt/slideMasters/slideMaster1.xml"
+   ],
+   "slideCount": {
+    "036": 52,
+    "0351": 52
+   }
+  },
+  "localized-chart-references": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 7,
+    "0351": 7
+   }
+  },
+  "localized-timeline": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.07556,
+     "regions": [
+      [
+       0.1562,
+       0.4111,
+       0.8313,
+       0.7333
+      ],
+      [
+       0.6875,
+       0.5556,
+       0.9187,
+       0.7333
+      ],
+      [
+       0.0688,
+       0.5556,
+       0.325,
+       0.7
+      ],
+      [
+       0.1375,
+       0.3222,
+       0.2562,
+       0.3889
+      ],
+      [
+       0.4437,
+       0.3222,
+       0.5563,
+       0.3889
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 1,
+    "0351": 1
+   }
+  },
+  "multilingual-slides": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.05396,
+     "regions": [
+      [
+       0.4625,
+       0.4,
+       0.925,
+       0.7333
+      ],
+      [
+       0.4062,
+       0.5222,
+       0.5062,
+       0.6111
+      ],
+      [
+       0.3125,
+       0.4111,
+       0.4188,
+       0.4889
+      ],
+      [
+       0.425,
+       0.4111,
+       0.4813,
+       0.4889
+      ],
+      [
+       0.9375,
+       0.4333,
+       0.9563,
+       0.5
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 4,
+    "0351": 4
+   }
+  },
+  "plantuml-diagrams": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0606,
+     "regions": [
+      [
+       0.0563,
+       0.2444,
+       0.9437,
+       0.8778
+      ],
+      [
+       0.075,
+       0.3,
+       0.2562,
+       0.3667
+      ],
+      [
+       0.4938,
+       0.4,
+       0.5938,
+       0.4778
+      ],
+      [
+       0.1187,
+       0.6667,
+       0.125,
+       0.8111
+      ],
+      [
+       0.85,
+       0.7111,
+       0.8688,
+       0.7222
+      ]
+     ]
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 8,
+    "0351": 8
+   }
+  },
+  "shape-effects": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 4,
+    "0351": 4
+   }
+  },
+  "shape-overlays": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 6,
+    "0351": 6
+   }
+  },
+  "shape-overlays-rtl": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 1,
+    "0351": 1
+   }
+  },
+  "shapes": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 8,
+    "0351": 8
+   }
+  },
+  "singleton-combo-reference-lines": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 1,
+    "0351": 1
+   }
+  },
+  "smartart": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0607,
+     "regions": [
+      [
+       0.425,
+       0.5889,
+       0.975,
+       0.6667
+      ],
+      [
+       0.425,
+       0.3444,
+       0.9625,
+       0.4222
+      ],
+      [
+       0.425,
+       0.8333,
+       0.9625,
+       0.9111
+      ],
+      [
+       0.425,
+       0.4667,
+       0.9437,
+       0.5444
+      ],
+      [
+       0.425,
+       0.2333,
+       0.925,
+       0.3
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.31452,
+     "regions": [
+      [
+       0.4188,
+       0.0778,
+       0.8187,
+       0.9222
+      ],
+      [
+       0.6937,
+       0.0778,
+       0.9563,
+       0.4889
+      ],
+      [
+       0.4375,
+       0.7556,
+       0.5375,
+       0.8222
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.47119,
+     "regions": [
+      [
+       0.0437,
+       0.2,
+       0.9563,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.09695,
+     "regions": [
+      [
+       0.1437,
+       0.7,
+       0.9563,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.2072,
+     "regions": [
+      [
+       0.4188,
+       0.3889,
+       0.5875,
+       0.6111
+      ],
+      [
+       0.7875,
+       0.3889,
+       0.9563,
+       0.6111
+      ],
+      [
+       0.4188,
+       0.0778,
+       0.5875,
+       0.3
+      ],
+      [
+       0.7875,
+       0.0778,
+       0.9563,
+       0.3
+      ],
+      [
+       0.4188,
+       0.7,
+       0.5875,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.23507,
+     "regions": [
+      [
+       0.1187,
+       0.4111,
+       0.625,
+       0.6111
+      ],
+      [
+       0.3812,
+       0.7222,
+       0.7625,
+       0.9222
+      ],
+      [
+       0.3438,
+       0.2,
+       0.5375,
+       0.4
+      ],
+      [
+       0.35,
+       0.6222,
+       0.675,
+       0.7111
+      ],
+      [
+       0.0437,
+       0.7222,
+       0.1688,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.30986,
+     "regions": [
+      [
+       0.4188,
+       0.0778,
+       0.6813,
+       0.5333
+      ],
+      [
+       0.6937,
+       0.0778,
+       0.9563,
+       0.4889
+      ],
+      [
+       0.5563,
+       0.5111,
+       0.8187,
+       0.9222
+      ],
+      [
+       0.4437,
+       0.7667,
+       0.5312,
+       0.8222
+      ]
+     ]
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 17,
+     "slideXmlIdentical": true,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 17,
+    "0351": 17
+   }
+  },
+  "smartart-arabic": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.21036,
+     "regions": [
+      [
+       0.3563,
+       0.5667,
+       0.7063,
+       0.9222
+      ],
+      [
+       0.3125,
+       0.3889,
+       0.5563,
+       0.5556
+      ],
+      [
+       0.3187,
+       0.2,
+       0.475,
+       0.3778
+      ],
+      [
+       0.0437,
+       0.5667,
+       0.1688,
+       0.9222
+      ],
+      [
+       0.1313,
+       0.3889,
+       0.25,
+       0.5556
+      ]
+     ]
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "smartart-japanese": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 3,
+    "0351": 3
+   }
+  },
+  "smartart~shapes": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0607,
+     "regions": [
+      [
+       0.425,
+       0.5889,
+       0.975,
+       0.6667
+      ],
+      [
+       0.425,
+       0.3444,
+       0.9625,
+       0.4222
+      ],
+      [
+       0.425,
+       0.8333,
+       0.9625,
+       0.9111
+      ],
+      [
+       0.425,
+       0.4667,
+       0.9437,
+       0.5444
+      ],
+      [
+       0.425,
+       0.2333,
+       0.925,
+       0.3
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.31452,
+     "regions": [
+      [
+       0.4188,
+       0.0778,
+       0.8187,
+       0.9222
+      ],
+      [
+       0.6937,
+       0.0778,
+       0.9563,
+       0.4889
+      ],
+      [
+       0.4375,
+       0.7556,
+       0.5375,
+       0.8222
+      ]
+     ]
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 6,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 7,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.47186,
+     "regions": [
+      [
+       0.0437,
+       0.2,
+       0.9563,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 8,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.09695,
+     "regions": [
+      [
+       0.1437,
+       0.7,
+       0.9563,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 9,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 10,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 11,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.2037,
+     "regions": [
+      [
+       0.4188,
+       0.3889,
+       0.5875,
+       0.6111
+      ],
+      [
+       0.7875,
+       0.3889,
+       0.9563,
+       0.6111
+      ],
+      [
+       0.4188,
+       0.0778,
+       0.5875,
+       0.3
+      ],
+      [
+       0.7875,
+       0.0778,
+       0.9563,
+       0.3
+      ],
+      [
+       0.4188,
+       0.7,
+       0.5875,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 12,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 13,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.24206,
+     "regions": [
+      [
+       0.1187,
+       0.4111,
+       0.625,
+       0.6111
+      ],
+      [
+       0.3812,
+       0.7222,
+       0.7625,
+       0.9222
+      ],
+      [
+       0.3438,
+       0.2,
+       0.5375,
+       0.4
+      ],
+      [
+       0.35,
+       0.6222,
+       0.675,
+       0.7111
+      ],
+      [
+       0.0437,
+       0.7222,
+       0.1688,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 14,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.31252,
+     "regions": [
+      [
+       0.4188,
+       0.0778,
+       0.6813,
+       0.5333
+      ],
+      [
+       0.6937,
+       0.0778,
+       0.9563,
+       0.4889
+      ],
+      [
+       0.5563,
+       0.5111,
+       0.8187,
+       0.9222
+      ],
+      [
+       0.4437,
+       0.7556,
+       0.5312,
+       0.8222
+      ]
+     ]
+    },
+    {
+     "slide": 15,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 16,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 17,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 17,
+    "0351": 17
+   }
+  },
+  "table-and-code": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.08717,
+     "regions": [
+      [
+       0.4437,
+       0.4222,
+       0.9625,
+       0.7111
+      ],
+      [
+       0.0563,
+       0.4111,
+       0.2687,
+       0.6111
+      ],
+      [
+       0.0563,
+       0.6111,
+       0.2812,
+       0.7222
+      ],
+      [
+       0.4188,
+       0.5556,
+       0.4313,
+       0.6
+      ],
+      [
+       0.4188,
+       0.4444,
+       0.4313,
+       0.4667
+      ]
+     ]
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 2,
+    "0351": 2
+   }
+  },
+  "trees-and-sets": {
+   "slides": [
+    {
+     "slide": 1,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 2,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.13502,
+     "regions": [
+      [
+       0.0437,
+       0.2,
+       0.9625,
+       0.9222
+      ]
+     ]
+    },
+    {
+     "slide": 3,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 4,
+     "slideXmlIdentical": true,
+     "closureIdentical": true,
+     "score": 0.0,
+     "regions": []
+    },
+    {
+     "slide": 5,
+     "slideXmlIdentical": false,
+     "closureIdentical": false,
+     "score": 0.0,
+     "regions": []
+    }
+   ],
+   "deckPartsIdentical": true,
+   "slideCount": {
+    "036": 5,
+    "0351": 5
+   }
+  }
+ }
+}

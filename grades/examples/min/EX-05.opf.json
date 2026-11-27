@@ -1,0 +1,20 @@
+{
+  "name": "EX-05 native bullets inherit the layout's bold",
+  "language": "en-US",
+  "slides": [
+    {
+      "title": "Market Shift",
+      "blocks": [
+        {"region": "start", "text": "Signal"},
+        {"region": "center+end", "items": ["Demand moved upmarket", "Procurement cycles shortened"]}
+      ]
+    },
+    {
+      "title": "Operating Choice",
+      "blocks": [
+        {"region": "start+center", "bullets": ["Standardize the intake path", "Keep escalation rules visible"]},
+        {"region": "end", "text": "Decision owners need one place to see what changed."}
+      ]
+    }
+  ]
+}

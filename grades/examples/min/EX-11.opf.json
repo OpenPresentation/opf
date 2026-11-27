@@ -1,0 +1,14 @@
+{
+  "name": "EX-11 native lead-in emphasis color",
+  "language": "en-US",
+  "slides": [
+    {
+      "title": "Promoted rows have distinct positions",
+      "blocks": [
+        {"region": "top", "text": "First: state the situation."},
+        {"region": "middle", "text": "Then: explain the change."},
+        {"region": "bottom", "text": "Finally: make the recommendation."}
+      ]
+    }
+  ]
+}
