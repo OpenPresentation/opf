@@ -1,0 +1,13 @@
+{
+  "description": "NT-12: the time budget of each run tier per application, in minutes of the application's own time (opening, probing and saving each file), and the model that turns a tier's files and slides into that time. Read by check:native-coverage (rule d) and report:native-coverage. A tier over its budget fails the check: move decks to a later tier, merge decks that show the same units, or raise the budget here in the same pull request with a reason.",
+  "models": {
+    "keynote": {
+      "perFile": 4.15,
+      "perSlide": 0.86,
+      "note": "Seconds per file and per slide, fitted on 584 Keynote opens of 2026-11-25 and 2026-11-27 (the native-test corpus study of 2026-11-27, owner's option A): modeled seconds = 4.15 x files + 0.86 x slides. Keynote 16 on one Mac; refit when the application, the machine or the runner's steps change."
+    }
+  },
+  "budgets": {
+    "keynote": { "smoke": 6, "release": 25, "full": 90 }
+  }
+}

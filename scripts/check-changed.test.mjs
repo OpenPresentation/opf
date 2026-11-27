@@ -39,6 +39,28 @@ test('selectChangedChecks maps changed paths to checks', () => {
   for (const name of ['check:schema-docs', 'check:registry-golden', 'check:spec']) assert.ok(schema.includes(name), name);
   const catalog = selectChangedChecks(['spec/schemas/layout.schema.json'], scripts, config);
   assert.ok(catalog.includes('check:spec'));
+  // NT-12: the corpus, its known places, its lists and the decks it reads run the coverage check, like check:native.
+  assert.deepEqual(selectChangedChecks(['scripts/native-acceptance/qualification/manifest.json'], scripts, config), [
+    'check:changes',
+    'check:evidence-size',
+    'check:format-coverage',
+    'check:libreoffice',
+    'check:native-acceptance',
+    'check:native-coverage',
+    'check:native-fragment',
+  ]);
+  assert.deepEqual(selectChangedChecks(['scripts/native-acceptance/core/coverage/budgets.json'], scripts, config), [
+    'check:changes',
+    'check:evidence-size',
+    'check:libreoffice',
+    'check:native',
+    'check:native-acceptance',
+    'check:native-coverage',
+    'check:native-fragment',
+  ]);
+  for (const changed of ['scripts/native-acceptance/known/keynote.json', 'examples/technical/gauges.opf.json', 'spec/schemas/opf.schema.json', 'scripts/format-coverage-allowlist.json']) {
+    assert.ok(selectChangedChecks([changed], scripts, config).includes('check:native-coverage'), changed);
+  }
   // A check whose command names the changed file runs, with no rule needed.
   assert.ok(selectChangedChecks(['scripts/check-text-integrity.mjs'], scripts, config).includes('check:text'));
   assert.ok(selectChangedChecks(['scripts/quarantine.test.mjs'], scripts, config).includes('check:quarantine'));

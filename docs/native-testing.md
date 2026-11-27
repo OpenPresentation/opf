@@ -166,6 +166,30 @@ classify step runs on it and it has a known-difference file.
 - Pictures, sheets, saved decks and logs go to an evidence branch (`codex/evidence-<slug>`), are attached to the issue, or stay
   on the machine. They never go into `main` (`pnpm check:evidence-size`).
 
+## Coverage and budgets
+
+The corpus stays small only if every file earns its place. `pnpm report:native-coverage [--tier release] [--out <file.md>]
+[--json]` computes, from the repository alone, the units each corpus file shows: the schema locations its decks use (keys, enum
+values, `oneOf`/`anyOf` branches, default layouts, chart types), the manifest features it carries, the scripts of its text, its
+export variant, and the known differences whose `where` names its slides. It prints the units each tier covers against the
+totals, the units on exactly one slide, the decks with no unit of their own, the schema locations no deck shows, and each tier's
+files, slides and modeled minutes. The report is not committed.
+
+`pnpm check:native-coverage` fails on any of four rules:
+
+1. **Known places.** Every record of `known/<application>.json` with places has one that the release tier runs (the deck and
+   variant are in the manifest, the slide is within the deck). Records whose deck is still being moved into the corpus are
+   listed with the item that moves it in `core/coverage/pending-known-places.json`; a listed record that no longer needs it fails.
+2. **Schema.** Every schema location is on a corpus slide, or `scripts/format-coverage-allowlist.json` gives a reason.
+3. **Earned place.** Every corpus deck shows a schema location, script or variant no other deck shows, or a known record or a
+   feature names it. The exceptions are in `core/coverage/dominated-decks.json`, each with a reason.
+4. **Time budget.** Modeled seconds = 4.15 x files + 0.86 x slides (fitted on 584 Keynote opens); the model and the budgets per
+   application and tier (smoke 6, release 25, full 90 minutes) are in `core/coverage/budgets.json`.
+
+To add a deck, give it something no corpus deck shows, or a feature with `targets`. To add a schema key or value, put it on a
+slide of a `coverage-*` deck. When a tier goes over its budget, move decks to a later tier or merge decks that show the same
+units before raising the budget.
+
 ## Who does what
 
 | Who | Does |
