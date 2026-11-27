@@ -9,9 +9,7 @@ OPF exports one `.pptx`. People open it in PowerPoint, Keynote and LibreOffice I
 is checked a different way, by a different session, with tools that mostly live outside the repository. This program gives them one
 corpus, one command (`pnpm native <target>`), one result format, one driver per application behind the same five verbs, known
 differences as data instead of prose, and a place in the release process. The proposal is opf#1468; its first use is the Keynote round
-of 0.36.0, opf#1466. State on 2026-11-27: items NT-00 to NT-09 are built, NT-02 and NT-05 are done (the first Keynote run and the smoke gate of
-0.37.0 ran that day), and NT-10 to NT-16 follow the corpus study ([corpus-study.md](corpus-study.md), decision D7): stress decks, a
-coverage report, a changed-slide tier, tiers for LibreOffice, Keynote warnings and the PowerPoint driver.
+of 0.36.0, opf#1466. State at the end of 2026-11-27: NT-00 to NT-05, NT-07 to NT-10, NT-12 to NT-14, NT-17 and NT-18 are done (NT-14 not yet proven by a nightly); NT-16, the PowerPoint driver, is in review (opf#1557); NT-06, NT-11, NT-15, NT-19, NT-20 and NT-21 are open. The Keynote driver has run on 0.37.0 (smoke and release tiers); NT-21, a release run on 0.37.1 with the stress decks and the `reader-keynote` variant, is the next run and has not happened because the Mac's screen was locked. The hand-over is [burndown.md](burndown.md), opf#1468 and [docs/native-testing.md](../../native-testing.md).
 
 ## What exists today
 
