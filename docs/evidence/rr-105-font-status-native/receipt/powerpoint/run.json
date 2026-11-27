@@ -1,0 +1,40 @@
+{
+    "environment":  {
+                        "powerPointVersion":  "16.0",
+                        "powerPointBuild":  "20527",
+                        "productVersion":  "16.0.20527.20112",
+                        "fileVersion":  "16.0.20527.20112",
+                        "windows":  "Windows 10 Home 25H2 build 26200.9711",
+                        "culture":  "en-US",
+                        "startedAt":  "2026-11-07T21:28:09.4003153-08:00",
+                        "revision":  "Multiple pinned candidates: see each deck.sourceCommit",
+                        "opfVersion":  "0.34.0-preparation",
+                        "finishedAt":  "2026-11-07T21:28:12.0191428-08:00"
+                    },
+    "files":  [
+                  {
+                      "name":  "fonts",
+                      "opened":  true,
+                      "slides":  4,
+                      "preview":  4,
+                      "error":  null,
+                      "seconds":  1.4
+                  },
+                  {
+                      "name":  "french",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.6
+                  },
+                  {
+                      "name":  "arabic",
+                      "opened":  true,
+                      "slides":  1,
+                      "preview":  1,
+                      "error":  null,
+                      "seconds":  0.5
+                  }
+              ]
+}

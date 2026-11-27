@@ -1,0 +1,31 @@
+{
+  "textEncoding": "UTF-8 with repository LF; binary files retain exact original bytes",
+  "sourceCommits": {
+    "LH177": "6f46dd2255b27abb4af7ecbfaf2e07ec5fba34a6",
+    "LH121": "b9642636e297a1d2dfbf65cb77bea133841beee1"
+  },
+  "files": {
+    "receipt/build.json": "b94e8cd6f349a373527ceae9bf60c75632acc7746457ebb1a72159fb8d169615",
+    "receipt/native.log": "d4d901523cc05bd19966492b2a6a77eef8a8b4e344cbd293d51a2aa58da03bfc",
+    "receipt/powerpoint/arabic/slide-1.png": "c7835abd1913b9396bf1101172419ad44eb0b3660965b82ec6f98d6ee5122f45",
+    "receipt/powerpoint/arabic.json": "24756e21c49eb21d818979320e33f96c5f5aa496678b22a5fc6c14ca0e2049ec",
+    "receipt/powerpoint/fonts/slide-1.png": "52ebe54f22189cde7865d03db1e5890288b520bbd1ac8abe211c9fbb2a8a2733",
+    "receipt/powerpoint/fonts/slide-2.png": "6aeba593b3b0d959d73b68ee2983bbfa474796b1080380ad351cc66131ae319c",
+    "receipt/powerpoint/fonts/slide-3.png": "ec15ab3288141a6926ae0574518dd2917a7341643b42768cc815255b41903947",
+    "receipt/powerpoint/fonts/slide-4.png": "19949e69587e8f04dfa716152aef4863b859bcb9d594abcd92cf64e088248f1c",
+    "receipt/powerpoint/fonts.json": "ec6e637b6961daf7b1ef5204a4a52a6c3eeeb2a5fcbc6e2dc7786740df0576ee",
+    "receipt/powerpoint/french/slide-1.png": "104395050cbea1e7051083b352c0dc3f8f17b5641095d29f59a3b0a7e3303bc0",
+    "receipt/powerpoint/french.json": "b188363e66d15270429111904367d6565f7eeb4f06efb1d2487b3174228c89c8",
+    "receipt/powerpoint/run.json": "97f7c48a4bdbfcc19ff37400ac89584d81177b167c3f2c27c5118e6f45101fac",
+    "receipt/powerpoint/saved/arabic.pptx": "bf74bd38214566b911d1b1a93bf86d8777eb3d72d0347aeb2aac30fdf5142434",
+    "receipt/powerpoint/saved/fonts.pptx": "98b398b4b17ab11db0860ce48e777531c0d87a1086c68487ef22cc60296cb6d1",
+    "receipt/powerpoint/saved/french.pptx": "4cbb0c95ca17042aaa86157bc0222b99ae38b83929280a79ceca2429f1ed402c",
+    "receipt/powerpoint/work/arabic.pptx": "43b2a7307fc836b779a62883f1d2f6a64db23baca07a2b3cb4e3ad1cce452067",
+    "receipt/powerpoint/work/fonts.pptx": "52b0387e8bab78e6f87010310718d1ee7fa755d0b34ef48e0e03ce0e68ae2e1c",
+    "receipt/powerpoint/work/french.pptx": "5c9479e14adb8986c3fcc2c92176797a1b5a26c635824044f8746c4d35df69f3",
+    "receipt/pptx/arabic.pptx": "43b2a7307fc836b779a62883f1d2f6a64db23baca07a2b3cb4e3ad1cce452067",
+    "receipt/pptx/fonts.pptx": "52b0387e8bab78e6f87010310718d1ee7fa755d0b34ef48e0e03ce0e68ae2e1c",
+    "receipt/pptx/french.pptx": "5c9479e14adb8986c3fcc2c92176797a1b5a26c635824044f8746c4d35df69f3",
+    "receipt/review.png": "769da4970f48172c1898154f5edbb662e1c4e7fccfc776aae92408591080d8ce"
+  }
+}

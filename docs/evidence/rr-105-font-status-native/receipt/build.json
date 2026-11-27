@@ -1,0 +1,51 @@
+{
+  "revision": "Multiple pinned candidates: see each deck.sourceCommit",
+  "opfVersion": "0.34.0-preparation",
+  "decks": [
+    {
+      "id": "fonts",
+      "source": "C:/opf-work/lh-177-light-fonts/artifacts/lh-177/stem-lab-funding-proposal.pptx",
+      "sourceCommit": "6f46dd2255b27abb4af7ecbfaf2e07ec5fba34a6",
+      "previewOk": true,
+      "previewSlides": 4,
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/fonts.pptx",
+          "ok": true,
+          "sha256": "52b0387e8bab78e6f87010310718d1ee7fa755d0b34ef48e0e03ce0e68ae2e1c"
+        }
+      ]
+    },
+    {
+      "id": "french",
+      "source": "C:/opf-work/lh-121-localized-status/artifacts/lh-121/french.pptx",
+      "sourceCommit": "b9642636e297a1d2dfbf65cb77bea133841beee1",
+      "previewOk": true,
+      "previewSlides": 1,
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/french.pptx",
+          "ok": true,
+          "sha256": "5c9479e14adb8986c3fcc2c92176797a1b5a26c635824044f8746c4d35df69f3"
+        }
+      ]
+    },
+    {
+      "id": "arabic",
+      "source": "C:/opf-work/lh-121-localized-status/artifacts/lh-121/arabic.pptx",
+      "sourceCommit": "b9642636e297a1d2dfbf65cb77bea133841beee1",
+      "previewOk": true,
+      "previewSlides": 1,
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/arabic.pptx",
+          "ok": true,
+          "sha256": "43b2a7307fc836b779a62883f1d2f6a64db23baca07a2b3cb4e3ad1cce452067"
+        }
+      ]
+    }
+  ]
+}
