@@ -396,7 +396,15 @@ function Ppt-Open {
   param([string]$Path)
   $global:NtPres = $null
   $global:NtPres = Com-Open $global:NtApp $Path
-  return (Com-PresInfo $global:NtPres)
+  try {
+    return (Com-PresInfo $global:NtPres)
+  } catch {
+    # The file opened but could not be read: close it before the failure goes up, so no presentation of this run stays open.
+    $problem = $_
+    try { Com-Close $global:NtPres } catch {}
+    $global:NtPres = $null
+    throw $problem
+  }
 }
 
 function Ppt-SaveCopy {
@@ -440,16 +448,28 @@ function Ppt-Finish {
   param()
   # Quit only when no presentation is open: one left open (a close that failed) keeps PowerPoint running for the supervisor.
   # Order (first contact, 2026-11-27): no global keeps a COM object, Quit, release every reference, collect on this thread.
-  $count = Com-OpenCount $global:NtApp
+  # Every step runs whatever the one before it did (opf#1557 review): a presentation this run still holds open (the main
+  # thread failed while it was open) is closed first; a Quit that throws is recorded, and release and collect still run.
+  $problems = New-Object System.Collections.ArrayList
+  if ($null -ne $global:NtPres) {
+    try { Com-Close $global:NtPres } catch { [void]$problems.Add("closing the presentation the run still held: $($_.Exception.Message)") }
+  }
   $app = $global:NtApp
   $global:NtPres = $null
   $global:NtApp = $null
+  $count = $null
   $quit = $false
-  if ($count -eq 0) { Com-Quit $app; $quit = $true }
-  Com-Release $app
-  $app = $null
-  Com-Collect
-  return [ordered]@{ openCount = $count; quit = $quit }
+  try {
+    try { $count = Com-OpenCount $app } catch { [void]$problems.Add("counting the open presentations: $($_.Exception.Message)") }
+    if ($count -eq 0) {
+      try { Com-Quit $app; $quit = $true } catch { [void]$problems.Add("Quit: $($_.Exception.Message)") }
+    }
+  } finally {
+    try { Com-Release $app } catch {}
+    $app = $null
+    Com-Collect
+  }
+  return [ordered]@{ openCount = $count; quit = $quit; problems = $problems.ToArray() }
 }
 
 # ---- main thread: no COM here ----------------------------------------------------------------------------------------
@@ -471,7 +491,7 @@ function Get-PowerPointIds {
 
 function Wait-PowerPointExit {
   # Waits at most $Seconds in all for these processes to end on their own (Process.WaitForExit: no loop, nothing is ended).
-  # Returns { exited, seconds, left: [ids still running] }.
+  # Returns { exited, seconds, left: [ids still running] }. The caller passes at least one id.
   param([int[]]$Ids, [double]$Seconds)
   $watch = [System.Diagnostics.Stopwatch]::StartNew()
   $left = New-Object System.Collections.ArrayList
@@ -522,6 +542,7 @@ function Invoke-Worker {
   if (-not $finished) {
     # The worker is still inside PowerPoint. Nothing more is sent to it; the script stops after writing what it has.
     $script:Stopped = "PowerPoint did not answer $Command within $Seconds s"
+    $script:Hung = $true
     return @{ status = 'timeout'; seconds = $elapsed; message = "PowerPoint did not answer $Command within $Seconds s; the run stopped without ending PowerPoint: a POWERPNT.EXE process may be left for the supervisor to look at" }
   }
   try {
@@ -606,7 +627,9 @@ if ($running.Count -gt 0) {
 }
 
 $script:Stopped = $null
-$script:Worker = [runspacefactory]::CreateRunspace()
+$script:Hung = $false
+$script:MainError = $null
+$script:Worker =[runspacefactory]::CreateRunspace()
 $script:Worker.ApartmentState = [System.Threading.ApartmentState]::STA
 $script:Worker.ThreadOptions = [System.Management.Automation.Runspaces.PSThreadOptions]::ReuseThread
 $script:Worker.Open()
@@ -624,11 +647,22 @@ $run.powerpointIds = @(Get-PowerPointIds | Where-Object { $idsBefore -notcontain
 if ($start.status -eq 'done') { $run.application = $start.value }
 Say "NT16 start $($start.status) $(if ($run.application) { "PowerPoint $($run.application.version) build $($run.application.build)" })"
 
+function Get-Utc {
+  param()
+  return (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+}
+
 $ids = New-Object System.Collections.ArrayList
+$raw = $null
+$rawFile = $null
+# An exception on this thread (not PowerPoint's: those come back as failed verbs) must not leave PowerPoint open: it is
+# caught, the file it happened in is written as far as it got, and the end below still closes, quits and releases.
+try {
 foreach ($entry in @($work.files)) {
   $dir = [string]$entry.dir
   $rawFile = Join-Path $dir 'powerpoint-raw.json'
   [void]$ids.Add($entry.id)
+  $raw = $null
   if ($start.status -ne 'done' -or $script:Stopped) {
     $why = 'not run: PowerPoint did not start'
     if ($start.status -eq 'done' -or $start.status -eq 'timeout') { $why = "not run: the run stopped earlier ($($script:Stopped))" }
@@ -637,9 +671,11 @@ foreach ($entry in @($work.files)) {
     $raw.sha256Before = Get-Sha256 $entry.path
     $raw.sha256After = $raw.sha256Before
     Write-Json $rawFile $raw
+    $raw = $null
     continue
   }
   $raw = New-RawFile $entry $null
+  $raw.started = Get-Utc
   $raw.sha256Before = Get-Sha256 $entry.path
   $open = Invoke-Worker 'Ppt-Open' @{ Path = [string]$entry.path } ([double]$limits.open)
   $raw.open = Verb $open
@@ -733,41 +769,61 @@ foreach ($entry in @($work.files)) {
     $readCharts = $false
     if (-not $script:Stopped) { $script:Stopped = "EXCEL.EXE appeared while $($entry.id) was open; the driver never starts Excel and does not end it: the supervisor looks at it" }
   }
+  $raw.finished = Get-Utc
   Write-Json $rawFile $raw
   Say ("NT16 file {0} open {1} resave {2} render {3} probe {4} close {5} edits {6}" -f $entry.id, $raw.open.status, $raw.resave.status, $raw.render.status, $raw.probe.status, $raw.close.status, (@($raw.edits | Where-Object { $_.status -eq 'done' }).Count))
+  $raw = $null
+}
+} catch {
+  $script:MainError = "the driver failed: $(Get-Message $_.Exception)"
+  if ($null -ne $raw) {
+    $raw.failure = $script:MainError
+    $raw.finished = Get-Utc
+    try { Write-Json $rawFile $raw } catch {}
+  }
+  Say "NT16 error: $($script:MainError)"
 }
 $run.files = $ids.ToArray()
 
+# The end. On every path but a call PowerPoint did not answer, the worker is idle: Ppt-Finish closes a presentation the
+# run still holds, quits PowerPoint when nothing is open, releases and collects; then the worker closes and the exit check
+# runs. This includes Excel appearing and an exception on this thread (opf#1557 review). Nothing ends a process.
 $code = 0
-if ($start.status -eq 'done' -and -not $script:Stopped) {
+if ($start.status -ne 'timeout' -and -not $script:Hung) {
   $finish = Invoke-Worker 'Ppt-Finish' @{} ([double]$limits.quit)
   $run.finish = Verb $finish
   if ($finish.status -eq 'done') {
     $run.finish.openCount = $finish.value.openCount
     $run.finish.quit = $finish.value.quit
-    if (-not $finish.value.quit) { $run.finish.message = "$($finish.value.openCount) presentation(s) still open in PowerPoint, so it was not quit: a POWERPNT.EXE process is left for the supervisor to look at"; $run.powerpointMayBeLeft = $true }
-  } else { $run.powerpointMayBeLeft = $true }
+    if (@($finish.value.problems).Count -gt 0) { $run.finish.problems = @($finish.value.problems) }
+    if (-not $finish.value.quit -and $start.status -eq 'done') { $run.finish.message = "PowerPoint was not quit ($($finish.value.openCount) presentation(s) open$(if (@($finish.value.problems).Count -gt 0) { '; ' + (@($finish.value.problems) -join '; ') })): a POWERPNT.EXE process is left for the supervisor to look at"; $run.powerpointMayBeLeft = $true }
+  } elseif ($finish.status -ne 'done') { $run.powerpointMayBeLeft = $true }
 }
-if ($script:Stopped) { $run.stopped = $script:Stopped; $run.powerpointMayBeLeft = $true; $code = 4 }
+if ($script:Stopped) { $run.stopped = $script:Stopped; $code = 4 }
 if ($start.status -eq 'failed') { $run.stopped = "PowerPoint did not start: $($start.message)"; $code = 4 }
-if ($code -ne 0) {
+if ($script:MainError) { $run.error = $script:MainError; $code = 5 }
+if ($script:Hung) {
+  $run.powerpointMayBeLeft = $true
   Write-Json $runFile $run
   Say "NT16 done exit $code$(if ($run.stopped) { ": $($run.stopped)" })"
-  # Only here, where the worker thread may still wait inside PowerPoint: Environment.Exit ends this process without it.
+  # Only here, where the worker thread still waits inside PowerPoint: Environment.Exit ends this process without it.
   # PowerPoint is not ended.
   [Environment]::Exit($code)
 }
 
-# The clean path: the worker has released and collected everything; close it, then see whether PowerPoint ends on its own.
+# The worker has released and collected everything; close it, then see whether PowerPoint ends on its own.
 $script:Worker.Close()
 $script:Worker.Dispose()
 $run.finish.workerClosed = $true
 $exitNote = ''
 if ($run.finish.quit) {
-  $gone = Wait-PowerPointExit ([int[]]@($run.powerpointIds)) ([double]$limits.exit)
-  $run.finish.exited = [bool]$gone.exited
+  # No id of its own (none was new after it started PowerPoint): nothing to check, and no claim that it exited.
+  $gone = @{ exited = $null; seconds = 0; left = @() }
+  if (@($run.powerpointIds).Count -gt 0) { $gone = Wait-PowerPointExit ([int[]]@($run.powerpointIds)) ([double]$limits.exit) }
+  $run.finish.exited = $gone.exited
   $run.finish.exitSeconds = $gone.seconds
-  if ($gone.exited) { $exitNote = "; PowerPoint exited after $($gone.seconds) s" }
+  if ($null -eq $gone.exited) { $exitNote = '; the id of the POWERPNT.EXE it started is not known, so its exit was not checked' }
+  elseif ($gone.exited) { $exitNote = "; PowerPoint exited after $($gone.seconds) s" }
   else {
     $run.finish.left = @($gone.left)
     $run.powerpointMayBeLeft = $true
@@ -776,5 +832,5 @@ if ($run.finish.quit) {
   }
 }
 Write-Json $runFile $run
-Say "NT16 done exit $code$exitNote"
+Say "NT16 done exit $code$(if ($run.stopped) { ": $($run.stopped)" })$(if ($run.error) { ": $($run.error)" })$exitNote"
 exit $code

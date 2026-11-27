@@ -56,9 +56,12 @@ export function execCommand(command, args = [], { timeoutMs = 60_000, onLine, en
   });
 }
 
-/** Windows PowerShell 5.1 (never pwsh): the one shell powerpoint.ps1 is written for. */
+/**
+ * Windows PowerShell 5.1 (never pwsh): the one shell powerpoint.ps1 is written for. A Windows path on every host
+ * (path.win32), so the driver's tests see the same command on Linux and macOS as on Windows.
+ */
 export function powershellPath(env = process.env) {
-  return path.join(env.WINDIR ?? env.windir ?? 'C:\\Windows', 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe');
+  return path.win32.join(env.WINDIR ?? env.windir ?? 'C:\\Windows', 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe');
 }
 
 /** The child environment of powershell.exe: the parent's without an inherited PSModulePath (windows-powershell-env.mjs). */

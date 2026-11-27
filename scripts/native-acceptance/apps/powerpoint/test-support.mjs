@@ -5,6 +5,13 @@
 import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
+/**
+ * A command's file name, lower case, whatever the host: the driver names Windows programs with Windows paths
+ * ("C:\Windows\System32\...\powershell.exe"), which the host's path.basename does not split on Linux or macOS;
+ * path.win32.basename splits on both "\" and "/" on every host.
+ */
+export const commandName = (command) => path.win32.basename(String(command)).toLowerCase();
+
 /** A 1 x 1 PNG. */
 export const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==', 'base64');
 
@@ -66,7 +73,7 @@ export function fakeExec({ files = {}, running = [], installed = true, refuseInS
   const calls = [];
   const exec = async (command, args = [], options = {}) => {
     calls.push([command, ...args]);
-    const name = path.basename(command).toLowerCase();
+    const name = commandName(command);
     if (name === 'tasklist') return { code: 0, stdout: tasklistWith(...running), stderr: '', timedOut: false, seconds: 0.1 };
     if (name === 'reg') {
       if (!installed) return { code: 1, stdout: '', stderr: 'ERROR: The system was unable to find the specified registry key or value.', timedOut: false, seconds: 0.1 };
@@ -82,10 +89,12 @@ export function fakeExec({ files = {}, running = [], installed = true, refuseInS
       return { code: 3, stdout: 'NT16 refused', stderr: '', timedOut: false, seconds: 0.5 };
     }
     let stopped = null;
+    let hung = false;
+    let error = null;
     let open = 0;
-    for (const file of plan.files) {
+    for (const [position, file] of plan.files.entries()) {
       const spec = files[path.basename(file.path)] ?? defaults;
-      const raw = { id: file.id, path: file.path, sha256Before: 'x', sha256After: 'x', open: { status: 'not-run' }, resave: { status: 'not-run' }, render: { status: 'not-run' }, probe: { status: 'not-run' }, close: { status: 'not-run' }, edits: [], slides: [] };
+      const raw = { id: file.id, path: file.path, sha256Before: 'x', sha256After: 'x', started: `2026-11-27T10:0${position}:00Z`, finished: `2026-11-27T10:0${position}:30Z`, open: { status: 'not-run' }, resave: { status: 'not-run' }, render: { status: 'not-run' }, probe: { status: 'not-run' }, close: { status: 'not-run' }, edits: [], slides: [] };
       // The script hashes with Get-FileHash; the fake leaves those to Node's own (see sha256 below).
       delete raw.sha256Before;
       delete raw.sha256After;
@@ -96,6 +105,7 @@ export function fakeExec({ files = {}, running = [], installed = true, refuseInS
         continue;
       }
       if (spec.hang === 'open') {
+        hung = true;
         stopped = `PowerPoint did not answer Ppt-Open within ${plan.timeouts.open} s`;
         raw.open = { status: 'timeout', seconds: plan.timeouts.open, message: `${stopped}; the run stopped without ending PowerPoint: a POWERPNT.EXE process may be left for the supervisor to look at` };
         write();
@@ -121,6 +131,7 @@ export function fakeExec({ files = {}, running = [], installed = true, refuseInS
       const failed = [];
       for (const slide of raw.slides) {
         if (spec.hang === 'render' && slide.index === 2) {
+          hung = true;
           stopped = `PowerPoint did not answer Ppt-Export within ${plan.timeouts.slide} s`;
           raw.render.status = 'timeout';
           raw.render.message = `slide 2: ${stopped}; the run stopped without ending PowerPoint: a POWERPNT.EXE process may be left for the supervisor to look at`;
@@ -134,6 +145,15 @@ export function fakeExec({ files = {}, running = [], installed = true, refuseInS
         }
       }
       if (raw.render.status === 'done' && failed.length > 0) Object.assign(raw.render, { status: 'failed', message: `PowerPoint exported no picture of ${failed.length} slide(s): ${failed.join('; ')}` });
+      if (spec.scriptError) {
+        // The script itself throws while this file is open: the file is written as far as it got, the files after it get
+        // nothing, and the end still closes it, quits and checks the exit (powerpoint.ps1's catch).
+        error = `the driver failed: ${spec.scriptError}`;
+        raw.failure = error;
+        open -= 1;
+        write();
+        break;
+      }
       if (!stopped) {
         raw.probe = { status: 'done', seconds: 0.6 };
         for (const slide of raw.slides) {
@@ -165,7 +185,8 @@ export function fakeExec({ files = {}, running = [], installed = true, refuseInS
       write();
       options.onLine?.(`NT16 file ${file.id} open ${raw.open.status}`);
     }
-    if (!stopped) {
+    // As powerpoint.ps1: the end runs on every path but a call that did not answer (hung).
+    if (!hung) {
       run.finish = { status: 'done', seconds: 0.2, openCount: open, quit: open === 0, workerClosed: true };
       if (open === 0 && exitsAfterQuit) Object.assign(run.finish, { exited: true, exitSeconds: 0.8 });
       if (open === 0 && !exitsAfterQuit) {
@@ -176,12 +197,12 @@ export function fakeExec({ files = {}, running = [], installed = true, refuseInS
         run.finish.message = `${open} presentation(s) still open in PowerPoint, so it was not quit: a POWERPNT.EXE process is left for the supervisor to look at`;
         run.powerpointMayBeLeft = true;
       }
-    } else {
-      run.stopped = stopped;
-      run.powerpointMayBeLeft = true;
-    }
+    } else run.powerpointMayBeLeft = true;
+    if (stopped) run.stopped = stopped;
+    if (error) run.error = error;
+    const code = error ? 5 : stopped ? 4 : 0;
     writeFileSync(runFile, JSON.stringify(run, null, 2));
-    return { code: stopped ? 4 : 0, stdout: `NT16 done exit ${stopped ? 4 : 0}\n`, stderr: '', timedOut: false, seconds: 2 };
+    return { code, stdout: `NT16 done exit ${code}\n`, stderr: '', timedOut: false, seconds: 2 };
   };
   exec.calls = calls;
   return exec;

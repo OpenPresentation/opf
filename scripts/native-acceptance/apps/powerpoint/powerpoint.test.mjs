@@ -66,7 +66,12 @@ test('every COM touch is inside a Com-* function; the main thread only waits on 
   assert.equal((code.match(/\.Quit\(\)/gu) ?? []).length, 1);
   assert.match(body('Com-Quit'), /\$App\.Quit\(\)/u);
   // The end on the worker thread: globals cleared, Quit only when nothing is open, every reference released, collected.
-  assert.match(body('Ppt-Finish'), /\$global:NtPres = \$null\s+\$global:NtApp = \$null[\s\S]*if \(\$count -eq 0\) \{ Com-Quit \$app; \$quit = \$true \}\s+Com-Release \$app\s+\$app = \$null\s+Com-Collect/u, 'quit only when no presentation is open');
+  assert.match(
+    body('Ppt-Finish'),
+    /if \(\$null -ne \$global:NtPres\) \{\s+try \{ Com-Close \$global:NtPres \}[\s\S]*\$global:NtPres = \$null\s+\$global:NtApp = \$null[\s\S]*try \{[\s\S]*if \(\$count -eq 0\) \{\s+try \{ Com-Quit \$app; \$quit = \$true \} catch[\s\S]*\} finally \{\s+try \{ Com-Release \$app \} catch \{\}\s+\$app = \$null\s+Com-Collect\s+\}/u,
+    'close what the run still holds, quit only when nothing is open, release and collect whatever Quit did',
+  );
+  assert.match(body('Ppt-Open'), /try \{\s+return \(Com-PresInfo \$global:NtPres\)\s+\} catch \{[\s\S]*Com-Close \$global:NtPres[\s\S]*throw \$problem/u);
   assert.match(body('Com-Release'), /FinalReleaseComObject\(\$App\)/u);
   assert.match(body('Com-Collect'), /\[GC\]::Collect\(\)\s+\[GC\]::WaitForPendingFinalizers\(\)\s+\[GC\]::Collect\(\)\s+\[GC\]::WaitForPendingFinalizers\(\)/u);
   assert.match(body('Com-Close'), /\$Pres\.Saved = -1[\s\S]*\$Pres\.Close\(\)/u);
@@ -75,7 +80,10 @@ test('every COM touch is inside a Com-* function; the main thread only waits on 
   assert.match(body('Invoke-Worker'), /BeginInvoke\(\)[\s\S]*AsyncWaitHandle\.WaitOne/u, 'every call waits with a time limit');
   // Environment.Exit only on the stopped path; the clean path closes the worker, waits for PowerPoint's exit, ends normally.
   assert.equal((code.match(/\[Environment\]::Exit\(/gu) ?? []).length, 1);
-  assert.match(code, /if \(\$code -ne 0\) \{\s+Write-Json \$runFile \$run\s+Say [^\n]*\n\s+\[Environment\]::Exit\(\$code\)\s*\}/u);
+  // Environment.Exit only after a call PowerPoint did not answer; every other path runs Ppt-Finish first.
+  assert.match(code, /if \(\$script:Hung\) \{\s+\$run\.powerpointMayBeLeft = \$true\s+Write-Json \$runFile \$run\s+Say [^\n]*\n(\s+#[^\n]*\n)*\s+\[Environment\]::Exit\(\$code\)\s*\}/u);
+  assert.match(code, /if \(\$start\.status -ne 'timeout' -and -not \$script:Hung\) \{\s+\$finish = Invoke-Worker 'Ppt-Finish'/u);
+  assert.match(code, /\} catch \{\s+\$script:MainError = /u, 'an exception on the main thread is caught before the end runs');
   assert.match(code, /\$script:Worker\.Close\(\)\s+\$script:Worker\.Dispose\(\)[\s\S]*Wait-PowerPointExit[\s\S]*\nexit \$code\s*$/u);
   assert.match(body('Wait-PowerPointExit'), /\.WaitForExit\(\$remaining\)/u, 'a bounded wait, no loop and nothing ended');
 });
@@ -233,6 +241,56 @@ test('self-test: a failed close keeps PowerPoint running (no quit); Excel appear
   assert.equal(stopped.excelSeen, true);
   assert.match(stopped.stopped, /EXCEL\.EXE appeared while a~default was open/u);
   assert.equal(readJson(path.join(excel.entries[1].dir, 'powerpoint-raw.json')).open.status, 'not-run');
+  // Excel appearing is not a stuck worker: PowerPoint is quit, released and collected, and its exit checked (review point 5).
+  assert.deepEqual(callsOf(excel.scenario).slice(-4), ['quit (globals null)', 'release (globals null)', 'collect (globals null)', 'wait-exit 4242 within 1.5']);
+  assert.deepEqual([stopped.finish.quit, stopped.finish.exited, stopped.finish.workerClosed, stopped.powerpointMayBeLeft], [true, true, true, false]);
+  assert.match(second.stdout, /NT16 done exit 4: EXCEL\.EXE appeared[^\n]*; PowerPoint exited after 0\.5 s/u);
+});
+
+test('self-test: a file that opens but cannot be read is closed before the failure goes up (review point 2)', { skip }, () => {
+  const folder = selfTestFolder({ 'a.pptx': { slideSize: [960, 540], slides, presInfoError: 'The slide size could not be read (fake)' }, 'b.pptx': { slideSize: [960, 540], slides } });
+  const answer = powershell(['-File', SCRIPT, '-Plan', folder.plan, '-SelfTest', '-Fake', folder.scenario]);
+  assert.equal(answer.status, 0, answer.stdout + answer.stderr);
+  assert.deepEqual(callsOf(folder.scenario).slice(0, 4), ['new-app', 'open a.pptx', 'close a.pptx', 'open b.pptx']);
+  const a = readJson(path.join(folder.entries[0].dir, 'powerpoint-raw.json'));
+  assert.deepEqual([a.open.status, a.open.message], ['failed', 'The slide size could not be read (fake)']);
+  const run = readJson(path.join(folder.runDir, 'powerpoint-run.json'));
+  assert.deepEqual([run.finish.openCount, run.finish.quit, run.finish.exited], [0, true, true], 'nothing left open, so PowerPoint is quit');
+});
+
+test('self-test: a Quit that throws still releases and collects, and is recorded (review point 3)', { skip }, () => {
+  const folder = selfTestFolder({ 'a.pptx': { slideSize: [960, 540], slides } }, { quitError: 'Quit failed (fake)' });
+  const answer = powershell(['-File', SCRIPT, '-Plan', folder.plan, '-SelfTest', '-Fake', folder.scenario]);
+  assert.equal(answer.status, 0, answer.stdout + answer.stderr);
+  assert.deepEqual(callsOf(folder.scenario).slice(-3), ['quit (globals null)', 'release (globals null)', 'collect (globals null)']);
+  const run = readJson(path.join(folder.runDir, 'powerpoint-run.json'));
+  assert.deepEqual([run.finish.status, run.finish.quit, run.finish.problems, run.powerpointMayBeLeft, run.finish.exited], ['done', false, ['Quit: Quit failed (fake)'], true, undefined]);
+  assert.match(run.finish.message, /PowerPoint was not quit \(0 presentation\(s\) open; Quit: Quit failed \(fake\)\)/u);
+});
+
+test('self-test: an exception on the main thread closes the open presentation, quits, releases and checks the exit (review point 4)', { skip }, () => {
+  // A slide width of 0 makes the picture height Infinity, which the main thread cannot convert to an integer: an exception
+  // of the script itself, thrown while a.pptx is open in PowerPoint.
+  const folder = selfTestFolder({ 'a.pptx': { slideSize: [0, 540], slides }, 'b.pptx': { slideSize: [960, 540], slides } });
+  const answer = powershell(['-File', SCRIPT, '-Plan', folder.plan, '-SelfTest', '-Fake', folder.scenario]);
+  assert.equal(answer.status, 5, answer.stdout + answer.stderr);
+  assert.deepEqual(callsOf(folder.scenario), ['new-app', 'open a.pptx', 'save-copy resaved.pptx', 'close a.pptx', 'quit (globals null)', 'release (globals null)', 'collect (globals null)', 'wait-exit 4242 within 1.5']);
+  const run = readJson(path.join(folder.runDir, 'powerpoint-run.json'));
+  assert.match(run.error, /^the driver failed: /u);
+  assert.deepEqual([run.finish.openCount, run.finish.quit, run.finish.exited, run.powerpointMayBeLeft, run.files], [0, true, true, false, ['a~default']]);
+  const a = readJson(path.join(folder.entries[0].dir, 'powerpoint-raw.json'));
+  assert.equal(a.failure, run.error, 'the file is written as far as it got');
+  assert.equal(existsSync(path.join(folder.entries[1].dir, 'powerpoint-raw.json')), false, 'the files after it are not run');
+  assert.match(answer.stdout, /NT16 done exit 5: the driver failed: [^\n]*; PowerPoint exited after 0\.5 s/u);
+});
+
+test('self-test: without the id of the POWERPNT.EXE it started, the exit is not checked and not claimed', { skip }, () => {
+  const folder = selfTestFolder({ 'a.pptx': { slideSize: [960, 540], slides } }, { noIds: true });
+  const answer = powershell(['-File', SCRIPT, '-Plan', folder.plan, '-SelfTest', '-Fake', folder.scenario]);
+  assert.equal(answer.status, 0, answer.stdout + answer.stderr);
+  const run = readJson(path.join(folder.runDir, 'powerpoint-run.json'));
+  assert.deepEqual([run.powerpointIds, run.finish.quit, run.finish.exited], [[], true, null]);
+  assert.match(answer.stdout, /NT16 done exit 0; the id of the POWERPNT\.EXE it started is not known, so its exit was not checked/u);
 });
 
 test('self-test: PowerPoint quit but its process still there after the wait: recorded, said on the done line, never ended', { skip }, () => {

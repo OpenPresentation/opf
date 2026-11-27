@@ -17,7 +17,7 @@ function Get-PowerPointIds {
   # None before the run starts PowerPoint; then the scenario's (4242 unless it says otherwise).
   param()
   $script:FakeIdCalls++
-  if ($script:FakeIdCalls -eq 1) { return @() }
+  if ($script:FakeIdCalls -eq 1 -or $script:FakeMain.noIds) { return @() }
   $ids = @($script:FakeMain.powerpointIds)
   if ($ids.Count -eq 0 -or $null -eq $ids[0]) { $ids = @(4242) }
   return $ids
@@ -89,6 +89,7 @@ function Com-Open {
 
 function Com-PresInfo {
   param($Pres)
+  if ($Pres.spec.presInfoError) { throw [string]$Pres.spec.presInfoError }
   $slides = @()
   $i = 0
   foreach ($slide in @($Pres.spec.slides)) {
@@ -155,6 +156,8 @@ function Com-FakeGlobals {
 function Com-Quit {
   param($App)
   Com-FakeMark "quit ($(Com-FakeGlobals))"
+  $scenario = Com-FakeScenario
+  if ($scenario.quitError) { throw [string]$scenario.quitError }
 }
 
 function Com-Release {

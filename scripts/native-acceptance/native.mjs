@@ -438,6 +438,7 @@ export async function runNative(argv, deps = {}) {
 
     let driver;
     let ctx;
+    let checked;
     if (target === 'keynote' || windowsPowerPoint) {
       driver = await d.loadDriver(target);
       const warningsText = options.warningsDir
@@ -452,6 +453,7 @@ export async function runNative(argv, deps = {}) {
         entry.status = answer.status;
         return answer;
       });
+      checked = first;
       if (first.status !== 'ready') return refuse('check', first.reasons);
       report.application = first.facts.application;
     }
@@ -530,7 +532,7 @@ export async function runNative(argv, deps = {}) {
       await step('run', async (entry) => {
         if (driver.runFiles) {
           // PowerPoint on Windows: one powerpoint.ps1 process runs every file and the driver writes the run directory.
-          const done = await driver.runFiles(ctx, built, { opf, tier: options.tier, baseline: baseline?.version ?? null, log: (line) => say(`  ${line}`) });
+          const done = await driver.runFiles(ctx, built, { opf, check: checked, tier: options.tier, baseline: baseline?.version ?? null, log: (line) => say(`  ${line}`) });
           if (done.refused) throw new Error(`refused; nothing was opened: ${done.refused.join('; ')}`);
           for (const result of done.results) {
             const { verbs } = result;

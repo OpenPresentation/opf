@@ -9,9 +9,9 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { validateResult, validateRun } from '../../core/result/result.mjs';
 import { check, createContext, EDIT_CASES, RENDER_WIDTH, runFiles, SCRIPT } from './driver.mjs';
-import { LOCK_NAME, parseRegValue, parseTasklist, splitOfficeVersion, takeLock } from './machine.mjs';
+import { LOCK_NAME, parseRegValue, powershellPath, parseTasklist, splitOfficeVersion, takeLock } from './machine.mjs';
 import { buildResult, cleanFonts, kindOf, linkTarget, objectsOf, OPEN_NOTE, slidesOf } from './normalize.mjs';
-import { fakeExec, REG_VERSION, sampleSlides, TASKLIST_IDLE, tasklistWith, windowsMachine } from './test-support.mjs';
+import { commandName, fakeExec, REG_VERSION, sampleSlides, TASKLIST_IDLE, tasklistWith, windowsMachine } from './test-support.mjs';
 
 const temp = (name) => mkdtempSync(path.join(tmpdir(), `nt16-${name}-`));
 const OPF = { version: '0.37.0', commit: 'abc1234' };
@@ -34,7 +34,7 @@ async function ready(exec, extra = {}) {
 }
 
 const readJson = (file) => JSON.parse(readFileSync(file, 'utf8'));
-const powershellCalls = (exec) => exec.calls.filter(([command]) => path.basename(command).toLowerCase() === 'powershell.exe');
+const powershellCalls = (exec) => exec.calls.filter(([command]) => commandName(command) === 'powershell.exe');
 
 test('check refuses while POWERPNT.EXE or EXCEL.EXE runs, says whose it is, and starts no PowerShell', async () => {
   for (const running of [['POWERPNT.EXE'], ['EXCEL.EXE'], ['POWERPNT.EXE', 'EXCEL.EXE']]) {
@@ -61,6 +61,24 @@ test('check refuses on another system, without PowerPoint, and while a live driv
   writeFileSync(path.join(runDir, LOCK_NAME), JSON.stringify({ pid: process.ppid, started: 'earlier' }));
   const locked = await check(createContext({ runDir, exec: fakeExec(), machine: windowsMachine() }));
   assert.match(locked.reasons.join('\n'), new RegExp(`another PowerPoint driver \\(process ${process.ppid}\\) holds this run directory's lock`, 'u'));
+});
+
+test('Windows paths are handled the same on every host (opf#1557 review: the tests failed on macOS and Linux)', async () => {
+  // path.win32 splits on "\" and "/" whatever the host; the host's path.basename would not split "C:\...\x" on POSIX.
+  assert.equal(path.win32.basename('C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'), 'powershell.exe');
+  for (const command of ['C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe', 'C:/Windows/System32/WindowsPowerShell/v1.0/POWERSHELL.EXE', '/usr/local/bin/powershell.exe', 'powershell.exe']) {
+    assert.equal(commandName(command), 'powershell.exe', command);
+  }
+  assert.equal(commandName('tasklist'), 'tasklist');
+  assert.equal(powershellPath({ WINDIR: 'C:\\Windows' }), 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe', 'a Windows path, not the host form');
+  assert.equal(powershellPath({}), 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe');
+  // The same run with the command named the POSIX way: the fake and the driver do not depend on the separator.
+  const exec = fakeExec();
+  const ctx = await ready(exec, { powershell: '/opt/windows/powershell.exe' });
+  const done = await runFiles(ctx, inputs(['a']), { opf: OPF });
+  assert.equal(done.exit, 0);
+  assert.equal(powershellCalls(exec).length, 1);
+  assert.ok(done.validations.every((validation) => validation.ok));
 });
 
 test('the machine facts parse tasklist and reg output', () => {
@@ -195,6 +213,31 @@ test('a script that dies: every file not-run with the reason, the run unfinished
   assert.ok(done.results.every((result) => result.verbs.open.status === 'not-run' && /wrote nothing about this file/u.test(result.verbs.open.message)));
   assert.ok(done.validations.every((validation) => validation.ok));
   assert.deepEqual(done.run.application, { name: 'PowerPoint', version: '16.0', build: '20625.20108' }, 'the registry facts when PowerPoint never answered');
+});
+
+test('the script throws (exit 5): its error is the reason, the run is unfinished, PowerPoint was still closed and quit', async () => {
+  const ctx = await ready(fakeExec({ files: { 'a.pptx': { scriptError: 'Cannot convert value "Infinity" to type "System.Int32"' } } }));
+  const done = await runFiles(ctx, inputs(['a', 'b']), { opf: OPF });
+  assert.equal(done.exit, 5);
+  assert.equal(done.stopped, true);
+  assert.deepEqual(done.notRun.map((item) => [item.what, item.blocking]), [['the PowerShell driver', true]]);
+  assert.match(done.notRun[0].reason, /^powerpoint\.ps1 exited with 5: the driver failed: Cannot convert value "Infinity"/u);
+  assert.equal(done.summary, 'PowerPoint quit and POWERPNT.EXE 4242 exited after 0.8 s');
+  assert.equal(done.results[0].verbs.open.status, 'done');
+  assert.match(done.results[1].verbs.open.message, /wrote nothing about this file \(it did not finish\)/u);
+  assert.ok(done.validations.every((validation) => validation.ok));
+});
+
+test('each file keeps its own started and finished times when the script took them (review note)', async () => {
+  const ctx = await ready(fakeExec());
+  const done = await runFiles(ctx, inputs(['a', 'b']), { opf: OPF });
+  assert.deepEqual(
+    done.results.map((result) => [result.started, result.finished]),
+    [
+      ['2026-11-27T10:00:00Z', '2026-11-27T10:00:30Z'],
+      ['2026-11-27T10:01:00Z', '2026-11-27T10:01:30Z'],
+    ],
+  );
 });
 
 test('the hash proof: an input that changed during the run is not unchanged', async () => {
