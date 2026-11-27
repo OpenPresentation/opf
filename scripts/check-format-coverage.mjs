@@ -113,6 +113,14 @@ export function collectLocations(schema) {
 
 /** Walks documents along the schema; returns the Set of location ids they use (a superset of countable ids). */
 export function walkDocuments(schema, documents) {
+  return createWalker(schema)(documents);
+}
+
+/**
+ * NT-12: a walker that compiles each schema location once and can be called many times (one call per slide of a corpus
+ * deck, scripts/native-acceptance/core/coverage/units.mjs); walkDocuments is one call of a fresh walker.
+ */
+export function createWalker(schema) {
   const Ajv = require('ajv/dist/2020.js').default;
   const formats = require('ajv-formats').default;
   const ajv = new Ajv({ strict: false, allErrors: false, allowUnionTypes: true, validateFormats: true });
@@ -128,6 +136,7 @@ export function walkDocuments(schema, documents) {
     }
     return validate(value);
   };
+  return (documents) => {
   const used = new Set();
   const walk = (value, node, pointer) => {
     if (node === true || !node || typeof node !== 'object') return;
@@ -184,6 +193,7 @@ export function walkDocuments(schema, documents) {
   };
   for (const document of documents) walk(document, schema, '#');
   return used;
+  };
 }
 
 /** locations: Map from collectLocations; used: Set from walkDocuments; allowlist: [{location, reason}] keyed by label. */

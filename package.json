@@ -138,6 +138,8 @@
     "check:native": "node scripts/native-acceptance/check-native.mjs",
     "native": "node scripts/native-acceptance/native.mjs",
     "check:native-acceptance": "node --test scripts/native-acceptance/*.test.mjs",
+    "check:native-coverage": "node scripts/native-acceptance/core/coverage/check.mjs",
+    "report:native-coverage": "node scripts/native-acceptance/core/coverage/report.mjs",
     "check:native-known": "node --test scripts/native-acceptance/known/known.test.mjs && node scripts/native-acceptance/known/build-skill-table.mjs --check",
     "build:native-known": "node scripts/native-acceptance/known/build-skill-table.mjs",
     "check:format-coverage": "node --test scripts/check-format-coverage.test.mjs && node scripts/check-format-coverage.mjs",

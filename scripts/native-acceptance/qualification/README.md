@@ -104,6 +104,12 @@ uses, unless `scripts/format-coverage-allowlist.json` lists it with a reason; a 
 `packages/integration/test/format-coverage-decks.test.mjs` validates, draws and exports every coverage deck on each CI run.
 `coverage-known-issues.opf.json` holds a valid case the engines cannot draw yet; it is not in the manifest.
 
+`pnpm check:native-coverage` (`scripts/native-acceptance/core/coverage/`, NT-12) keeps the corpus small and complete: every
+known record has a place the release tier runs, every schema location is on a corpus slide, every deck shows a unit no other
+deck shows (or a known record or a feature names it), and each tier stays within its modeled time budget.
+`pnpm report:native-coverage` prints the units per tier, the units on one slide only, the decks with no unit of their own and
+the minutes per tier. A new deck or slide must add something; see "Coverage and budgets" in `docs/native-testing.md`.
+
 ## Maintain
 
 Add a feature as a slide in `decks/` (or an example by path) and a `features` entry naming its change fragments, deck, variant,

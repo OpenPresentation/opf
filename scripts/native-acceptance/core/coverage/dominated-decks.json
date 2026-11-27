@@ -1,0 +1,17 @@
+{
+  "description": "NT-12 rule (c): corpus decks that show no schema location, script or variant that another corpus deck lacks and that no known record or manifest feature names, each with a reason. check:native-coverage fails for such a deck that is not listed here, and for a listed deck that has since earned its place (or left the manifest). A new deck earns its place instead of joining this list.",
+  "decks": [
+    {
+      "deck": "bands-and-bullet",
+      "reason": "An example of a 0.37.0 format change (format-requests program) added before its manifest feature: the coverage decks already show every location it uses. Name it in a feature with targets, or remove it from the manifest."
+    },
+    {
+      "deck": "computed-metrics",
+      "reason": "An example of a 0.37.0 format change (format-requests program) added before its manifest feature: the coverage decks already show every location it uses. Name it in a feature with targets, or remove it from the manifest."
+    },
+    {
+      "deck": "gauges",
+      "reason": "An example of a 0.37.0 format change (format-requests program) added before its manifest feature: the coverage decks already show every location it uses. Name it in a feature with targets, or remove it from the manifest."
+    }
+  ]
+}

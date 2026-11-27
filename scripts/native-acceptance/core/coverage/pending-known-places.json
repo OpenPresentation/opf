@@ -1,0 +1,90 @@
+{
+  "description": "NT-12 rule (a): known records whose places are all on decks the release tier does not run yet, each with the item that brings its deck into the corpus. check:native-coverage fails for a record without such a place that is not listed here, and for a listed record that no longer needs to be (NT-10 moves the round decks into the corpus and empties this list). Ids per application file of scripts/native-acceptance/known/.",
+  "records": [
+    {
+      "application": "keynote",
+      "id": "kn-axis-details-rewritten",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-flush-lines-hang",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-import-colon-categories",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-import-colon-categories-layouts",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-import-highlight-chart",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-korean-native-wrap",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-label-category-dropped",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-legend-leaves-frame",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-long-column-names",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-mixed-direction-order",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-negative-bar-labels",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-outer-plot-area-bar-labels",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-pie-legend-cut",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-rtl-table",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-table-alignment-export",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-table-header-terminal",
+      "reason": "NT-10"
+    },
+    {
+      "application": "keynote",
+      "id": "kn-titles-written-smaller",
+      "reason": "NT-10"
+    }
+  ]
+}
