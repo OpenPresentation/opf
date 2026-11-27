@@ -1,6 +1,7 @@
 // NT-02: the facts check() needs about this Mac, each behind one small function so a test can replace it, and the one
 // process runner every command of the driver goes through. None of these sends Keynote an Apple event: whether Keynote
-// is running comes from the process list, its build from its bundle's Info.plist. Keynote's version is Keynote's own
+// is running comes from the process list, its build from its bundle's Info.plist, its wear (start time, open
+// descriptors) from ps and lsof. Keynote's version is Keynote's own
 // answer to the `info` verb (driver.mjs), asked only while it is running.
 import { execFile } from 'node:child_process';
 
@@ -74,5 +75,65 @@ export async function keynoteBundle(exec) {
   return null;
 }
 
+/** The part of a path that marks Keynote's remote-assets cache: Library/Caches/app-remote-assets/database and database-wal. */
+export const REMOTE_ASSETS = 'app-remote-assets';
+
+/**
+ * Counts the descriptors in `lsof -p <pid>` output: { descriptors, remoteAssets } (remoteAssets: the lines whose path
+ * contains app-remote-assets), or null when the text is not lsof's table (no COMMAND header).
+ */
+export function parseLsof(text) {
+  const lines = String(text ?? '')
+    .split('\n')
+    .filter((line) => line.trim() !== '');
+  if (lines.length === 0 || !/^COMMAND\s+PID\b/u.test(lines[0])) return null;
+  const rows = lines.slice(1);
+  return { descriptors: rows.length, remoteAssets: rows.filter((line) => line.includes(REMOTE_ASSETS)).length };
+}
+
+/** `ps -o lstart=` ("Wed Nov 25 09:14:03 2026", local time) -> an ISO date, or null. */
+export function parseStartTime(text) {
+  const trimmed = String(text ?? '').trim();
+  if (trimmed === '') return null;
+  const date = new Date(trimmed);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString().replace(/\.\d{3}Z$/u, 'Z');
+}
+
+/**
+ * Keynote's wear, read with plain shell tools (no Apple event): { pid, started, descriptors, remoteAssets, imports,
+ * problems }. pid from `pgrep -x Keynote`, started from `ps -o lstart= -p <pid>`, descriptors and remoteAssets from
+ * `lsof -p <pid>`; imports is remoteAssets / 2 (Keynote keeps two descriptors per imported document on database and
+ * database-wal). A value that could not be read stays null and its reason goes in problems; nothing here throws.
+ */
+export async function keynoteWear(exec) {
+  const wear = { pid: null, started: null, descriptors: null, remoteAssets: null, imports: null, problems: [] };
+  const tool = async (command, args) => {
+    try {
+      return await exec(command, args, { timeoutMs: 30_000 });
+    } catch (error) {
+      return { code: null, stdout: '', stderr: String(error?.message ?? error) };
+    }
+  };
+  const found = await tool('pgrep', ['-x', KEYNOTE_PROCESS]);
+  const pid = found.code === 0 ? Number(String(found.stdout).trim().split('\n')[0]) : Number.NaN;
+  if (!Number.isInteger(pid) || pid <= 0) {
+    wear.problems.push('pgrep found no Keynote process id');
+    return wear;
+  }
+  wear.pid = pid;
+  const ps = await tool('ps', ['-o', 'lstart=', '-p', String(pid)]);
+  wear.started = ps.code === 0 ? parseStartTime(ps.stdout) : null;
+  if (wear.started === null) wear.problems.push(`ps did not give the start time${ps.code === 0 ? '' : ` (${String(ps.stderr || `exit ${ps.code}`).trim().slice(0, 200)})`}`);
+  // lsof exits 1 when some descriptor could not be described but still prints the table; read whatever table it printed.
+  const lsof = await tool('lsof', ['-p', String(pid)]);
+  const counted = parseLsof(lsof.stdout);
+  if (counted) {
+    wear.descriptors = counted.descriptors;
+    wear.remoteAssets = counted.remoteAssets;
+    wear.imports = Math.floor(counted.remoteAssets / 2);
+  } else wear.problems.push(`lsof did not list Keynote's descriptors (${String(lsof.stderr || `exit ${lsof.code}`).trim().slice(0, 200)})`);
+  return wear;
+}
+
 /** The default facts; ctx.machine may replace any of them. */
-export const defaultMachine = Object.freeze({ keynoteRunning, screenLocked, macosVersion, keynoteBundle });
+export const defaultMachine = Object.freeze({ keynoteRunning, screenLocked, macosVersion, keynoteBundle, keynoteWear });
