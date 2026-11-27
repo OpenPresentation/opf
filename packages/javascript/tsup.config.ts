@@ -65,7 +65,9 @@ export default defineConfig({
   external: [/^node:/, /^#schema-engine$/, /^#diagram-engine$/, /^#shape-engine$/],
   // CE-01: the precompiled validators are CommonJS that require two helpers of ajv and ajv-formats. Bundle them, so the
   // edge build has no `require` and no dependency left to resolve.
-  noExternal: [/^ajv\/dist\/runtime\//, /^ajv-formats\/dist\/formats$/],
+  // Also jsonc-parser: its `main` is a UMD build that loads its parts through a `require` parameter, so a server bundle of the core
+  // (esbuild, platform node) builds and then throws when it loads. Bundled here from its ES module build, it is no dependency.
+  noExternal: [/^ajv\/dist\/runtime\//, /^ajv-formats\/dist\/formats$/, /^jsonc-parser$/],
   outExtension() {
     return { js: ".js" };
   },
