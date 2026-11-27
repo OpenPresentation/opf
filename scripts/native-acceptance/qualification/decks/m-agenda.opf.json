@@ -1,0 +1,103 @@
+{
+ "name": "Matrix M67: long agendas",
+ "language": "en-US",
+ "slides": [
+  {
+   "layout": "agenda",
+   "title": "M67 agenda of 7 entries",
+   "blocks": [
+    {
+     "items": [
+      "Welcome",
+      "The problem",
+      "Pilot design",
+      "Evidence",
+      "Costs",
+      "Options",
+      "Decision"
+     ]
+    }
+   ],
+   "notes": "M67 slide 1 (also M50). Agenda layout with 7 entries. 0.35.1 stopped the export with 'Duplicate generated step badge shape.' Look: every entry has its numbered badge in every column (1 to 7), columns 4 + 3 as in the OPF preview, the group in the middle of the body (M50).",
+   "subtitle": "Exports with numbered badges in both columns, 4 + 3"
+  },
+  {
+   "layout": "agenda",
+   "title": "M67 agenda of 8 entries: exports, numbered badges in every column",
+   "blocks": [
+    {
+     "items": [
+      "Welcome and goals",
+      "Where the waits come from",
+      "The pilot at North",
+      "What the data shows",
+      "Costs and savings",
+      "Options for January",
+      "Risks and how we cover them",
+      "Budget request"
+     ]
+    }
+   ],
+   "notes": "M67 slide 2. Agenda layout with 8 entries. 0.35.1 stopped the export with 'Duplicate generated step badge shape.' Look: every entry has its numbered badge in every column (1 to 8), columns 4 + 4 as in the OPF preview, the group in the middle of the body (M50)."
+  },
+  {
+   "layout": "agenda",
+   "title": "M67 agenda of 14 entries: exports, numbered badges in every column",
+   "blocks": [
+    {
+     "items": [
+      "Welcome and goals",
+      "Where the waits come from",
+      "The pilot at North",
+      "What the data shows",
+      "Costs and savings",
+      "Options for January",
+      "Risks and how we cover them",
+      "Budget request",
+      "Rollout timeline",
+      "Training the gate staff",
+      "Support after go-live",
+      "Legal and labor review",
+      "Security of the handhelds",
+      "Decision and next steps"
+     ]
+    }
+   ],
+   "notes": "M67 slide 3. Agenda layout with 14 entries. 0.35.1 stopped the export with 'Duplicate generated step badge shape.' Look: every entry has its numbered badge in every column (1 to 14), columns 5 + 5 + 4 as in the OPF preview, the group in the middle of the body (M50)."
+  },
+  {
+   "layout": "agenda",
+   "title": "M67 control: agenda of five entries in one column",
+   "blocks": [
+    {
+     "items": [
+      "Welcome and goals",
+      "Where the waits come from",
+      "The pilot at North",
+      "What the data shows",
+      "Costs and savings"
+     ]
+    }
+   ],
+   "notes": "M67 slide 4. Control: an agenda of five entries in one column exported in 0.35.1 too; badge names unchanged."
+  },
+  {
+   "layout": "agenda",
+   "title": "M67 control: seven short entries that fit one column",
+   "blocks": [
+    {
+     "items": [
+      "Welcome",
+      "The problem",
+      "Pilot design",
+      "Evidence",
+      "Costs",
+      "Options",
+      "Decision"
+     ]
+    }
+   ],
+   "notes": "M67 slide 5. control: seven short entries that fit one column under a one-line title. 0.35.1 exported this one too (one column, one badge sequence). Look: badges 1 to 7 in one column."
+  }
+ ]
+}

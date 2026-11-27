@@ -3,7 +3,7 @@
   "description": "Release qualification corpus as of 0.36.0: the decks (new ones in decks/, existing examples by path), the PPTX variants to export, the run tiers, and per feature the slides, what to check and what each application is expected to make of the feature's object (targets). build.mjs exports it; run-powerpoint-windows.ps1 probes it through COM and evaluate.mjs grades the probe against the checks below; scripts/libreoffice grades the same features in LibreOffice Impress; the native-testing program (docs/programs/native-testing/README.md) runs it in Keynote and compares a run with the targets.",
   "tiers": {
     "smoke": {
-      "description": "About ten decks that together show every object kind, a hidden slide, a right-to-left slide, a chart of each family Keynote reads differently and the decks behind the most serious known differences, plus the decks named by unreleased changelog fragments.",
+      "description": "About a dozen decks that together show every object kind, a hidden slide, a right-to-left slide, a chart of each family Keynote reads differently and the decks behind the most serious known differences, plus the decks named by unreleased changelog fragments.",
       "variants": "default",
       "decks": [
         {
@@ -57,6 +57,18 @@
         {
           "deck": "coverage-images",
           "why": "Pictures with crops, masks, recolor and SVG; links on the shape of video captions (14, 15); per-point bar colors (16, kn-per-point-colors); alt text Keynote does not show (kn-alt-text)."
+        },
+        {
+          "deck": "m-charts",
+          "why": "One-series highlights whose copy fails OPF's import (kn-import-highlight-chart, 1-3), a label category Keynote drops (kn-label-category-dropped, 5 and 12), a pie legend cut short (5) and bar charts on table rows (13-16)."
+        },
+        {
+          "deck": "m-negative-bars",
+          "why": "Bars and columns below zero with long category names (kn-long-column-names, 5) and labels outside the plot area (kn-outer-plot-area-bar-labels, 8)."
+        },
+        {
+          "deck": "layouts-lots",
+          "why": "Every gallery layout overfilled: legends leave their frame and Keynote's copy fails OPF's import on colon categories (30, 31, 36), long titles overprint (kn-title-overprints)."
         }
       ],
       "sources": [
@@ -64,12 +76,42 @@
       ]
     },
     "release": {
-      "description": "The whole corpus: every deck of `decks` in every variant.",
+      "description": "The whole corpus (every deck of `decks` without a `group`, in every variant), plus the decks of the sources gallery-layouts and languages that a known Keynote difference names and no corpus deck carries.",
       "decks": "all",
-      "variants": "all"
+      "variants": "all",
+      "sources": [
+        {
+          "source": "gallery-layouts",
+          "decks": [
+            {
+              "deck": "layouts-lots",
+              "variants": [
+                "default"
+              ],
+              "why": "Charts of 5 series over 12 long categories leave their frame (kn-legend-leaves-frame) and Keynote's copy fails OPF's import on the colon in their names (kn-import-colon-categories, slides 30, 31, 36)."
+            }
+          ]
+        },
+        {
+          "source": "languages",
+          "decks": [
+            {
+              "deck": "lang-rtl",
+              "why": "A right-to-left table (kn-rtl-table, slides 1 and 2)."
+            },
+            {
+              "deck": "lang-cjk",
+              "variants": [
+                "native-body"
+              ],
+              "why": "Korean body text in a native body placeholder wraps differently (kn-korean-native-wrap, slide 4)."
+            }
+          ]
+        }
+      ]
     },
     "full": {
-      "description": "The corpus in every variant, plus the decks the runner builds from the named sources.",
+      "description": "The corpus in every variant, plus every deck of the sources gallery-layouts and languages and the examples the runner collects.",
       "decks": "all",
       "variants": "all",
       "sources": [
@@ -82,8 +124,8 @@
   "sources": {
     "native-fragments": "The decks and slides that the `native:` key of each unreleased changelog fragment names (changes/*.md, NT-07).",
     "examples": "Every example deck under examples/ that `decks` does not already name, exported in its default variant.",
-    "gallery-layouts": "Every layout of the default gallery (packages/gallery/catalog/layouts/) filled at three content sizes: short, typical and long.",
-    "languages": "One deck per language group of the language round (Latin, right to left, CJK, other scripts), in the default and native-body variants."
+    "gallery-layouts": "Every layout of the default gallery (packages/gallery/catalog/layouts/) filled at three content sizes: the decks whose `group` is \"gallery-layouts\" (layouts-little, layouts-ordinary, layouts-lots: short, typical and long), committed as the 0.36.0 Keynote round generated them.",
+    "languages": "One deck per language group of the language round (Latin, Cyrillic and Greek, right to left, CJK, Indic, Southeast Asia, other scripts), in the default and native-body variants: the decks whose `group` is \"languages\", committed as the 0.36.0 Keynote round generated them."
   },
   "checks": {
     "opens": "The file opens without a repair prompt or an error.",
@@ -442,6 +484,266 @@
     {
       "id": "coverage-size-standard",
       "source": "scripts/native-acceptance/qualification/decks/coverage-size-standard.opf.json"
+    },
+    {
+      "id": "m-charts",
+      "source": "scripts/native-acceptance/qualification/decks/m-charts.opf.json",
+      "description": "Changelog rows of 0.36.0 on 16 chart slides (one-series highlights, labels kept on one line, dashboards, pies and doughnuts with separators, bar charts on table rows); kn-label-category-dropped, kn-import-highlight-chart, kn-pie-legend-cut, kn-axis-details-rewritten and kn-table-alignment-export name only this deck."
+    },
+    {
+      "id": "m-negative-bars",
+      "source": "scripts/native-acceptance/qualification/decks/m-negative-bars.opf.json",
+      "description": "Bar and column charts with values below zero, short and long category names and twelve categories (changelog row M71); kn-long-column-names and kn-outer-plot-area-bar-labels name only this deck."
+    },
+    {
+      "id": "m-agenda",
+      "source": "scripts/native-acceptance/qualification/decks/m-agenda.opf.json",
+      "description": "Agendas of 5 to 14 entries in one or more columns with numbered badges (changelog row M67); kn-titles-written-smaller names only this deck."
+    },
+    {
+      "id": "m-text-flush",
+      "source": "scripts/native-acceptance/qualification/decks/m-text-flush.opf.json",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ],
+      "description": "Right-aligned and centered wrapped text in titles, body, table cells and a picture caption (changelog row M16); kn-flush-lines-hang and kn-table-header-terminal name it, the second only this deck."
+    },
+    {
+      "id": "m-text-flush-rtl",
+      "source": "scripts/native-acceptance/qualification/decks/m-text-flush-rtl.opf.json",
+      "description": "Wrapped Arabic and Hebrew text aligned to start, center and end, and mixed-direction lines (changelog row M16, right to left); kn-flush-lines-hang and kn-mixed-direction-order name it, the second only this deck."
+    },
+    {
+      "id": "layouts-little",
+      "source": "scripts/native-acceptance/qualification/decks/layouts/layouts-little.opf.json",
+      "group": "gallery-layouts",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ],
+      "description": "Every default gallery layout (38, in catalog order) with the least content it takes: a title or one entry per region."
+    },
+    {
+      "id": "layouts-ordinary",
+      "source": "scripts/native-acceptance/qualification/decks/layouts/layouts-ordinary.opf.json",
+      "group": "gallery-layouts",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        },
+        {
+          "name": "static",
+          "flags": [
+            "--slide-numbers",
+            "static"
+          ]
+        }
+      ],
+      "description": "Every default gallery layout (38, in catalog order) with typical content and a live slide-number footer."
+    },
+    {
+      "id": "layouts-lots",
+      "source": "scripts/native-acceptance/qualification/decks/layouts/layouts-lots.opf.json",
+      "group": "gallery-layouts",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ],
+      "description": "Every default gallery layout (38, in catalog order) filled past comfort: long titles, ten-entry lists with nested levels, 5-series charts over 12 long categories, 8x6 tables, 28 lines of code; kn-legend-leaves-frame and both kn-import-colon-categories records name only this deck."
+    },
+    {
+      "id": "lang-latin-1",
+      "source": "scripts/native-acceptance/qualification/decks/languages/lang-latin-1.opf.json",
+      "group": "languages",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ],
+      "description": "Article 1 of the Universal Declaration of Human Rights, one language tag per slide (24 slides): Latin-script languages af to gl."
+    },
+    {
+      "id": "lang-latin-2",
+      "source": "scripts/native-acceptance/qualification/decks/languages/lang-latin-2.opf.json",
+      "group": "languages",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ],
+      "description": "Article 1 of the Universal Declaration of Human Rights, one language tag per slide (24 slides): Latin-script languages de to es."
+    },
+    {
+      "id": "lang-latin-3",
+      "source": "scripts/native-acceptance/qualification/decks/languages/lang-latin-3.opf.json",
+      "group": "languages",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ],
+      "description": "Article 1 of the Universal Declaration of Human Rights, one language tag per slide (9 slides): Latin-script languages sw to zu."
+    },
+    {
+      "id": "lang-cyrillic-greek",
+      "source": "scripts/native-acceptance/qualification/decks/languages/lang-cyrillic-greek.opf.json",
+      "group": "languages",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ],
+      "description": "Article 1 of the Universal Declaration of Human Rights, one language tag per slide (9 slides): Cyrillic and Greek languages."
+    },
+    {
+      "id": "lang-rtl",
+      "source": "scripts/native-acceptance/qualification/decks/languages/lang-rtl.opf.json",
+      "group": "languages",
+      "description": "Article 1 of the Universal Declaration of Human Rights, one language tag per slide (6 slides): Right-to-left languages (Arabic, Hebrew, Pashto, Persian, Punjabi in Arabic script, Urdu), with a table and a chart on two slides; kn-rtl-table names only this deck."
+    },
+    {
+      "id": "lang-cjk",
+      "source": "scripts/native-acceptance/qualification/decks/languages/lang-cjk.opf.json",
+      "group": "languages",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ],
+      "description": "Article 1 of the Universal Declaration of Human Rights, one language tag per slide (4 slides): Chinese (simplified and traditional), Japanese and Korean, with tables and charts; kn-korean-native-wrap (native-body, slide 4) names only this deck."
+    },
+    {
+      "id": "lang-indic",
+      "source": "scripts/native-acceptance/qualification/decks/languages/lang-indic.opf.json",
+      "group": "languages",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ],
+      "description": "Article 1 of the Universal Declaration of Human Rights, one language tag per slide (10 slides): Indic scripts (Bengali, Gujarati, Devanagari, Kannada, Malayalam, Gurmukhi, Tamil, Telugu)."
+    },
+    {
+      "id": "lang-southeast-asia",
+      "source": "scripts/native-acceptance/qualification/decks/languages/lang-southeast-asia.opf.json",
+      "group": "languages",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ],
+      "description": "Article 1 of the Universal Declaration of Human Rights, one language tag per slide (2 slides): Khmer and Thai."
+    },
+    {
+      "id": "lang-other",
+      "source": "scripts/native-acceptance/qualification/decks/languages/lang-other.opf.json",
+      "group": "languages",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ],
+      "description": "Article 1 of the Universal Declaration of Human Rights, one language tag per slide (3 slides): Amharic, Armenian and Georgian."
     }
   ],
   "features": [
@@ -4335,6 +4637,235 @@
           "outcome": "n/a",
           "kind": "footer",
           "note": "features.mjs does not grade footer: it needs the app's Header and Footer dialog."
+        }
+      }
+    },
+    {
+      "id": "NT10-m-charts",
+      "title": "Chart export fixes of 0.36.0: one-series highlights, labels on one line, dashboards, pies with separators, bars on table rows",
+      "changes": [],
+      "deck": "m-charts",
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Every chart opens native, matches the preview and imports back; each slide title names the changelog row it shows.",
+      "targets": {
+        "keynote": {
+          "outcome": "changed",
+          "kind": "chart",
+          "known": [
+            "kn-reference-line-label",
+            "kn-direct-line-labels",
+            "kn-stacked-lines",
+            "kn-chart-title",
+            "kn-per-point-colors",
+            "kn-label-category-dropped",
+            "kn-import-highlight-chart",
+            "kn-highlight-legend-twice",
+            "kn-pie-legend-cut",
+            "kn-axis-details-rewritten",
+            "kn-table-alignment-export"
+          ],
+          "note": "Native charts that Keynote reads differently (0.36.0: 19 native, 2 changed); Keynote's copy fails OPF's import (invalid-chart-cache)."
+        }
+      }
+    },
+    {
+      "id": "NT10-m-negative-bars",
+      "title": "Bar and column charts below zero with short, long and many categories",
+      "changes": [],
+      "deck": "m-negative-bars",
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Labels of bars below zero sit outside the bar on the zero side; long category names keep their room.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "chart",
+          "known": [
+            "kn-long-column-names",
+            "kn-outer-plot-area-bar-labels"
+          ],
+          "note": "Native charts (0.36.0: 8 of 8); long column names and labels outside the plot area drawn differently."
+        }
+      }
+    },
+    {
+      "id": "NT10-m-agenda",
+      "title": "Long agendas in columns with numbered badges",
+      "changes": [],
+      "deck": "m-agenda",
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Every entry keeps its badge and column; the title keeps its size.",
+      "targets": {
+        "keynote": {
+          "outcome": "changed",
+          "kind": "group",
+          "known": [
+            "kn-titles-written-smaller",
+            "kn-text-shape-group"
+          ],
+          "note": "The numbered badges arrive as groups of a shape and a text box (QS-01); Keynote writes the titles smaller on resave."
+        }
+      }
+    },
+    {
+      "id": "NT10-m-text-flush",
+      "title": "Right-aligned and centered wrapped text ends flush",
+      "changes": [],
+      "deck": "m-text-flush",
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Wrapped lines end on the right edge or center on one axis, as in the preview.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-flush-lines-hang",
+            "kn-table-header-terminal"
+          ],
+          "note": "Native text; Keynote hangs the trailing space of a wrapped line past the edge (kn-flush-lines-hang)."
+        }
+      }
+    },
+    {
+      "id": "NT10-m-text-flush-native",
+      "title": "Right-aligned and centered wrapped text ends flush, in native body placeholders",
+      "changes": [],
+      "deck": "m-text-flush",
+      "variant": "native-body",
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Wrapped lines end on the right edge or center on one axis, as in the preview.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "body",
+          "known": [
+            "kn-flush-lines-hang",
+            "kn-table-header-terminal"
+          ],
+          "note": "Native body placeholders; Keynote hangs the trailing space of a wrapped line past the edge (kn-flush-lines-hang)."
+        }
+      }
+    },
+    {
+      "id": "NT10-m-text-flush-rtl",
+      "title": "Right-to-left and mixed-direction wrapped text ends flush",
+      "changes": [],
+      "deck": "m-text-flush-rtl",
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Arabic and Hebrew lines end flush on the aligned edge; mixed-direction runs keep their order.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "text",
+          "known": [
+            "kn-flush-lines-hang",
+            "kn-mixed-direction-order"
+          ],
+          "note": "Native text; trailing spaces hang past the edge and a mixed-direction line changes its order (kn-mixed-direction-order)."
+        }
+      }
+    },
+    {
+      "id": "NT10-layouts-lots",
+      "title": "Every gallery layout filled past comfort",
+      "changes": [],
+      "deck": "layouts-lots",
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Every slide opens and matches the preview; the charts on 30, 31 and 36 import back.",
+      "targets": {
+        "keynote": {
+          "outcome": "changed",
+          "known": [
+            "kn-quote-beside-portrait",
+            "kn-link-color",
+            "kn-legend-leaves-frame",
+            "kn-import-colon-categories",
+            "kn-import-colon-categories-layouts",
+            "kn-title-overprints",
+            "kn-line-boxes-overrun"
+          ],
+          "note": "Two titles change (0.36.0: title.changed 2); charts leave their frame; Keynote's copy fails OPF's import (unsupported-chart-cache)."
+        }
+      }
+    },
+    {
+      "id": "NT10-lang-rtl",
+      "title": "Right-to-left languages with a table and a chart",
+      "changes": [],
+      "deck": "lang-rtl",
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Text, list, table and chart read right to left as in the preview.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "table",
+          "known": [
+            "kn-rtl-table"
+          ],
+          "note": "Native tables (0.36.0: 2 of 2), but the right-to-left table is drawn left to right (kn-rtl-table)."
+        }
+      }
+    },
+    {
+      "id": "NT10-lang-cjk-native",
+      "title": "Chinese, Japanese and Korean in native body placeholders",
+      "changes": [],
+      "deck": "lang-cjk",
+      "variant": "native-body",
+      "checks": [
+        "opens",
+        "slides",
+        "visual",
+        "roundtrip"
+      ],
+      "check": "Body text wraps as in the preview.",
+      "targets": {
+        "keynote": {
+          "outcome": "native",
+          "kind": "body",
+          "known": [
+            "kn-korean-native-wrap"
+          ],
+          "note": "Native body placeholders; Korean wraps at other places (kn-korean-native-wrap)."
         }
       }
     }
