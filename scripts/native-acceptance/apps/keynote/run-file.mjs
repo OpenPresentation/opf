@@ -12,14 +12,29 @@ export const iso = (date) => date.toISOString().replace(/\.\d{3}Z$/u, 'Z');
 
 const failedVerb = (error) => ({ status: 'failed', message: String(error?.message ?? error) });
 
+// NT-18: Keynote's answers that mean it could not write into the run directory (render's export folder, resave's copy):
+// "could not be exported ... You don't have permission. (6)" on 2026-11-27, and the classic write errors -54 (permErr),
+// -61 (wrPermErr), -5000 (afpAccessDenied).
+const WRITE_ERROR = /permission|not permitted|could(?: not|n[’']t) be (?:exported|saved|written)|\((?:-54|-61|-5000)\)\s*$/iu;
+
+/** True when a verb's answer is a permission or write error of the application (not our own "wrote no copy" check). */
+export function isWriteError(verb) {
+  return verb?.status === 'failed' && WRITE_ERROR.test(String(verb.message ?? ''));
+}
+
 /**
  * Runs one file. input = { path (absolute), relativePath (to the run's input root), deck, variant? }.
- * options = { opf: { version, commit? }, fonts?, driver?, target? } (driver and target default to Keynote's). ctx must have
- * been through check() (ctx.facts).
- * Returns { result, validation, close, stop }: stop is true when the run must not go on (open timed out, a document of
- * the run's own could not be closed).
+ * options = { opf: { version, commit? }, fonts?, driver?, target?, keepGoing? } (driver and target default to Keynote's).
+ * ctx must have been through check() (ctx.facts).
+ * Returns { result, validation, close, stop, stopReason }: stop is true when the run must send the application no further
+ * file, and stopReason says why. It stops when open did not return a document (failed, alert or timeout: a refused
+ * import may leave an alert in front of the owner, and every further open on 2026-11-27 left another), when render or
+ * resave failed with a permission or write error after open and probe were done (then resave is not sent, the document is
+ * closed and the run stops), when a document opened although open did not finish, and when a document of the run's own
+ * could not be closed. keepGoing (run.mjs --keep-going; the native runner never sets it) goes on after a refused import
+ * or a write error, as before NT-18; a timed-out open and a document left open still stop.
  */
-export async function runFile(ctx, input, { opf, fonts = 'installed', driver = keynoteDriver, target = 'keynote' }) {
+export async function runFile(ctx, input, { opf, fonts = 'installed', driver = keynoteDriver, target = 'keynote', keepGoing = false }) {
   if (!ctx.facts?.application || !ctx.facts?.system) throw new Error('runFile: run check(ctx) first; it reads the application and system versions');
   const variant = input.variant ?? 'default';
   const file = { id: fileId(input.deck, variant), path: input.path };
@@ -51,10 +66,13 @@ export async function runFile(ctx, input, { opf, fonts = 'installed', driver = k
       } catch (error) {
         verbs.render = failedVerb(error);
       }
-      try {
-        verbs.resave = (await driver.resave(ctx, handle)).verb;
-      } catch (error) {
-        verbs.resave = failedVerb(error);
+      // A write error on render (2026-11-27: "You don't have permission. (6)") is not sent a resave that would fail the same way.
+      if (keepGoing || !(verbs.probe.status === 'done' && isWriteError(verbs.render))) {
+        try {
+          verbs.resave = (await driver.resave(ctx, handle)).verb;
+        } catch (error) {
+          verbs.resave = failedVerb(error);
+        }
       }
     }
   } finally {
@@ -95,10 +113,20 @@ export async function runFile(ctx, input, { opf, fonts = 'installed', driver = k
   mkdirSync(dir, { recursive: true });
   writeFileSync(path.join(dir, 'result.json'), `${JSON.stringify(result, null, 2)}\n`);
   const leftOpen = Boolean(handle?.documentId) && closed.status !== 'done';
-  return { result, validation, close: closed, stop: Boolean(handle?.stop) || leftOpen };
+  const name = ctx.facts.application?.name ?? 'the application';
+  let stopReason = null;
+  if (leftOpen) stopReason = `its document did not close (${closed.message ?? closed.state}); close it by hand`;
+  else if (verbs.open.status === 'timeout' || handle?.stop) stopReason = `open did not finish; look at ${name} before the next run`;
+  else if (verbs.open.status !== 'done' && !keepGoing) {
+    stopReason = `${name} refused to import ${result.file.id}: ${verbs.open.message ?? verbs.open.status}. An alert may be showing in ${name}; only the owner dismisses it. No further file was sent.`;
+  } else if (verbs.open.status === 'done' && verbs.probe?.status === 'done' && !keepGoing) {
+    const written = ['render', 'resave'].find((verb) => isWriteError(verbs[verb]));
+    if (written) stopReason = `${name} could not write the ${written} of ${result.file.id}: ${verbs[written].message}. The document was ${closed.status === 'done' ? 'closed' : 'not closed'}; no further file was sent. ${name} may be worn out: ask the owner to look at it.`;
+  }
+  return { result, validation, close: closed, stop: stopReason !== null, stopReason };
 }
 
-/** run.json for the files run so far (core/result/native-run.schema.json); tier and baseline are the runner's (NT-05). */
+/** run.json for the files run so far (core/result/native-run.schema.json); tier and baseline are the runner's (NT-05). check is check()'s answer. */
 export function buildRun(ctx, { opf, fonts = 'installed', started, check, results, target = 'keynote', tier = null, baseline = null }) {
   return {
     schemaVersion: SCHEMA_VERSION,
@@ -111,7 +139,8 @@ export function buildRun(ctx, { opf, fonts = 'installed', started, check, result
     baseline,
     started,
     finished: iso(ctx.now()),
-    check: { status: check.status, reasons: check.reasons },
+    // run.json's check is strict ({ status, reasons }); check()'s notes (Keynote's wear, a warning) follow its reasons there.
+    check: { status: check.status, reasons: [...check.reasons, ...(check.notes ?? [])] },
     files: results.map(runFileEntry),
   };
 }

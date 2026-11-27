@@ -424,6 +424,7 @@ export async function runNative(argv, deps = {}) {
 
     let driver;
     let ctx;
+    let checked;
     if (target === 'keynote') {
       driver = await d.loadDriver(target);
       const warningsText = options.warningsDir
@@ -434,10 +435,12 @@ export async function runNative(argv, deps = {}) {
         : undefined;
       ctx = driver.createContext({ runDir, warningsText });
       const first = await step('check', async (entry) => {
-        const answer = await driver.check(ctx);
+        const answer = await driver.check(ctx, { files: selection.files.length });
         entry.status = answer.status;
+        if (answer.notes?.length) entry.message = answer.notes.join(' ');
         return answer;
       });
+      checked = first;
       if (first.status !== 'ready') return refuse('check', first.reasons);
       report.application = first.facts.application;
     }
@@ -490,8 +493,8 @@ export async function runNative(argv, deps = {}) {
       await step('run', async (entry) => {
         const started = iso(d.now());
         const results = [];
-        for (const input of built) {
-          const again = await driver.check(ctx);
+        for (const [index, input] of built.entries()) {
+          const again = await driver.check(ctx, { files: built.length - index });
           if (again.status !== 'ready') {
             report.notRun.push({ what: `file ${input.id} and the files after it`, reason: `check refused before it: ${again.reasons.join('; ')}`, blocking: true });
             stopped = true;
@@ -504,12 +507,12 @@ export async function runNative(argv, deps = {}) {
           for (const verb of ['open', 'probe', 'render', 'resave']) if (verbs[verb].message) say(`    ${verb}: ${verbs[verb].message}`);
           if (!done.validation.ok) throw new Error(`${input.id}: result.json does not validate: ${done.validation.errors.join('; ')}`);
           if (done.stop) {
-            report.notRun.push({ what: `the files after ${input.id}`, reason: done.close.status !== 'done' && done.close.status !== 'not-run' ? `its document did not close (${done.close.message ?? done.close.state}); close it by hand` : `open did not finish; look at ${ctx.facts.application?.name ?? 'the application'} before the next run`, blocking: true });
+            report.notRun.push({ what: `the files after ${input.id}`, reason: done.stopReason, blocking: true });
             stopped = true;
             break;
           }
         }
-        const run = buildRun(ctx, { opf, started, check: { status: 'ready', reasons: [] }, results, target, tier: options.tier, baseline: baseline?.version ?? null });
+        const run = buildRun(ctx, { opf, started, check: { status: 'ready', reasons: [], notes: checked?.notes ?? [] }, results, target, tier: options.tier, baseline: baseline?.version ?? null });
         const validation = writeRun(ctx, run);
         if (!validation.ok) throw new Error(`run.json does not validate: ${validation.errors.join('; ')}`);
         entry.message = `${results.length} of ${built.length} file(s) into ${runDir}`;

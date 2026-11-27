@@ -27,7 +27,7 @@ export const GRACE = 20;
 
 /**
  * The context of one run: { runDir, exec, machine, timeouts, ledger, warningsText, now, script, facts }. facts is filled
- * by check(): { application, system, documents }.
+ * by check(): { application, system, documents, wear }.
  *   warningsText(fileId) -> string | null: the text of Keynote's Warnings window for that file, read by someone who could
  *   see it (Keynote shows the window only while it is in front). Without it the warnings are "not-read".
  */
@@ -86,14 +86,57 @@ async function info(ctx) {
   return answer.status === 'done' ? { ...answer, ...parseInfo(answer.stdout) } : answer;
 }
 
+// NT-18: Keynote keeps two descriptors open per imported .pptx on its remote-assets cache
+// (~/Library/Containers/com.apple.Keynote/Data/Library/Caches/app-remote-assets/database and database-wal) and does not
+// close them while it runs. On 2026-11-27 a Keynote started on 2026-11-25 stopped importing after about 890 documents,
+// with 1,784 such descriptors (about 1,830 open in all, measured with lsof): every later open failed with -1728 and left
+// an alert in front of the owner. check() refuses when this run's files would take the count past REMOTE_ASSETS_REFUSE
+// (about 140 imports short of that failure) and notes a warning past REMOTE_ASSETS_WARN.
+export const DESCRIPTORS_PER_IMPORT = 2;
+export const REMOTE_ASSETS_REFUSE = 1500;
+export const REMOTE_ASSETS_WARN = 1000;
+
 /**
- * Can this Mac run Keynote now? { status: "ready" | "refused", reasons: [], facts }. Refuses when Keynote is not running
- * (the owner starts it), when the screen is locked, or when a document the run did not open is open. Never starts or quits
- * Keynote; sends no Apple event unless Keynote runs and the screen is unlocked, and then only `info`.
+ * Keynote's wear against the files still to run: { refusal: string | null, notes: [string] }. wear is machine.mjs
+ * keynoteWear's answer; files the number of files this run still means to open. Unread wear never refuses.
  */
-export async function check(ctx) {
+export function judgeWear(wear, files = 0) {
+  if (!wear) return { refusal: null, notes: [] };
+  if (wear.remoteAssets === null || wear.remoteAssets === undefined) {
+    return { refusal: null, notes: [`Keynote's wear: not read (${(wear.problems ?? []).join('; ') || 'no answer'}).`] };
+  }
+  const planned = Math.max(0, Number(files) || 0);
+  const projected = wear.remoteAssets + DESCRIPTORS_PER_IMPORT * planned;
+  const since = wear.started ? `since it was started on ${wear.started}` : 'since it was started (start time not read)';
+  const notes = [
+    `Keynote's wear: process ${wear.pid}, started ${wear.started ?? 'at a time not read'}; ${wear.remoteAssets} open descriptors on app-remote-assets (${wear.descriptors} in all), about ${wear.imports} documents imported; ${planned} file(s) planned, which would bring app-remote-assets to about ${projected} (refused above ${REMOTE_ASSETS_REFUSE}).`,
+  ];
+  if (projected > REMOTE_ASSETS_REFUSE) {
+    return {
+      refusal: `Keynote has imported about ${wear.imports} documents ${since}; it stopped importing at about 890 on 2026-11-27; ask the owner to quit and reopen Keynote (the driver never starts or quits it). This run's ${planned} file(s) would bring its app-remote-assets descriptors to about ${projected}, past ${REMOTE_ASSETS_REFUSE}.`,
+      notes,
+    };
+  }
+  if (projected > REMOTE_ASSETS_WARN) {
+    notes.push(
+      `Warning: Keynote has imported about ${wear.imports} documents ${since}; this run would bring its app-remote-assets descriptors to about ${projected} (refused above ${REMOTE_ASSETS_REFUSE}; it stopped importing at about 890 documents on 2026-11-27). Ask the owner to quit and reopen Keynote before a long run.`,
+    );
+  }
+  return { refusal: null, notes };
+}
+
+/**
+ * Can this Mac run Keynote now? { status: "ready" | "refused", reasons: [], notes: [], facts }. Refuses when Keynote is
+ * not running (the owner starts it), when the screen is locked, when a document the run did not open is open, or when
+ * Keynote is too worn to import `files` more documents (judgeWear). notes carry Keynote's wear and any warning; they
+ * never refuse. Never starts or quits Keynote; sends no Apple event unless Keynote runs and the screen is unlocked, and
+ * then only `info`. The wear comes from pgrep, ps and lsof, which send Keynote nothing.
+ *   files: how many files the run still means to open (the per-file check passes the number left, this one included).
+ */
+export async function check(ctx, { files = 0 } = {}) {
   const reasons = [];
-  const facts = { application: null, system: null, documents: [] };
+  const notes = [];
+  const facts = { application: null, system: null, documents: [], wear: null };
   const running = await ctx.machine.keynoteRunning(ctx.exec);
   if (!running) reasons.push('Keynote is not running. The owner starts it; the driver never does.');
   let locked = true;
@@ -121,8 +164,16 @@ export async function check(ctx) {
       }
     }
   }
+  if (running) {
+    facts.wear = await Promise.resolve()
+      .then(() => ctx.machine.keynoteWear(ctx.exec))
+      .catch((error) => ({ pid: null, started: null, descriptors: null, remoteAssets: null, imports: null, problems: [String(error?.message ?? error)] }));
+    const judged = judgeWear(facts.wear, files);
+    if (judged.refusal) reasons.push(judged.refusal);
+    notes.push(...judged.notes);
+  }
   ctx.facts = facts;
-  return { status: reasons.length === 0 ? 'ready' : 'refused', reasons, facts };
+  return { status: reasons.length === 0 ? 'ready' : 'refused', reasons, notes, facts };
 }
 
 export function sha256File(file) {

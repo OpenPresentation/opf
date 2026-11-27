@@ -79,7 +79,7 @@ test('check is ready otherwise: one info event, versions from Keynote and its bu
   assert.deepEqual(exec.osascript(), [['info', 50_000]]);
   assert.deepEqual(
     exec.calls.map(([command]) => command),
-    ['pgrep', 'ioreg', 'sw_vers', 'osascript', 'mdfind', 'plutil', 'plutil', 'plutil'],
+    ['pgrep', 'ioreg', 'sw_vers', 'osascript', 'mdfind', 'plutil', 'plutil', 'plutil', 'pgrep', 'ps', 'lsof'],
   );
   assert.deepEqual(exec.calls[0][1], ['-x', 'Keynote']);
 });
@@ -192,7 +192,7 @@ test('open timing out: the late document is ledgered and closed, the run stops',
   assert.equal(validation.ok, true);
 });
 
-test('open failing with nothing opened: failed, no close, no stop', async () => {
+test('open failing with nothing opened: failed, no close, and the run stops (NT-18)', async () => {
   const { exec, ctx, file } = setup({ on: { open: () => ({ stdout: 'ERROR\t\topen failed: The file can’t be opened.\\nIt is damaged. (-10000)\n' }) } });
   await check(ctx);
   const { result, stop } = await runFile(ctx, file, { opf: OPF });
@@ -202,7 +202,7 @@ test('open failing with nothing opened: failed, no close, no stop', async () => 
     exec.osascript().map(([verb]) => verb),
     ['info', 'open', 'info'],
   );
-  assert.equal(stop, false);
+  assert.equal(stop, true);
   assert.deepEqual(result.slides, []);
   assert.equal(validateResult(result).ok, true);
 });

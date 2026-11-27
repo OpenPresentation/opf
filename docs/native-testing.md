@@ -79,6 +79,14 @@ summary carries the release.
 - The owner starts Keynote. The run never starts, activates or quits Keynote.
 - The screen stays unlocked for the whole run.
 - No other Keynote document is open; `check` refuses when one is.
+- Keynote has room for the run. Keynote keeps two file descriptors open for every document it imports (on its remote-assets
+  cache) and never closes them while it runs; on 2026-11-27 a Keynote started two days before stopped importing after about
+  890 documents. `check` reads the count with `lsof` (no Apple event) and refuses when the planned files would take it past
+  1,500 descriptors, with a warning past 1,000. The owner quits and reopens Keynote before a release tier that follows a long
+  Keynote session.
+- If Keynote refuses an import anyway, the run stops at that file (exit 2): Keynote may show one alert ("<file>.pptx can't be
+  imported"), which only the owner dismisses; the run never dismisses alerts. The same after a permission or write error on
+  `render` or `resave`: the document is closed and no further file is sent.
 - One job at a time on the machine, and only the session that runs the command sends Keynote events. Before you start, read the
   tracking issue of any round that may be running (for 0.36.0, opf#1466).
 - The run never saves and closes only the documents it opened.

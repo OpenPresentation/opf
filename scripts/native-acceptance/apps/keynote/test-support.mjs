@@ -93,12 +93,27 @@ export function tinyPng({ width = 960, height = 540, colorType = 6, profile } = 
   return Buffer.concat(parts);
 }
 
+/** lsof -p output for Keynote with `remoteAssets` descriptors on app-remote-assets (two per imported document). */
+export function lsofTable(remoteAssets, pid = 4242) {
+  const caches = '/Users/someone/Library/Containers/com.apple.Keynote/Data/Library/Caches/app-remote-assets';
+  const rows = [
+    'COMMAND   PID    USER   FD   TYPE             DEVICE SIZE/OFF                NODE NAME',
+    `Keynote ${pid} someone  cwd    DIR               1,18      640                   2 /`,
+    `Keynote ${pid} someone  txt    REG               1,18  1357312 1152921500312571425 /Applications/Keynote.app/Contents/MacOS/Keynote`,
+  ];
+  for (let index = 0; index < remoteAssets; index += 1) {
+    rows.push(`Keynote ${pid} someone  ${30 + index}u   REG               1,18    32768            90000${index} ${caches}/${index % 2 === 0 ? 'database' : 'database-wal'}`);
+  }
+  return `${rows.join('\n')}\n`;
+}
+
 /**
  * A fake ctx.exec: this Mac (pgrep, ioreg, sw_vers, mdfind, plutil) and Keynote behind osascript, with documents (documentId: one id, or a list for
  * successive opens) of `slideCount` slides (`skipped` positions) whose probe lines are `lines`. `on.<verb>(args)` replaces one verb's answer.
- * exec.calls lists every [command, args, options].
+ * Keynote's wear (pgrep's pid, ps's start time, lsof's table): `remoteAssets` descriptors on app-remote-assets (plus a few
+ * others), or `remoteAssets: null` for an lsof that is not there. exec.calls lists every [command, args, options].
  */
-export function fakeExec({ running = true, locked = false, documents = [], slideCount = 4, skipped = [4], lines = '', on = {}, documentId = 'DOC-1' } = {}) {
+export function fakeExec({ running = true, locked = false, documents = [], slideCount = 4, skipped = [4], lines = '', on = {}, documentId = 'DOC-1', remoteAssets = 6 } = {}) {
   const open = [...documents];
   const ids = [documentId].flat();
   let opened = 0;
@@ -132,7 +147,9 @@ export function fakeExec({ running = true, locked = false, documents = [], slide
   };
   const plist = { CFBundleIdentifier: 'com.apple.Keynote', CFBundleVersion: '7052.0.68', CFBundleShortVersionString: '16.0' };
   const commands = {
-    pgrep: () => ({ code: running ? 0 : 1 }),
+    pgrep: () => (running ? { stdout: '4242\n' } : { code: 1 }),
+    ps: () => ({ stdout: 'Wed Nov 25 09:14:03 2026\n' }),
+    lsof: () => (remoteAssets === null ? { code: null, stderr: 'spawn lsof ENOENT' } : { stdout: lsofTable(remoteAssets) }),
     ioreg: () => ({ stdout: `<dict><key>CGSSessionScreenIsLocked</key><${locked}/><key>CGSSessionUserIDKey</key><integer>501</integer></dict>` }),
     sw_vers: () => ({ stdout: '26.6.2\n' }),
     mdfind: () => ({ stdout: '/Applications/Keynote.app\n' }),
