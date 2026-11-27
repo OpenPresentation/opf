@@ -1,6 +1,6 @@
 // RR-86 opt-in prototype. Native paragraphs trade measured line positions for a
 // single editable body. No source words or per-line recovery tags are stored.
-import {bindNoBreak, paragraphDirection, resolveTextStyle, styledText, textWidthMeasurer} from '@openpresentation/opf/composition';
+import {bindNoBreak, paragraphDirection, physicalAlignment, resolveTextStyle, styledText, textWidthMeasurer} from '@openpresentation/opf/composition';
 import {autoNumScheme} from './numbered-list.js';
 import {exportHyperlink} from './slide-links.js';
 
@@ -9,6 +9,25 @@ const RUN_KEYS = new Set(['text', 'bold', 'italic', 'underline', 'strikethrough'
 const runsOf = value => typeof value === 'string' ? [{text: value}] : value;
 const ownText = value => Array.isArray(value) ? value.map(run => typeof run === 'string' ? run : run?.text ?? '').join('') : value;
 const richSupported = value => typeof value === 'string' || Array.isArray(value) && value.every(run => typeof run === 'string' || run && typeof run.text === 'string' && Object.keys(run).every(key => RUN_KEYS.has(key)) && (run.link === undefined || /^(https?:|mailto:|tel:)/i.test(run.link)));
+/**
+ * The physical alignment of a native body's paragraphs, as the measured export writes it: a list keeps its own rule (its lines start at the
+ * physical start edge: left, or right in right-to-left text, as addMeasuredList's `physicalAlignment('left', direction)`), never the slide's or
+ * region's content alignment, which centers or right-aligns text and not a list's markers; text takes the item's alignment (opf#1551).
+ */
+export function nativeAlignment(item, list) {
+  if (list) return physicalAlignment('left', item.text?.listEntries?.[0]?.direction ?? item.text?.directions?.[0]);
+  return physicalAlignment(item.alignment ?? 'left', item.text?.directions?.[0]);
+}
+/**
+ * The runs core fitted for a text, by index into the value it fitted: the fragments' `run` objects, which carry what core decided about the
+ * run's look (the emphasis color of a display message's bold words, a legible color on a message surface). The measured export draws these
+ * (richFitLineRuns); a native body reads the same objects, so both write one color for one run (opf#1553).
+ */
+function fittedRuns(fit) {
+  const runs = new Map();
+  for (const line of fit?.richLines ?? []) for (const fragment of line.fragments) if (!fragment.kind && !runs.has(fragment.runIndex)) runs.set(fragment.runIndex, fragment.run);
+  return runs;
+}
 // An LTR deck does not ask core for paragraph directions. Conservatively reject
 // RTL letters anywhere (including an embedded phrase), using core's own script rule.
 const hasRtl = text => [...text].some(char => /\p{L}/u.test(char) && paragraphDirection(char, 'rtl') === 'rtl');
@@ -279,7 +298,7 @@ export function nativeWrapBox(item, values, list, limits, textMeasurement, colle
     return undefined;
   }
   const average = textWidthMeasurer(style, textMeasurement)('abcdefghijklmnopqrstuvwxyz', item.text.fontSize) / 26;
-  const alignment = item.alignment ?? 'left';
+  const alignment = list ? nativeAlignment(item, true) : item.alignment ?? 'left';
   const left = Math.max(0, item.box.x - limits.left), right = Math.max(0, limits.right - (item.box.x + item.box.width));
   const room = alignment === 'center' ? 2 * Math.min(left, right) : alignment === 'right' ? left : right;
   const low = widths.widest + margin, high = Math.min(widths.unbroken - margin, wrapWidth + room);
@@ -344,11 +363,15 @@ export function addNativeBody(slide, plan, context, options, helpers) {
   const baseFont = helpers.nativeFontOptions(base);
   const paragraphs = [], latinFragments = [];
   let sourceRun = 0;
-  for (const value of values) {
+  for (const [valueIndex, value] of values.entries()) {
     let paragraph = [];
     paragraphs.push(paragraph);
-    for (const source of runsOf(value)) {
-      const run = typeof source === 'string' ? {text: source} : source;
+    const fitted = fittedRuns(list ? item.text.listEntries[valueIndex]?.text : item.text);
+    for (const [runIndex, source] of runsOf(value).entries()) {
+      const authored = typeof source === 'string' ? {text: source} : source;
+      // opf#1553: the color of a fitted run (core's emphasis) is the color of the native run.
+      // It is read only where the fitted run is this run (the same text at the same index).
+      const run = fitted.get(runIndex)?.text === authored.text ? {...authored, color: fitted.get(runIndex).color} : authored;
       const style = resolveTextStyle({...base, fontFamily: run.fontFamily ?? base.fontFamily,
         fontWeight: run.bold === undefined ? base.fontWeight : run.bold ? 700 : 400, italic: run.italic ?? base.italic}, options.textMeasurement);
       const hex = helpers.exportColor(run.color, context, context.colors.text);
@@ -393,7 +416,7 @@ export function addNativeBody(slide, plan, context, options, helpers) {
   // RR-105: the box wraps where core wrapped (nativeWrapBox), at the item's columns (a region can be wider than core's measure).
   const {x, width} = plan.wrap;
   slide.addText(runs, {...helpers.textBoxOptions({x: x / 96, y: box.y / 96, w: width / 96, h: box.height / 96}, context, item.text.fontSize * .75),
-    ...baseFont, ...paragraphOptions, objectName, align: item.alignment ?? 'left', valign: {top: 'top', middle: 'mid', bottom: 'bottom'}[anchor],
+    ...baseFont, ...paragraphOptions, objectName, align: nativeAlignment(item, list), valign: {top: 'top', middle: 'mid', bottom: 'bottom'}[anchor],
     fit: 'none', wrap: true, lineSpacing: pitch(0), lineSpacingMultiple: undefined, bold: false, italic: false});
   // Defaults for blank/appended paragraphs must name the selected family too.
   const defaults = `<a:defRPr sz="${Math.round(item.text.fontSize * 75)}" b="${baseFont.bold ? 1 : 0}" i="${baseFont.italic ? 1 : 0}"><a:solidFill>${helpers.solidColorXml(context.textColor)}</a:solidFill><a:latin typeface="${escapeXml(baseFont.fontFace)}"/></a:defRPr>`;
@@ -449,6 +472,22 @@ const zeroParagraphSpace = pPr => {
   return pPr.includes('<a:spcAft>') ? pPr : pPr.replace('</a:spcBef>', `</a:spcBef>${NO_SPACE_AFTER}`);
 };
 
+/**
+ * opf#1552: the weight and slant of every run, written (`b="0"` and `i="0"` too). The vendored writer emits `b` and `i` only when set, so a
+ * regular run carried neither and read them from a level-1 paragraph's chain: the shape's list style (`a:lvl1pPr`), then the layout's
+ * placeholder, which is bold where the layout's sample text was (template-layouts.js writes `b="1"` into every level). The list style's
+ * `a:defPPr` is not one of the level styles and never reached the runs. Every other run property the layout's placeholder can set (size,
+ * font faces) or that a paragraph's chain would supply (color, underline) is already written on the run, so the weight and the slant were
+ * the whole hole; runs state them as they do the rest, which no layout, template or master can change.
+ */
+const explicitStyle = attributes => {
+  for (const attribute of ['b', 'i']) if (!new RegExp(`\\s${attribute}="`).test(attributes)) {
+    const at = attributes.search(/\s(?:u|strike|cap|spc|baseline|kern|dirty|err|smtClean|noProof)="/);
+    attributes = at < 0 ? `${attributes} ${attribute}="0"` : `${attributes.slice(0, at)} ${attribute}="0"${attributes.slice(at)}`;
+  }
+  return attributes;
+};
+
 /** Only prototype objects receive explicit no-autofit and paragraph typing defaults. */
 export function nativeBodyDefaults(xml, records) {
   if (!records?.size) return xml;
@@ -460,6 +499,7 @@ export function nativeBodyDefaults(xml, records) {
     // LH-91: no space before or after a paragraph, as core measured the lines. A body bound to a placeholder would otherwise take the
     // master's body style (spcBef 20%), and each paragraph would sit lower than in a text box beside it.
     shape = shape.replace(/<a:pPr\b([^>]*?)\/>|<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>/g, (pPr, empty) => empty !== undefined ? `<a:pPr${empty}>${NO_SPACE_BEFORE}${NO_SPACE_AFTER}</a:pPr>` : zeroParagraphSpace(pPr));
+    shape = shape.replace(/<a:rPr\b([^>]*?)(\/?)>/g, (rPr, attributes, empty) => `<a:rPr${explicitStyle(attributes)}${empty}>`);
     const pPr = shape.match(/<a:pPr\b[^>]*(?:\/>|>[\s\S]*?<\/a:pPr>)/)?.[0] ?? '<a:pPr/>';
     const paragraphDefault = pPr.replace(/<a:pPr\b/, '<a:defPPr').replace(/<\/a:pPr>/, '</a:defPPr>').replace(/<a:defRPr\b[^>]*(?:\/>|>[\s\S]*?<\/a:defRPr>)/g, '');
     const withDefaults = paragraphDefault.endsWith('/>') ? paragraphDefault.slice(0, -2) + `>${defaults}</a:defPPr>` : paragraphDefault.replace('</a:defPPr>', `${defaults}</a:defPPr>`);
