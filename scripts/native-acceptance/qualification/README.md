@@ -41,7 +41,7 @@ saved copy (`roundtrip/`). The visual verdict is a reviewer's; the score only sa
 Keynote and Impress runs belong to the native-testing program ([docs/programs/native-testing/README.md](../../../docs/programs/native-testing/README.md)):
 one command per application and tier, one result format for every application, known differences as data
 (`scripts/native-acceptance/known/<target>.json`), and a comparison of each run with the `targets` below. Until that command
-lands, `scripts/libreoffice/run.mjs --qualification <dir>` grades the features in Impress (`docs/libreoffice.md`). PowerPoint for
+lands, `scripts/libreoffice/run.mjs --qualification <dir> [--tier smoke|release|full]` opens the tier's decks (selected by `tiers.mjs`, as for Keynote) and grades the features in Impress (`docs/libreoffice.md`). PowerPoint for
 Mac has a slot in the result format (`powerpoint-mac`) and no driver yet. `checks` in the manifest says what each check means;
 `fallback` (SH-16's picture fallback for SmartArt) applies only where the app does not lay SmartArt out.
 
