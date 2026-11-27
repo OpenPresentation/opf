@@ -440,7 +440,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": "OpenPresentation/opf#1298",
       "skill": true,
@@ -508,7 +508,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -575,7 +575,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -606,7 +606,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -633,7 +633,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": "OpenPresentation/opf#1418",
       "skill": true,
@@ -661,7 +661,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": "OpenPresentation/opf#1416",
       "skill": true,
@@ -688,7 +688,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": "OpenPresentation/opf#1416",
       "skill": true,
@@ -716,7 +716,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -759,13 +759,61 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": "OpenPresentation/opf#1416",
       "finding": "QC-02",
       "skill": true,
       "status": "open",
       "note": "Finding QC-02 (Keynote 16.0, OPF 0.36.0) narrows the cause: Keynote rewrites a value-axis step that does not divide the range (46/20 becomes 23, 250/100 becomes 83.3) and a percent axis keeps only 0% and its maximum; even steps are kept. It shows on any value axis with such a step, not only a secondary one. In Keynote 15.4, leaving out c:majorUnit restored the labels (#1416 item 2); not re-run on 16.0."
+    },
+    {
+      "id": "kn-bands-second-bar-group",
+      "title": "A chart with bands, and a bullet chart",
+      "feature": "charts",
+      "sees": "Only one group of the combination chart is kept: the ranges are drawn as stacked segments on each bar (or as stacked areas under a line), the range labels and the bullet target marks are dropped, and the axis is rescaled (a bullet chart's 100% axis runs to 200%); on a line chart with bands the dashed target line and its label are gone",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 21
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 22
+        },
+        {
+          "deck": "bands-and-bullet",
+          "slide": 1
+        },
+        {
+          "deck": "bands-and-bullet",
+          "slide": 2
+        },
+        {
+          "deck": "bands-and-bullet",
+          "slide": 3
+        },
+        {
+          "deck": "bands-and-bullet",
+          "slide": 4
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": "OpenPresentation/opf#1541",
+      "skill": true,
+      "status": "open",
+      "note": "OPF writes the ranges as a stacked bar (or area) group and the data on the secondary axes (plus a scatter series for bullet targets); Keynote keeps one group of a combination chart. No workaround tried. Same grade as kn-secondary-value-axis."
     },
     {
       "id": "kn-reference-line-label",
@@ -840,7 +888,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": "OpenPresentation/opf#1416",
       "skill": true,
@@ -876,7 +924,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": "OpenPresentation/opf#1416",
       "skill": true,
@@ -908,7 +956,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -944,7 +992,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": "OpenPresentation/opf#1416",
       "skill": true,
@@ -979,7 +1027,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -1023,7 +1071,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -1083,6 +1131,14 @@
           "deck": "m-links",
           "variant": "native",
           "slide": 3
+        },
+        {
+          "deck": "variable-translations",
+          "slide": 1
+        },
+        {
+          "deck": "variable-translations",
+          "slide": 3
         }
       ],
       "firstSeen": {
@@ -1091,7 +1147,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": "OpenPresentation/opf#1416",
       "skill": true,
@@ -1358,7 +1414,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -1393,7 +1449,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -1621,7 +1677,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -1661,7 +1717,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -1789,7 +1845,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -1828,7 +1884,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "skill": true,
@@ -1855,7 +1911,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": "OpenPresentation/opf#1298",
       "skill": true,
@@ -1887,7 +1943,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QC-04",
@@ -1916,7 +1972,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QC-03",
@@ -2005,7 +2061,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QC-05",
@@ -2153,7 +2209,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": "OpenPresentation/opf#1477",
       "finding": "QC-01",
@@ -2195,7 +2251,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "MX-03",
@@ -2301,7 +2357,7 @@
       "finding": "SW-02",
       "skill": false,
       "status": "open",
-      "note": "Cause proved (#1481): native-body.js lines 102-103 use the layout region box; y 572.1 vs 475.4 in default; not a 0.36.0 regression (inferred from 0.34.2)."
+      "note": "Cause proved (#1481): native-body.js lines 102-103 use the layout region box; y 572.1 vs 475.4 in default; not a 0.36.0 regression (inferred from 0.34.2). 2026-11-27 (Keynote 16.0, OPF 0.37.0): on layout-sampler~native-body slide 24 the note now sits under the table as in the preview (score 0.096 in 0.36.0, 0.048 now); not re-checked on its other place."
     },
     {
       "id": "kn-import-colon-categories",
@@ -2544,7 +2600,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "LY-01",
@@ -2628,7 +2684,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "LY-02",
@@ -2759,7 +2815,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "LG-01",
@@ -2828,7 +2884,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "SW-01",
@@ -2953,7 +3009,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QT-01",
@@ -3071,7 +3127,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": "OpenPresentation/opf#1479",
       "finding": "LY-04",
@@ -3128,7 +3184,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QC-07",
@@ -3156,7 +3212,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QC-08",
@@ -3184,7 +3240,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QC-09",
@@ -3216,7 +3272,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QC-10",
@@ -3341,7 +3397,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "LY-06",
@@ -3403,7 +3459,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QS-01",
@@ -3491,7 +3547,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QS-02",
@@ -3519,7 +3575,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QS-03",
@@ -3547,7 +3603,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QS-04",
@@ -3575,7 +3631,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QS-05",
@@ -3603,7 +3659,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QS-06",
@@ -3631,7 +3687,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QS-07",
@@ -3663,7 +3719,7 @@
       },
       "lastSeen": {
         "application": "16.0",
-        "opf": "0.36.0"
+        "opf": "0.37.0"
       },
       "issue": null,
       "finding": "QS-08",

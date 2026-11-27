@@ -123,7 +123,7 @@ A PPTX opened in Keynote is not drawn like OPF's preview or PowerPoint. The 0.34
 Keynote's exported images carry a Display P3 profile and an alpha channel. A comparison that ignores the profile reads colors as grayer and a gradient as shifted, and one that drops alpha without compositing reads a transparent fill as opaque. The first pass did both, so its "gradients shift" and "saturated fills grayer" rows are not differences and are not listed; no remaining row about color has evidence that survives the correction.
 
 <!-- native-known:keynote:start -->
-These rows were seen in Keynote 15.1.1 and 16.0, opening the PPTX export of OPF 0.34.0 to 0.36.0.
+These rows were seen in Keynote 15.1.1 and 16.0, opening the PPTX export of OPF 0.34.0 to 0.37.0.
 
 | What the deck has | What an author sees in Keynote | What to do |
 | --- | --- | --- |
@@ -138,6 +138,7 @@ These rows were seen in Keynote 15.1.1 and 16.0, opening the PPTX export of OPF 
 | Radar chart with lines only | Drawn filled, and the axis labels can collide and clip at the right edge. Each series also carries an area fill beside its line, and Keynote fills the marker radar as well, so that fill is the likely cause; cause not confirmed | Not tested: variants with the area fill set to no fill look the same in PowerPoint and have not been opened in Keynote |
 | Area chart with a gap in the data | The gap is bridged by the area (PowerPoint shows the gap) | None measured |
 | Secondary value axis | Only its 0% and 40% labels, and the legend overlaps them (PowerPoint shows 0% to 40% in steps of 10%); cause not confirmed | Not tested: variants without the major unit and with the General number format have not been opened in Keynote |
+| A chart with bands, and a bullet chart | Only one group of the combination chart is kept: the ranges are drawn as stacked segments on each bar (or as stacked areas under a line), the range labels and the bullet target marks are dropped, and the axis is rescaled (a bullet chart's 100% axis runs to 200%); on a line chart with bands the dashed target line and its label are gone | None |
 | Reference line | The line is drawn at the right value; its label is not (the legend names it). On one bar chart the label collided with a bar value, because Keynote lays the bars out on the tick marks | Name the line; do not rely on the label |
 | Direct line labels | Dropped | None measured |
 | Stacked lines | Drawn unstacked (values 18 to 55 where the preview stacks to 122) | None measured |
