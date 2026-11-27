@@ -1,9 +1,4 @@
 {
-  "version": "0.36.0",
-  "drawing": [
-    "layouts:agenda",
-    "layouts:chart-beside",
-    "layouts:code",
-    "layouts:dashboard"
-  ]
+  "version": "0.37.0",
+  "drawing": []
 }
