@@ -1,5 +1,537 @@
 {
   "schemaVersion": 1,
   "target": "powerpoint",
-  "records": []
+  "records": [
+    {
+      "id": "kn-pp-text-offset",
+      "title": "Text in Aptos, which the preview draws with its stand-in face Intos",
+      "feature": "fonts",
+      "sees": "The same drawing, with the text a few pixels higher than in the preview, by about 5 to 10% of its size (about 8 px for large body text, 2 to 3 px for titles, 1 px for footers on a 1920 px picture); widths, line breaks and the distance between lines are the same",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "preview",
+      "grade": "small",
+      "where": [],
+      "scope": "every-deck",
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": "OpenPresentation/opf#1556",
+      "skill": false,
+      "status": "open",
+      "note": "The preview's stand-in for Aptos places the first line of a text box lower than PowerPoint's Aptos does (footers slide 1: the first baseline about 1.0 em below the box top in the preview, about 0.93 em in PowerPoint). The release review gave it to 522 of 645 slides, scores 0.005 to 0.063, so a score cannot tell it from a small real difference; the 0.37.0 baseline carries those slides. Scope every-deck, not default-theme: it was seen in decks of the classic, bold and minimal themes that use Aptos, and also on 22 slides of decks whose text is in Work Sans and Montserrat, Open Sans, Georgia or Arial, so the cause may not be Aptos's face alone (opf#1556 lists the chart labels and quotation marks as possibly separate)."
+    },
+    {
+      "id": "kn-pp-world-chart-as-columns",
+      "title": "World (region map) chart",
+      "feature": "charts",
+      "sees": "A clustered column chart of the values, where the preview draws a tile grid of the regions",
+      "workaround": "Draw place data as a column or bar chart, so both show the same chart",
+      "workaroundTried": false,
+      "whose": "opf-file",
+      "grade": "wrong",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 7
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": "OpenPresentation/opf#1306",
+      "skill": false,
+      "status": "open",
+      "note": "By design today: the export reports pptx/chart-data-adapted (the world chartex part is not written by default; chartex: 'native' writes it). Also tracked by opf#924 (native map export, parked). Seen in PowerPoint before the driver existed (0.34 coverage decks)."
+    },
+    {
+      "id": "kn-pp-chart-plot-area-unpinned",
+      "title": "Chart whose plot area or axis scale the export leaves to PowerPoint",
+      "feature": "charts",
+      "sees": "PowerPoint sizes the plot area itself: the plot is larger or smaller than the preview's, points and bars move, axis titles and category names sit elsewhere; on a combo chart the secondary axis gets 5% steps where the preview draws 10%",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "opf-file",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 5
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 11
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 17
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 19
+        },
+        {
+          "deck": "chart-type-sampler",
+          "slide": 3
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": "OpenPresentation/opf#1277",
+      "skill": false,
+      "status": "open",
+      "note": "The chart parts have an empty c:layout (scatter chart23, Pareto chart29, bar chart32 of coverage-charts; scatter chart3 of chart-type-sampler) or an outer manualLayout (radar chart9; combo chart7 of chart-type-sampler, which also has no c:min, c:max or c:majorUnit). Charts with an inner manualLayout and written scales match. opf#1277 named chart-type-sampler slide 3 in the 0.34.0 pass."
+    },
+    {
+      "id": "kn-pp-bar-negative-plot-larger",
+      "title": "Horizontal bar chart with negative values",
+      "feature": "charts",
+      "sees": "Bars about 5% longer and rows a little higher than in the preview; the value label of the longest bar touches the plot's right edge",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "opf-file",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-charts",
+          "slide": 15
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": "OpenPresentation/opf#1554",
+      "skill": false,
+      "status": "open",
+      "note": "chart27 writes an inner manualLayout (x 0.0877, y 0.0777, w 0.9037, h 0.9029 of an 873.6 x 386.2 pt frame). PowerPoint draws exactly that box (axis -10 to 25 over 789.5 pt); the preview draws its plot about 5% narrower and lower, leaving room for the value labels. The written layout does not describe the preview's plot. Not seen again in the release round."
+    },
+    {
+      "id": "kn-pp-chartex-plot-extents",
+      "title": "Office 2016 charts (box and whisker, histogram, waterfall, funnel, treemap)",
+      "feature": "charts",
+      "sees": "PowerPoint chooses the inner plot margins: the plot is taller or wider than the preview's, labels move a few pixels, the box plot's median line is fainter",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "chart-type-sampler",
+          "slide": 1
+        },
+        {
+          "deck": "chart-type-sampler",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-charts",
+          "slide": 17
+        },
+        {
+          "deck": "layout-harvest",
+          "slide": 17
+        },
+        {
+          "deck": "layout-harvest",
+          "slide": 18
+        },
+        {
+          "deck": "layout-harvest",
+          "slide": 19
+        },
+        {
+          "deck": "layout-harvest",
+          "variant": "native",
+          "slide": 17
+        },
+        {
+          "deck": "layout-harvest",
+          "variant": "native",
+          "slide": 18
+        },
+        {
+          "deck": "layout-harvest",
+          "variant": "native",
+          "slide": 19
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": null,
+      "skill": false,
+      "status": "open",
+      "note": "Documented in docs/chart-options.md (RR-105): PowerPoint chooses the inner plot margins of its chartex constructs; also observed in the 0.35.1 PowerPoint round (opf#1441, no issue filed). coverage-charts slide 17 is also in kn-pp-chart-plot-area-unpinned (its Pareto half). Release round: layout-harvest slides 17 (histogram), 18 (Pareto, written as chartEx2) and 19 (waterfall) in both variants."
+    },
+    {
+      "id": "kn-pp-script-font-look",
+      "title": "Japanese and Arabic text in the Windows default fonts",
+      "feature": "languages",
+      "sees": "Japanese body text in a lighter face with wider kana spacing (Yu Gothic); Arabic-Indic digits spaced wider and Arabic titles a little narrower (Times New Roman)",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "preview",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-languages",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-languages",
+          "slide": 3
+        },
+        {
+          "deck": "coverage-languages",
+          "slide": 5
+        },
+        {
+          "deck": "coverage-languages",
+          "slide": 9
+        },
+        {
+          "deck": "multilingual-slides",
+          "slide": 2
+        },
+        {
+          "deck": "multilingual-slides",
+          "slide": 3
+        },
+        {
+          "deck": "smartart-arabic",
+          "slide": 1
+        },
+        {
+          "deck": "smartart-arabic",
+          "slide": 2
+        },
+        {
+          "deck": "smartart-arabic",
+          "slide": 3
+        },
+        {
+          "deck": "smartart-japanese",
+          "slide": 1
+        },
+        {
+          "deck": "smartart-japanese",
+          "slide": 2
+        },
+        {
+          "deck": "smartart-japanese",
+          "slide": 3
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": "OpenPresentation/opf#1400",
+      "skill": false,
+      "status": "open",
+      "note": "The file names the fonts PowerPoint uses (theme ea Yu Gothic, Jpan and Arab script fonts); the preview draws Yu Gothic with Noto Sans JP (build.json fonts/font-substituted). Line breaks are the same. opf#1400 items 2 and 3."
+    },
+    {
+      "id": "kn-pp-table-seams-in-preview",
+      "title": "Table with filled header and banded rows",
+      "feature": "tables",
+      "sees": "No vertical lines between columns; the preview shows thin light lines at some column edges",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "preview",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "layout-sampler",
+          "slide": 24
+        },
+        {
+          "deck": "layout-sampler",
+          "slide": 25
+        },
+        {
+          "deck": "layout-sampler",
+          "slide": 45
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 24
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 25
+        },
+        {
+          "deck": "layout-sampler",
+          "variant": "native",
+          "slide": 45
+        },
+        {
+          "deck": "layout-harvest",
+          "slide": 15
+        },
+        {
+          "deck": "layout-harvest",
+          "variant": "native",
+          "slide": 15
+        },
+        {
+          "deck": "table-and-code",
+          "slide": 1
+        },
+        {
+          "deck": "coverage-tables",
+          "slide": 1
+        },
+        {
+          "deck": "coverage-tables",
+          "slide": 2
+        },
+        {
+          "deck": "coverage-tables",
+          "slide": 3
+        },
+        {
+          "deck": "coverage-tables",
+          "slide": 4
+        },
+        {
+          "deck": "coverage-tables",
+          "slide": 5
+        },
+        {
+          "deck": "table-color-scale",
+          "slide": 1
+        },
+        {
+          "deck": "table-color-scale",
+          "slide": 4
+        },
+        {
+          "deck": "table-color-scale",
+          "slide": 5
+        },
+        {
+          "deck": "table-color-scale",
+          "slide": 6
+        },
+        {
+          "deck": "table-color-scale",
+          "slide": 7
+        },
+        {
+          "deck": "table-color-scale",
+          "slide": 8
+        },
+        {
+          "deck": "table-color-scale",
+          "slide": 9
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": "OpenPresentation/opf#1555",
+      "skill": false,
+      "status": "open",
+      "note": "The file writes lnL and lnR with noFill on every cell (slide 24), so PowerPoint is right; the lines are seams between adjacent cell fills in the preview, not at every column edge. Release round: the color-scale tables (0.37.0) show the same seams between colored cells; their cell colors match PowerPoint exactly."
+    },
+    {
+      "id": "kn-pp-chart-number-locale",
+      "title": "Chart data labels in a deck whose language uses a decimal comma",
+      "feature": "charts",
+      "sees": "Data labels with a decimal point (96.1%) where the preview draws the deck language's decimal comma (96,1%)",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "application",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "localized-chart-references",
+          "slide": 2
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 3
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 4
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 5
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 6
+        },
+        {
+          "deck": "localized-chart-references",
+          "slide": 7
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": null,
+      "skill": false,
+      "status": "open",
+      "note": "chart2 to chart7 write c:numFmt formatCode 0.0% (sourceLinked 0) with lang de-DE, fr-FR, es-ES, it-IT, pt-PT and nl-NL; PowerPoint takes the separators from the Windows locale of the machine (en-US in this round). Expected to match on a machine set to the deck's locale (not tried). Not new in 0.37.0: the deck dates from 0.34.0."
+    },
+    {
+      "id": "kn-pp-script-run-double-shrink",
+      "title": "Superscript and subscript text",
+      "feature": "text",
+      "sees": "Superscript and subscript characters (the 2 of m2, the 2 of H2O) clearly smaller than in the preview",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "opf-file",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-text",
+          "slide": 2
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": "OpenPresentation/opf#1558",
+      "skill": false,
+      "status": "open",
+      "note": "The runs are written with sz 2940 (70% of the 4200 body size) and baseline 50000 or -28571; PowerPoint reduces a run with a baseline offset again, so the size is applied twice. Not new in 0.37.0 (RR-34)."
+    },
+    {
+      "id": "kn-pp-combo-legend-key",
+      "title": "Combo chart (bars with a line) with a top legend",
+      "feature": "charts",
+      "sees": "The bar series' legend key is a wide rectangle and the legend entries are spaced differently; the preview draws a small square key",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "preview",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "explicit-chart-reference-lines",
+          "slide": 3
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": "OpenPresentation/opf#1559",
+      "skill": false,
+      "status": "open",
+      "note": "chart3 has a barChart and a lineChart, legendPos t with a manualLayout (w 0.2144, h 0.0583) and two deleted legend entries (idx 1 and 3, the reference lines). Bars and lines match. Not the opf#1525 change, which is for left and right legends."
+    },
+    {
+      "id": "kn-pp-dash-corner-phase",
+      "title": "Dashed shape outline",
+      "feature": "shapes",
+      "sees": "The dash pattern restarts at every corner, so the corners are solid; the preview runs one pattern around the outline and some corners fall in a gap",
+      "workaround": null,
+      "workaroundTried": null,
+      "whose": "preview",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-shape-styles",
+          "slide": 2
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": "OpenPresentation/opf#1559",
+      "skill": false,
+      "status": "open",
+      "note": "Seen in crops of the preview and PowerPoint pictures; compound lines on slide 3 match."
+    },
+    {
+      "id": "kn-pp-segoe-ui-light-look",
+      "title": "Text in Segoe UI Light or Segoe UI Semilight",
+      "feature": "fonts",
+      "sees": "Segoe UI Light letter shapes, which differ visibly from the preview's",
+      "workaround": "Use a font the preview bundles when the preview must match",
+      "workaroundTried": false,
+      "whose": "preview",
+      "grade": "small",
+      "where": [
+        {
+          "deck": "coverage-design",
+          "slide": 33
+        }
+      ],
+      "firstSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "lastSeen": {
+        "application": "16.0",
+        "opf": "0.37.0"
+      },
+      "issue": null,
+      "skill": false,
+      "status": "open",
+      "note": "By design: Segoe UI is not bundled; build.json reports Segoe UI Light drawn with Red Hat Display, a visual substitute. The file names Segoe UI Light and Segoe UI Semilight, which PowerPoint reports. Line breaks are the same."
+    }
+  ]
 }
