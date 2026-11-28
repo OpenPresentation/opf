@@ -12,7 +12,7 @@ Every item also meets the definition of done in the README; the acceptance colum
 | FR-04 | CR 1 with CR 3: data sources and a flat dataset | [Below](#fr-04-data-sources-and-a-flat-dataset-cr-1-with-cr-3) | done |
 | FR-05 | CR 2: typed dataset columns | [Below](#fr-05-typed-columns-cr-2) | done |
 | FR-06 | CR 4: a metric computed from data, with its change | [Below](#fr-06-a-metric-computed-from-data-cr-4) | done |
-| FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | in-progress |
+| FR-07 | CR 5: table color scale, bands with the bullet chart, and the gauge | [Below](#fr-07-table-color-scale-bands-with-the-bullet-chart-and-the-gauge-cr-5) | done |
 | FR-08 | CR 11: embed | [Below](#fr-08-embed-cr-11) | done |
 | FR-09 | CR 14: limits on a variable's value | [Below](#fr-09-limits-on-a-variables-value-cr-14) | done |
 | FR-10 | CR 15: translations and localized date names | [Below](#fr-10-translations-and-localized-date-names-cr-15) | done |
@@ -228,6 +228,11 @@ Progress log:
   reported. A dataset column declared as another type than `number` is never shaded. Rules: the error
   `table-color-scale-unknown-column`, the warnings `table-color-scale-no-data` and `table-color-scale-range`. Checked in PowerPoint
   (fills and text colors match the preview; the saved copy, a retyped number and a refilled cell import as designed).
+- 2026-11-26: all three parts are merged, so the row is done: the table color scale (opf#1520), bands behind a chart's data with the
+  bullet chart (opf#1521) and a metric drawn as a gauge (opf#1526). Two follow-ups merged the same day: band labels beside the plot are
+  placed before the legend and a stacked chart's series names start past the plot (opf#1532), and a gauge's arc sets the size of its
+  text (opf#1533).
+- 2026-11-27: released in 0.37.0. The row still said in-progress on that day; this entry corrects it.
 
 ## FR-08: embed (CR 11)
 
