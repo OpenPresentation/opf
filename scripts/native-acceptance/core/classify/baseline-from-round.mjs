@@ -2,10 +2,17 @@
 // NT-04c: a one-time importer. It writes a baseline summary (native-summary.schema.json) from run directories of a recorded
 // round (apps/keynote/import-recorded.mjs, then core/compare/compare-run.mjs and core/roundtrip/roundtrip-run.mjs) and that
 // round's hand grades, so the 0.36.0 Keynote round, graded by people looking at sheets before the classifier existed, is the
-// first baseline (runs/0.36.0/keynote.json). Later baselines are written from a reviewed classify.json (README.md).
+// first baseline (runs/0.36.0/keynote.json). PowerPoint's first baseline (runs/0.37.0/powerpoint.json) was made the same
+// way from its first reviewed release run (NT-16), with --inputs for the export hashes. Later baselines are written from a
+// reviewed classify.json (README.md).
 //
 //   node scripts/native-acceptance/core/classify/baseline-from-round.mjs --run <dir> [--run <dir> ...] --known <file>
 //        --out <summary.json> [--grades <grades.json> ...] [--ungraded reviewed] [--known-before <opf version>] [--note <text>]
+//        [--inputs <dir>]
+//
+// --inputs names the folder the runs' file.path is relative to (a run's build folder): the summary then carries each file's
+// export hashes (NT-13), for a file whose exported copy there has the sha256 the run opened. The summary's tier is the runs'
+// tier when they all have the same one, else null.
 //
 // A graded slide's class: grade "same" -> same; "small" or "wrong" -> known-present with the open records that name the
 // slide (`where`) or carry the row's finding id; with none of those and a known text "font substituted" -> known-present
@@ -15,8 +22,10 @@
 // an earlier release as a baseline); without it an ungraded slide is an error.
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { fileId } from '../result/result.mjs';
+import { exportsOfResults } from '../select/select.mjs';
 import { activeRecords, ambientIds, CALIBRATION, readRun, recordsNaming, VARIANT_ALIASES } from './classify.mjs';
 import { summarize, writeSummary } from './summary.mjs';
 
@@ -36,11 +45,12 @@ export function gradedFileId(row, ids) {
 
 /**
  * The classified files of a set of results from grades.
- *   classesFromGrades({ results, grades, known, ungraded, threshold, knownBefore }) -> { classified, unplaced, unmatched, ties }
+ *   classesFromGrades({ results, grades, known, ungraded, threshold, knownBefore, exports }) -> { classified, unplaced, unmatched, ties }
  * `unplaced`: graded slides placed without a record id or without a picture, with why. `unmatched`: grade rows no file
- * has. `ties`: record id -> ["<fileId>#<slide>"], what the grades tie to each record.
+ * has. `ties`: record id -> ["<fileId>#<slide>"], what the grades tie to each record. `exports` (a Map of file id ->
+ * { deck, slides }, exportsOfResults' value) gives a classified file its `export`.
  */
-export function classesFromGrades({ results, grades = [], known, ungraded = null, threshold = CALIBRATION.threshold, knownBefore }) {
+export function classesFromGrades({ results, grades = [], known, ungraded = null, threshold = CALIBRATION.threshold, knownBefore, exports = new Map() }) {
   const records = activeRecords(known, { knownBefore });
   const byFinding = new Map();
   for (const record of records) if (record.finding) byFinding.set(record.finding, record.id);
@@ -87,9 +97,16 @@ export function classesFromGrades({ results, grades = [], known, ungraded = null
       unplaced.push({ slide: where, grade: row.grade, why: `reviewed, no record: ${said}` });
       return place('known-present');
     });
-    return { id: result.file.id, slides };
+    const exported = exports.get(result.file.id);
+    return { id: result.file.id, ...(exported ? { export: exported } : {}), slides };
   });
   return { classified, unplaced, unmatched, ties };
+}
+
+/** The summary's tier: the runs' tier when every run has the same one (a driver's tier run), else null (a recorded round). */
+export function summaryTier(runs) {
+  const tiers = new Set(runs.map((run) => run.tier ?? null));
+  return tiers.size === 1 ? [...tiers][0] : null;
 }
 
 export function parseArgs(argv) {
@@ -108,6 +125,7 @@ export function parseArgs(argv) {
     else if (arg === '--ungraded') options.ungraded = value();
     else if (arg === '--known-before') options.knownBefore = value();
     else if (arg === '--note') options.note = value();
+    else if (arg === '--inputs') options.inputs = value();
     else if (arg === '--help' || arg === '-h') options.help = true;
     else throw new Error(`unknown argument ${arg}`);
   }
@@ -117,7 +135,7 @@ export function parseArgs(argv) {
 function main(argv) {
   const options = parseArgs(argv);
   if (options.help || options.runs.length === 0 || !options.known || !options.out) {
-    console.log('usage: baseline-from-round.mjs --run <dir> [--run <dir> ...] --known <file> --out <summary.json> [--grades <grades.json> ...] [--ungraded reviewed] [--known-before <opf version>] [--note <text>]');
+    console.log('usage: baseline-from-round.mjs --run <dir> [--run <dir> ...] --known <file> --out <summary.json> [--grades <grades.json> ...] [--ungraded reviewed] [--known-before <opf version>] [--note <text>] [--inputs <dir>]');
     return options.help ? 0 : 2;
   }
   const runs = options.runs.map((dir) => readRun(dir));
@@ -130,12 +148,16 @@ function main(argv) {
   const results = runs.flatMap((item) => item.results);
   const grades = options.grades.flatMap((file) => readJson(file));
   const known = readJson(options.known);
-  const { classified, unplaced, unmatched, ties } = classesFromGrades({ results, grades, known, ungraded: options.ungraded ?? null, knownBefore: options.knownBefore });
+  const sha256 = (file) => createHash('sha256').update(readFileSync(file)).digest('hex');
+  const { exports, notes } = options.inputs ? exportsOfResults(results, path.resolve(options.inputs), { sha256 }) : { exports: new Map(), notes: [] };
+  const { classified, unplaced, unmatched, ties } = classesFromGrades({ results, grades, known, ungraded: options.ungraded ?? null, knownBefore: options.knownBefore, exports });
   const finished = runs.map((item) => item.run.finished).sort().at(-1);
-  const run = { ...first.run, finished, tier: null };
+  const run = { ...first.run, finished, tier: summaryTier(runs.map((item) => item.run)) };
   const summary = summarize({ run, results, classified, note: options.note, settings: CALIBRATION });
   writeSummary(options.out, summary);
   console.log(`${summary.counts.files} files; slides: ${Object.entries(summary.counts.slides).map(([name, count]) => `${count} ${name}`).join(', ')}; ${grades.length} grade rows`);
+  if (options.inputs) console.log(`export hashes: ${exports.size} of ${results.length} files`);
+  for (const note of notes) console.log(`export hashes: ${note}`);
   for (const row of unmatched) console.log(`unmatched grade: ${row.deck} ${row.mode} slide ${row.slide}`);
   for (const item of unplaced) console.log(`placed without a record: ${item.slide} (${item.grade}): ${item.why}`);
   console.log(`ties: ${JSON.stringify(Object.fromEntries(Object.entries(ties).map(([id, list]) => [id, list.length])))}`);

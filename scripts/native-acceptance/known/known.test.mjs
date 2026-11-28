@@ -12,11 +12,23 @@ test('keynote.json validates against known.schema.json', () => {
   assert.equal(known.target, 'keynote');
 });
 
-test('powerpoint.json validates: an empty set until the PowerPoint driver has a reviewed run (NT-16)', () => {
+test('powerpoint.json validates: the records of the first reviewed PowerPoint run (NT-16, release tier, 2026-11-27)', () => {
   const powerpoint = loadKnown('powerpoint');
   assert.deepEqual(validateKnown(powerpoint), []);
   assert.equal(powerpoint.target, 'powerpoint');
-  assert.deepEqual(powerpoint.records, []);
+  assert.ok(powerpoint.records.length > 0, 'the reviewed run left records');
+  const ids = powerpoint.records.map((record) => record.id);
+  assert.equal(new Set(ids).size, ids.length, 'ids are unique');
+  for (const record of powerpoint.records) {
+    // PowerPoint's ids have their own prefix, so a record is never taken for Keynote's of the same difference.
+    assert.match(record.id, /^kn-pp-[a-z0-9-]+$/, record.id);
+    // A record names the slides it was seen on, or has a scope (an ambient difference such as the text offset, opf#1556).
+    assert.ok(record.where.length > 0 || record.scope, `${record.id} names the slides it was seen on or has a scope`);
+    // The export skill has a generated table for Keynote only (build-skill-table.mjs): no PowerPoint record claims a row yet.
+    assert.equal(record.skill, false, `${record.id}: there is no PowerPoint table in the export skill yet`);
+  }
+  const keynote = new Set(records.map((record) => record.id));
+  for (const id of ids) assert.ok(!keynote.has(id), `${id} is also a Keynote id`);
   assert.notDeepEqual(validateKnown({ ...powerpoint, target: 'impress' }), [], 'a target without a driver here is refused');
 });
 

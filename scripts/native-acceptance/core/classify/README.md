@@ -2,7 +2,7 @@
 
 Almost every slide looks a little different in a native application: Keynote has no Aptos and draws Helvetica, which is wider. So "differs from OPF's preview" cannot mean "new". A difference is **new** when nobody has looked at it yet. Two things carry a review forward:
 
-1. **Known records** (`known/<target>.json`, NT-03). A record's `where` names a deck, variant and slide. A record with a `scope` and a feature that changes how every slide looks (fonts, text, languages) is *ambient*: today that is `kn-missing-fonts`.
+1. **Known records** (`known/<target>.json`, NT-03). A record's `where` names a deck, variant and slide. A record with a `scope` and a feature that changes how every slide looks (fonts, text, languages) is *ambient*: today that is `kn-missing-fonts` for Keynote and `kn-pp-text-offset` for PowerPoint.
 2. **The baseline**: the committed summary of an earlier run (`runs/<opf version>/<target>.json`). For each file it holds every slide's score and class as they stood after review.
 
 ## The rule
@@ -50,6 +50,7 @@ How records are matched:
     file, and `changed: true` on a slide whose hash differs from a baseline that has hashes (every slide when the deck hash
     differs or the baseline lacks the file). It changes no class. Summaries without `export` (0.36.0) stay valid.
 - `baseline-from-round.mjs`: a one-time importer that built `runs/0.36.0/keynote.json` from the 0.36.0 Keynote round's hand grades. Do not use it for later releases.
+  - PowerPoint's first baseline, `runs/0.37.0/powerpoint.json`, was made with it from the first reviewed PowerPoint run (NT-16, release tier, 74 files): the review's one cause per slide became grade rows, the text-offset slides were tied to the ambient record `kn-pp-text-offset`, and `--inputs <build>` added the export hashes. The summary keeps the run's tier.
 
 ## When a slide is new
 

@@ -7,7 +7,7 @@ import path from 'node:path';
 import { after, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { emptyResult, runFileEntry } from '../result/result.mjs';
-import { classesFromGrades, gradedFileId } from './baseline-from-round.mjs';
+import { classesFromGrades, gradedFileId, parseArgs, summaryTier } from './baseline-from-round.mjs';
 import { activeRecords, CALIBRATION, classifyResults, classifyRun, classifySlide, importCode, kindTotals, lookList, recordsExplaining, sameExport, validateClassify } from './classify.mjs';
 import { main } from './classify-run.mjs';
 import { baselineOf, formatSummary, summarize, validateSummary } from './summary.mjs';
@@ -362,6 +362,57 @@ test('baseline from a round: grade rows to file ids and classes', () => {
       ['known-present', ['kn-missing-fonts']],
     ],
   );
+});
+
+test('baseline from a round: export hashes travel to the summary and a tier run keeps its tier', () => {
+  const results = [result('charts', 'default', [0.004, 0.04]), result('words', 'default', [0.04])];
+  const grades = [
+    { deck: 'charts', mode: 'default', slide: 1, grade: 'same' },
+    { deck: 'charts', mode: 'default', slide: 2, grade: 'small', known: 'font substituted' },
+    { deck: 'words', mode: 'default', slide: 1, grade: 'small', known: 'font substituted' },
+  ];
+  const hashes = { deck: '0123456789abcdef', slides: ['1111111111111111', '2222222222222222'] };
+  const { classified } = classesFromGrades({ results, grades, known, exports: new Map([['charts~default', hashes]]) });
+  assert.deepEqual(classified[0].export, hashes);
+  assert.equal('export' in classified[1], false, 'a file without hashes has no export');
+  const run = { target: 'keynote', application: { name: 'Keynote', version: '16.0' }, system: { os: 'macOS', version: '26.6.2' }, opf: { version: '0.37.0' }, finished: '2026-11-27T17:48:33Z' };
+  const summary = summarize({ run: { ...run, tier: summaryTier([{ tier: 'release' }]) }, results, classified, settings: CALIBRATION });
+  assert.deepEqual(validateSummary(summary), { ok: true, errors: [] });
+  assert.deepEqual(summary.files[0].export, hashes);
+  assert.equal(summary.tier, 'release');
+  assert.equal(summaryTier([{ tier: 'release' }, { tier: 'release' }]), 'release');
+  assert.equal(summaryTier([{ tier: 'release' }, { tier: 'smoke' }]), null, 'runs of different tiers');
+  assert.equal(summaryTier([{}, {}]), null, 'a recorded round has no tier');
+  assert.equal(parseArgs(['--run', 'r', '--inputs', 'b']).inputs, 'b');
+});
+
+test('the committed 0.37.0 PowerPoint baseline: the reviewed release run, with export hashes and only known record ids', () => {
+  const file = path.join(here, '../../runs/0.37.0/powerpoint.json');
+  const text = readFileSync(file, 'utf8');
+  const summary = JSON.parse(text);
+  assert.deepEqual(validateSummary(summary), { ok: true, errors: [] });
+  assert.equal(text, formatSummary(summary), 'written by formatSummary');
+  assert.ok(statSync(file).size < 150 * 1024, 'well under 150 KB');
+  assert.equal(summary.target, 'powerpoint');
+  assert.equal(summary.tier, 'release');
+  assert.equal(summary.opf.version, '0.37.0');
+  assert.match(summary.opf.commit, /^[0-9a-f]{40}$/u);
+  assert.match(summary.application.build, /^\d+\.\d+$/u);
+  const records = JSON.parse(readFileSync(path.join(here, '../../known/powerpoint.json'), 'utf8')).records;
+  const ids = new Set(records.map((item) => item.id));
+  for (const entry of summary.files) for (const list of Object.values(entry.known)) for (const id of list) assert.ok(ids.has(id), `${entry.id} names ${id}, which known/powerpoint.json does not have`);
+  assert.ok(summary.files.every((entry) => entry.export), 'every file has export hashes');
+  assert.doesNotMatch(text, /"\/|[A-Za-z]:\\\\|\/Users\/|\/home\//u, 'no absolute path');
+  assert.equal(summary.counts.slides.new, 0);
+  assert.equal(summary.counts.files, 74);
+  assert.equal(summary.files.reduce((sum, entry) => sum + entry.classes.length, 0), 645);
+  // Every reviewed slide that differs carries the record that explains it (the text offset's ambient record or a placed one).
+  const back = baselineOf(summary);
+  for (const [id, entry] of back.files) {
+    for (const [position, slide] of entry.slides.entries()) {
+      if (slide.class === 'known-present') assert.ok(slide.known.length > 0, `${id}#${position + 1} is known-present without a record id`);
+    }
+  }
 });
 
 test('the committed 0.36.0 Keynote baseline is valid, small, names only known record ids and no absolute path', () => {
