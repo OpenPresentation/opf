@@ -166,11 +166,13 @@ Decision D1: a Keynote run gates OPF's defects only. A release supervisor applie
    known differences on the release's tracking issue.
 
 PowerPoint on Windows has a driver that writes the shared format (`pnpm native powerpoint`). The release supervisor ran the smoke
-tier (13 files) and the release tier (74 files) with it in PowerPoint on 2026-11-27. Until a PowerPoint run has been reviewed, with
-its records in `known/powerpoint.json` and its summary under `runs/`, PowerPoint keeps its existing rule: "A change that moves
-what the export writes (layout rules, chart geometry, text boxes) is opened in PowerPoint and compared with the preview before the
-owner is asked to approve it and before it merges" ([working-rules.md of 2026-11-24](handoff/2026-11-24/working-rules.md),
-"PowerPoint before merge"). Impress does not gate: its nightly leg is report-only, and `release.yml` turns it off in the release gate, until the
+tier (13 files) and the release tier (74 files) with it in PowerPoint on 2026-11-27, and every slide of the release run was
+reviewed. Its records are in `known/powerpoint.json` (among them `kn-pp-text-offset`, the ambient record for the text that sits a
+few pixels higher in PowerPoint than in the preview, opf#1556), and its summary is PowerPoint's first baseline,
+`runs/0.37.0/powerpoint.json`. PowerPoint keeps its existing rule: "A change that moves what the export writes (layout rules,
+chart geometry, text boxes) is opened in PowerPoint and compared with the preview before the owner is asked to approve it and
+before it merges" ([working-rules.md of 2026-11-24](handoff/2026-11-24/working-rules.md), "PowerPoint before merge"). Whether a
+PowerPoint run joins the release gate above is not decided: that is the owner's decision. Impress does not gate: its nightly leg is report-only, and `release.yml` turns it off in the release gate, until the
 classify step runs on it and it has a known-difference file.
 
 ## After the release
